@@ -22,7 +22,7 @@ export default function Home() {
             </p>
             <div className="flex gap-3 justify-center">
               <Link href={"/companyservices"}>
-                <button className="btn text-black btn-primary bg-transparent border-black">
+                <button className="btn text-black btn-primary bg-transparent border-black border-2">
                   Learn More
                 </button>
               </Link>

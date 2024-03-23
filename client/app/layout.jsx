@@ -21,7 +21,7 @@ export default function RootLayout({ children }) {
               <div className="btn btn-sm bg-transparent border-0">Services</div>
             </Link>
             <Link href={"/signup"}>
-              <div className="btn btn-sm bg-transparent">Sign Up</div>
+              <div className="btn btn-sm bg-transparent  border-2">Sign Up</div>
             </Link>
 
             <Link
