@@ -8,7 +8,7 @@ export default function Home() {
         className="hero min-h-screen "
         style={{
           backgroundImage:
-            "url(https://daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.jpg)",
+            "url(https://images-ext-1.discordapp.net/external/S8e1ub3wcnHxwWn4IRR8TzmwPTDyfHnLPRwYYP0IWqY/https/t4.ftcdn.net/jpg/06/32/70/29/360_F_632702962_sUHqrD8E1BSy3IQKqSGsIHi6C7xJiQSt.jpg?format=webp&width=938&height=525)",
         }}>
         <div className="hero-overlay bg-opacity-60"></div>
         <div className="hero-content text-center text-neutral-content">
@@ -22,12 +22,14 @@ export default function Home() {
             </p>
             <div className="flex gap-3 justify-center">
               <Link href={"/companyservices"}>
-                <button className="btn btn-secondary">Learn More</button>
+                <button className="btn text-black btn-primary bg-transparent border-black">
+                  Learn More
+                </button>
               </Link>
 
               {/* book now button with arrow */}
               <Link href={"/appointment"}>
-                <button className="btn btn-primary text-black">
+                <button className="btn btn-accent text-black ">
                   Book Now
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -51,7 +53,7 @@ export default function Home() {
         <Link
           href={"/admin"}
           className="  absolute bottom-0 right-0 inline-block">
-          <button className="btn btn-primary">Admin</button>
+          <button className="btn btn-neutral">Admin</button>
         </Link>
       </section>
     </section>
