@@ -1,4 +1,5 @@
 import Link from "next/link";
+import plumbingBg from "../public/plumbingbg.jpg";
 
 export default function Home() {
   return (
@@ -7,8 +8,8 @@ export default function Home() {
       <section
         className="hero min-h-screen "
         style={{
-          backgroundImage:
-            "url(https://images-ext-1.discordapp.net/external/S8e1ub3wcnHxwWn4IRR8TzmwPTDyfHnLPRwYYP0IWqY/https/t4.ftcdn.net/jpg/06/32/70/29/360_F_632702962_sUHqrD8E1BSy3IQKqSGsIHi6C7xJiQSt.jpg?format=webp&width=938&height=525)",
+          // backgroundImage: `url(${plumbingBg.src})`,
+          backgroundImage: `url('/plumbingbg.jpg')`,
         }}>
         <div className="hero-overlay bg-opacity-60"></div>
         <div className="hero-content text-center text-neutral-content">
