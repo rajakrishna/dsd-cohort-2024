@@ -2,9 +2,10 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-between w-full">
-      <div
-        className="hero min-h-screen"
+    <section className="w-full bg-inherit ">
+      {/* expert plumbing and book appointment */}
+      <section
+        className="hero min-h-screen "
         style={{
           backgroundImage:
             "url(https://daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.jpg)",
@@ -20,12 +21,13 @@ export default function Home() {
               quickly
             </p>
             <div className="flex gap-3 justify-center">
-              <div href={"/"}>
-                <button className="btn btn-primary">Learn More</button>
-              </div>
+              <Link href={"/companyservices"}>
+                <button className="btn btn-secondary">Learn More</button>
+              </Link>
 
+              {/* book now button with arrow */}
               <Link href={"/appointment"}>
-                <button className="btn bg-green-500 text-black hover:bg-green-700">
+                <button className="btn btn-primary text-black">
                   Book Now
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -45,7 +47,13 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </div>
-    </div>
+        {/* admin button */}
+        <Link
+          href={"/admin"}
+          className="  absolute bottom-0 right-0 inline-block">
+          <button className="btn btn-primary">Admin</button>
+        </Link>
+      </section>
+    </section>
   );
 }
