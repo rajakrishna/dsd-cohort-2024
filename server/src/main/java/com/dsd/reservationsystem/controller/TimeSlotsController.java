@@ -21,10 +21,7 @@ public class TimeSlotsController {
     }
 
 
-//    @GetMapping("")
-//    public String getTimeSlots(){
-//        return "timeslots";
-//    }
+
     @GetMapping("")
     public List getTimeSlots(){
         return this.database.getTimeSlots();
