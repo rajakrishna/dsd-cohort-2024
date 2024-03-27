@@ -17,13 +17,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-
 @Repository
 public class Db {
     private Firestore database;
-
-
-
 
     public Db() throws IOException {
         InputStream serviceAccount = new FileInputStream("credentials.json");
@@ -34,30 +30,25 @@ public class Db {
         FirebaseApp.initializeApp(options);
 
         this.database = FirestoreClient.getFirestore();
-
-
     }
 
-
-    public List getAllParts(){
+    public List getAllParts() {
         QuerySnapshot partsCollection;
-        ApiFuture<QuerySnapshot> query =  database.collection("parts").get();
+        ApiFuture<QuerySnapshot> query = database.collection("parts").get();
 
         try {
             partsCollection = query.get();
             List<QueryDocumentSnapshot> documents = partsCollection.getDocuments();
             return documents;
-        }catch (Exception exception){
+        } catch (Exception exception) {
             System.out.println("failed to get parts from firestore");
             return new ArrayList<>();
         }
-
-
-
     }
-    public List getTimeSlots(){
+
+    public List getTimeSlots() {
         QuerySnapshot timeSlotsCollection;
-        ApiFuture<QuerySnapshot> query =  database.collection("timeSlots").get();
+        ApiFuture<QuerySnapshot> query = database.collection("timeSlots").get();
 
         try {
             System.out.println("geting timeslots");
@@ -67,21 +58,14 @@ public class Db {
             System.out.println("sucess getting timeslots");
 
             for (QueryDocumentSnapshot document : documents) {
-               docs.add(document.getData());
+                docs.add(document.getData());
             }
 
 
-
-
-
             return docs;
-        }catch (Exception exception){
+        } catch (Exception exception) {
             System.out.println("failed to get timeSlots from firestore");
             return new ArrayList<>(Arrays.asList("fallback"));
         }
-
-
-
     }
-
 }

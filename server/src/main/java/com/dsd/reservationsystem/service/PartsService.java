@@ -14,8 +14,7 @@ public class PartsService {
     }
 
 
-
-    public List getAll(){
+    public List getAll() {
         return this.database.getAllParts();
     }
 }

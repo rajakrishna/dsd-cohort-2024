@@ -11,7 +11,7 @@ public class TimeSlotsService {
         this.database = database;
     }
 
-    public List getAll(){
+    public List getAll() {
         return this.database.getTimeSlots();
     }
 }
