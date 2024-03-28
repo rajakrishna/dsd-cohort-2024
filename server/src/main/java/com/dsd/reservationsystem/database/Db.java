@@ -78,7 +78,6 @@ public class Db {
             return docs;
 
         } catch (Exception exception) {
-            System.out.println("failed to get timeSlots from firestore");
             return new ArrayList<>(Arrays.asList(new HashMap<>() {{
                 put("id", "failed to get timeslots");
             }}));
