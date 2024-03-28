@@ -1,6 +1,8 @@
 package com.dsd.reservationsystem.controller;
 
 import com.dsd.reservationsystem.database.Db;
+import com.dsd.reservationsystem.service.PartsService;
+import com.dsd.reservationsystem.service.TimeSlotsService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,14 +13,14 @@ import java.util.List;
 @RequestMapping("/api/timeslots")
 public class TimeSlotsController {
 
-    private Db database;
+    private TimeSlotsService timeSlotsService;
 
-    public TimeSlotsController(Db database) {
-        this.database = database;
+    public TimeSlotsController(TimeSlotsService timeSlotsService) {
+        this.timeSlotsService = timeSlotsService;
     }
 
     @GetMapping("")
     public List getTimeSlots() {
-        return this.database.getTimeSlots();
+        return this.timeSlotsService.getAll();
     }
 }
