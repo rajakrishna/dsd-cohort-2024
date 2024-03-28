@@ -37,9 +37,15 @@ public class Db {
         ApiFuture<QuerySnapshot> query = database.collection("parts").get();
 
         try {
+            ArrayList docs = new ArrayList();
             partsCollection = query.get();
             List<QueryDocumentSnapshot> documents = partsCollection.getDocuments();
-            return documents;
+
+            for (QueryDocumentSnapshot document : documents) {
+                docs.add(document.getData());
+            }
+
+            return docs;
         } catch (Exception exception) {
             System.out.println("failed to get parts from firestore");
             return new ArrayList<>();
