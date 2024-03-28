@@ -13,9 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @Repository
 public class Db {
@@ -47,31 +45,43 @@ public class Db {
 
             return docs;
         } catch (Exception exception) {
-            System.out.println("failed to get parts from firestore");
-            return new ArrayList<>();
+            return new ArrayList<>(Arrays.asList(new HashMap<>() {{
+                put("id", "failed to get parts");
+            }}));
         }
     }
 
     public List getTimeSlots() {
+
+        //empty snapshot
         QuerySnapshot timeSlotsCollection;
+
+        //request to firebase for timeslots collection
+        //request to firebase for timeslots collection
         ApiFuture<QuerySnapshot> query = database.collection("timeSlots").get();
 
         try {
-            System.out.println("geting timeslots");
+            //get snapshot from query
             timeSlotsCollection = query.get();
-            ArrayList docs = new ArrayList();
-            List<QueryDocumentSnapshot> documents = timeSlotsCollection.getDocuments();
-            System.out.println("sucess getting timeslots");
 
+            //set new empty list
+            ArrayList docs = new ArrayList();
+
+            //get list of all documents from snapshot
+            List<QueryDocumentSnapshot> documents = timeSlotsCollection.getDocuments();
+
+            //loop all documents in snapshot and get the data
             for (QueryDocumentSnapshot document : documents) {
-                docs.add(document.getData());
+                docs.add(document.getData()); //add data of each doc to arraylist
             }
 
-
             return docs;
+
         } catch (Exception exception) {
             System.out.println("failed to get timeSlots from firestore");
-            return new ArrayList<>(Arrays.asList("fallback"));
+            return new ArrayList<>(Arrays.asList(new HashMap<>() {{
+                put("id", "failed to get timeslots");
+            }}));
         }
     }
 }
