@@ -21,7 +21,7 @@ public class TimeSlotsController {
   public ResponseEntity<Object> getTimeSlotsForDay(@RequestBody Map<String, String> requestBody) {
 
     try {
-      Map<String, Object> timeSlots = this.timeSlotsService.getAllForDay(requestBody.get("todaysDate"));
+      Map<String, Boolean> timeSlots = this.timeSlotsService.getTimeSlotsForDay(requestBody.get("todaysDate"));
       return ResponseEntity.ok().body(timeSlots);
 
     } catch (Exception e) {
