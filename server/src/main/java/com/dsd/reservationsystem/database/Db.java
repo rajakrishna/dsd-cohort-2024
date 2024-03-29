@@ -2,9 +2,7 @@ package com.dsd.reservationsystem.database;
 
 import com.google.api.core.ApiFuture;
 import com.google.auth.oauth2.GoogleCredentials;
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.QueryDocumentSnapshot;
-import com.google.cloud.firestore.QuerySnapshot;
+import com.google.cloud.firestore.*;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
@@ -57,7 +55,6 @@ public class Db {
         QuerySnapshot timeSlotsCollection;
 
         //request to firebase for timeslots collection
-        //request to firebase for timeslots collection
         ApiFuture<QuerySnapshot> query = database.collection("timeSlots").get();
 
         try {
@@ -81,6 +78,37 @@ public class Db {
             return new ArrayList<>(Arrays.asList(new HashMap<>() {{
                 put("id", "failed to get timeslots");
             }}));
+        }
+    }
+
+
+public Map<String,Object> getTimeSlotsForDay(String dateStr) {
+
+
+        System.out.println("date is :" + dateStr);
+        //request to firebase for timeslots collection
+    DocumentReference docRef = database.collection("timeSlots").document(dateStr);
+
+
+        try {
+            ApiFuture<DocumentSnapshot> query = docRef.get();
+
+            //get snapshot from query
+            DocumentSnapshot document = query.get();
+
+           if(document.exists()){
+
+               return document.getData();
+           }
+
+
+
+         return new HashMap<>();
+
+        } catch (Exception exception) {
+            return new HashMap<>() {{
+                put("id", "failed to get timeslots");
+            }};
         }
     }
 }

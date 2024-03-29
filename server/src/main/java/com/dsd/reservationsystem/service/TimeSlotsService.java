@@ -4,6 +4,7 @@ import com.dsd.reservationsystem.database.Db;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class TimeSlotsService {
@@ -13,7 +14,8 @@ public class TimeSlotsService {
         this.database = database;
     }
 
-    public List getAll() {
-        return this.database.getTimeSlots();
+    //date will be provided in 03022024 two-digit month, two-digit month and four digit year
+    public Map<String, Object> getAllForDay(String dateStr) {
+        return this.database.getTimeSlotsForDay(dateStr);
     }
 }

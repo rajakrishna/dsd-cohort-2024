@@ -1,17 +1,15 @@
 package com.dsd.reservationsystem.controller;
 
-import com.dsd.reservationsystem.database.Db;
-import com.dsd.reservationsystem.service.PartsService;
 import com.dsd.reservationsystem.service.TimeSlotsService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/timeslots")
 public class TimeSlotsController {
 
-    private TimeSlotsService timeSlotsService;
+    private final TimeSlotsService timeSlotsService;
 
     public TimeSlotsController(TimeSlotsService timeSlotsService) {
         this.timeSlotsService = timeSlotsService;
@@ -19,8 +17,8 @@ public class TimeSlotsController {
 
     @GetMapping("")
     @ResponseBody
-    public List getTimeSlotsForDay(@RequestBody String todayDate) {
+    public Map<String, Object> getTimeSlotsForDay(@RequestBody Map<String,String> requestBody) {
 
-        return this.timeSlotsService.getAll();
+        return this.timeSlotsService.getAllForDay(requestBody.get("todaysDate"));
     }
 }
