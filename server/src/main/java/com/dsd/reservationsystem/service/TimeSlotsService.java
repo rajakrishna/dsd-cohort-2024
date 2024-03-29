@@ -15,7 +15,13 @@ public class TimeSlotsService {
     }
 
     //date will be provided in 03022024 two-digit month, two-digit month and four digit year
-    public Map<String, Object> getAllForDay(String dateStr) {
-        return this.database.getTimeSlotsForDay(dateStr);
+    public Map<String, Object> getAllForDay(String dateStr) throws Exception {
+        try {
+          return this.database.getTimeSlotsForDay(dateStr);
+
+        }catch (Exception e){
+            throw e;
+
+        }
     }
 }
