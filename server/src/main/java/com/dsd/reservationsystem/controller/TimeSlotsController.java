@@ -3,9 +3,7 @@ package com.dsd.reservationsystem.controller;
 import com.dsd.reservationsystem.database.Db;
 import com.dsd.reservationsystem.service.PartsService;
 import com.dsd.reservationsystem.service.TimeSlotsService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,7 +18,9 @@ public class TimeSlotsController {
     }
 
     @GetMapping("")
-    public List getTimeSlots() {
+    @ResponseBody
+    public List getTimeSlotsForDay(@RequestBody String todayDate) {
+
         return this.timeSlotsService.getAll();
     }
 }
