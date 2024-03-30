@@ -84,11 +84,11 @@ public class Db {
         }
     }
 
-    public List getAllServices() {
+    public ArrayList<Map<String, Object>> getAllServices() {
         ApiFuture<QuerySnapshot> query = database.collection("services").get();
 
         try {
-            ArrayList docs = new ArrayList();
+            ArrayList<Map<String, Object>> docs = new ArrayList();
             QuerySnapshot servicesCollection = query.get();
             List<QueryDocumentSnapshot> documents = servicesCollection.getDocuments();
 
