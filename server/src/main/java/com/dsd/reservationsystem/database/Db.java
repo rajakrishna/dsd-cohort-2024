@@ -83,4 +83,24 @@ public class Db {
             }}));
         }
     }
+
+    public List getAllServices() {
+        ApiFuture<QuerySnapshot> query = database.collection("services").get();
+
+        try {
+            ArrayList docs = new ArrayList();
+            QuerySnapshot servicesCollection = query.get();
+            List<QueryDocumentSnapshot> documents = servicesCollection.getDocuments();
+
+            for (QueryDocumentSnapshot document : documents) {
+                docs.add(document.getData());
+            }
+
+            return docs;
+        } catch (Exception exception) {
+            return new ArrayList<>(Arrays.asList(new HashMap<>() {{
+                put("id", "failed to get services");
+            }}));
+        }
+    }
 }
