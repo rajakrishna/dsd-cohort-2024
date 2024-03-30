@@ -1,5 +1,6 @@
 package com.dsd.reservationsystem.database;
 
+import com.dsd.reservationsystem.models.ServiceModel;
 import com.google.api.core.ApiFuture;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.Firestore;
@@ -84,23 +85,22 @@ public class Db {
         }
     }
 
-    public ArrayList<Map<String, Object>> getAllServices() {
+    public ArrayList<ServiceModel> getAllServices() {
         ApiFuture<QuerySnapshot> query = database.collection("services").get();
 
         try {
-            ArrayList<Map<String, Object>> docs = new ArrayList();
+            ArrayList<ServiceModel> docs = new ArrayList();
             QuerySnapshot servicesCollection = query.get();
             List<QueryDocumentSnapshot> documents = servicesCollection.getDocuments();
 
             for (QueryDocumentSnapshot document : documents) {
-                docs.add(document.getData());
+                ServiceModel doc = new ServiceModel((String) document.getData().get("id"), (String) document.getData().get("name"));
+                docs.add(doc);
             }
 
             return docs;
         } catch (Exception exception) {
-            return new ArrayList<>(Arrays.asList(new HashMap<>() {{
-                put("id", "failed to get services");
-            }}));
+            return new ArrayList<>(Arrays.asList(new ServiceModel("id", "failed to get services")));
         }
     }
 }

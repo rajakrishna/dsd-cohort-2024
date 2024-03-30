@@ -1,6 +1,7 @@
 package com.dsd.reservationsystem.service;
 
 import com.dsd.reservationsystem.database.Db;
+import com.dsd.reservationsystem.models.ServiceModel;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,20 +20,20 @@ public class ServicesService {
 
 
     public List getAll() {
-        ArrayList<Map<String, Object>> servicesDocs = this.database.getAllServices();
+        ArrayList<ServiceModel> servicesDocs = this.database.getAllServices();
 
-        ArrayList<Map<String, Object>> servicesAvailable = new ArrayList<>();
+//        ArrayList<ServiceModel> servicesAvailable = new ArrayList<>();
 
-        for (Map<String, Object> service : servicesDocs) {
-            Object name = service.get("name");
-            Object id = service.get("id");
+//        for (ServiceModel service : servicesDocs) {
+//            Object name = service.name();
+//            Object id = service.id();
+//
+//            servicesAvailable.add(new HashMap<>() {{
+//                put("name", name);
+//                put("id", id);
+//            }});
+//        }
 
-            servicesAvailable.add(new HashMap<>() {{
-                put("name", name);
-                put("id", id);
-            }});
-        }
-
-        return servicesAvailable;
+        return servicesDocs;
     }
 }
