@@ -1,5 +1,8 @@
 package com.dsd.reservationsystem.database;
 
+import com.dsd.reservationsystem.models.DaySchedule;
+import com.dsd.reservationsystem.models.Appointment;
+
 import com.google.api.core.ApiFuture;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.*;
@@ -82,10 +85,30 @@ public class Db {
 //  }
 //
 
-    public Map<String, Object> getTimeSlotsForDay(String dateStr) throws Exception {
+    //    public Map<String, Object> getTimeSlotsForDay(String dateStr) throws Exception {
+//        //request to firebase for timeslots collection
+//        DocumentReference docRef = database.collection("timeSlots").document(dateStr);
+//
+//        try {
+//            ApiFuture<DocumentSnapshot> query = docRef.get();
+//
+//            //get snapshot from query
+//            DocumentSnapshot document = query.get();
+//
+//            if (document.exists()) {
+//                return document.getData();
+//            }
+//
+//            return new HashMap<>();
+//
+//        } catch (Exception exception) {
+//            throw new Exception("database failed to get timeslots for day" + dateStr);
+//        }
+//    }
+    public DaySchedule getTimeSlotsForDay(String dateStr) throws Exception {
         //request to firebase for timeslots collection
         DocumentReference docRef = database.collection("timeSlots").document(dateStr);
-
+//        System.out.println(dateStr);
         try {
             ApiFuture<DocumentSnapshot> query = docRef.get();
 
@@ -93,12 +116,33 @@ public class Db {
             DocumentSnapshot document = query.get();
 
             if (document.exists()) {
-                return document.getData();
+                HashMap<String, Appointment> appointments = new HashMap<>();
+                Map<String, Object> doc = document.getData();
+
+                for (Map.Entry<String, Object> entry : doc.entrySet()) {
+                    String key = entry.getKey();
+                    HashMap<String, String> value = (HashMap<String, String>) entry.getValue();
+                    System.out.println("Key: " + key + ", Value: " + value);
+                }
+
+//                System.out.println("doc ");
+//                HashMap<String, String> appointment = (HashMap<String, String>) doc.get("TS79");
+//                System.out.println(appointment.get("customerId"));
+
+//                appointments.put("TS79", new Appointment().setCustomerId() doc.get("TS79"));
+//                appointments.put("TS911", doc.get("TS911"));
+//                appointments.put("TS111", doc.get("TS111"));
+
+//                System.out.println("appointments ");
+//                System.out.println(appointments);
+                return new DaySchedule(dateStr, appointments);
             }
 
-            return new HashMap<>();
+            //no document found send new file
+            return new DaySchedule(dateStr, new HashMap<String, Appointment>());
 
         } catch (Exception exception) {
+            System.out.println(exception.getMessage());
             throw new Exception("database failed to get timeslots for day" + dateStr);
         }
     }

@@ -2,3 +2,5 @@
 build
 credentials.json
 .idea
+bin/
+out/
