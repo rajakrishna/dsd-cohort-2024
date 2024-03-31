@@ -14,4 +14,11 @@ public class Appointment {
     public void setCustomerId(String customerId) {
         this.customerId = customerId;
     }
+
+    @Override
+    public String toString() {
+        return "Appointment{" +
+                "customerId='" + customerId + '\'' +
+                '}';
+    }
 }

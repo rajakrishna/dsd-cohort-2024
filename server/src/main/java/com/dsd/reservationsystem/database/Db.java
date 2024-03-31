@@ -116,25 +116,8 @@ public class Db {
             DocumentSnapshot document = query.get();
 
             if (document.exists()) {
-                HashMap<String, Appointment> appointments = new HashMap<>();
-                Map<String, Object> doc = document.getData();
-
-                for (Map.Entry<String, Object> entry : doc.entrySet()) {
-                    String key = entry.getKey();
-                    HashMap<String, String> value = (HashMap<String, String>) entry.getValue();
-                    System.out.println("Key: " + key + ", Value: " + value);
-                }
-
-//                System.out.println("doc ");
-//                HashMap<String, String> appointment = (HashMap<String, String>) doc.get("TS79");
-//                System.out.println(appointment.get("customerId"));
-
-//                appointments.put("TS79", new Appointment().setCustomerId() doc.get("TS79"));
-//                appointments.put("TS911", doc.get("TS911"));
-//                appointments.put("TS111", doc.get("TS111"));
-
-//                System.out.println("appointments ");
-//                System.out.println(appointments);
+                //extract appointments from document
+                HashMap<String, Appointment> appointments = getAppointmentHashMap(document);
                 return new DaySchedule(dateStr, appointments);
             }
 
@@ -145,5 +128,22 @@ public class Db {
             System.out.println(exception.getMessage());
             throw new Exception("database failed to get timeslots for day" + dateStr);
         }
+    }
+
+    private static HashMap<String, Appointment> getAppointmentHashMap(DocumentSnapshot document) {
+        HashMap<String, Appointment> appointments = new HashMap<>();
+        Map<String, Object> doc = document.getData();
+
+        //loop through hash map of day timeslots
+        for (Map.Entry<String, Object> timeSlot : doc.entrySet()) {
+            String tsCode = timeSlot.getKey();
+            HashMap<String, String> timeSlotData = (HashMap<String, String>) timeSlot.getValue();
+
+//                    System.out.println("Key: " + tsCode + ", Value: " + (String) timeSlotData.get("customerId"));
+            Appointment appointment = new Appointment();
+            appointment.setCustomerId((String) timeSlotData.get("customerId"));
+            appointments.put(tsCode, appointment);
+        }
+        return appointments;
     }
 }

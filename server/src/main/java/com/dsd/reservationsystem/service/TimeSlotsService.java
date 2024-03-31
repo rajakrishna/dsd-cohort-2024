@@ -20,50 +20,26 @@ public class TimeSlotsService {
     }
 
     //date will be provided in 03022024 two-digit month, two-digit month and four digit year
-    public Map<String, Boolean> getTimeSlotsForDay(String dateStr) throws Exception {
+    public Map<String, Boolean> getTimeSlotsAvailabilityForDay(String dateStr) throws Exception {
+        Map<String, Boolean> timeSlotsAvailability = new HashMap<String, Boolean>() {{
+            put("TS79", true);
+            put("TS911", true);
+            put("TS111", true);
+        }};
 
-        Map<String, Boolean> timeSlotsAvailable = new HashMap<String, Boolean>();
-//        Map<String, Boolean> timeSlotsAvailable = new HashMap<String, Boolean>() {{
-//            put("TS79", true);
-//            put("TS911", true);
-//            put("TS111", true);
-//        }};
         DaySchedule dayTimeSlots = this.database.getTimeSlotsForDay(dateStr);
 
 
-        System.out.println("timeslots are: ");
-//        for (Map.Entry<String, Appointment> appointment : dayTimeSlots.appointments().entrySet()) {
-//            String key = appointment.getKey();
-//            String customerId = appointment.getValue().customerId();
-//
-//            System.out.println(key);
-//            System.out.println(customerId);
-//
-//            //get time slot
-//            //if time slot has customer id then slot is taken
-//
-//            //check if timecode exists if exists then time slot is taken
-//
-//
-//        }
-//        for (Map.Entry<String, Object> timeSlot : dayTimeSlots.entrySet()) {
-//            String key = timeSlot.getKey();
-//            Object time = timeSlot.getValue();
-//
-//            System.out.println(key);
-//            System.out.println(time);
-//
-//            //get time slot
-//            //if time slot has customer id then slot is taken
-//
-//            //check if timecode exists if exists then time slot is taken
-//            if (time != null) {
-//                timeSlotsAvailable.put(key, false);
-//            }
-//
-//
-//        }
+        //get set of key:value from Map and loop through it
+        for (Map.Entry<String, Appointment> timeSlot : dayTimeSlots.appointments().entrySet()) {
+            String key = timeSlot.getKey();
+            Object timeSlotData = timeSlot.getValue();
 
-        return timeSlotsAvailable;
+            //check if timecode exists, if exists then time slot is taken
+            if (timeSlotData != null) {
+                timeSlotsAvailability.put(key, false);
+            }
+        }
+        return timeSlotsAvailability;
     }
 }
