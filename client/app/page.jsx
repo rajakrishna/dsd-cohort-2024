@@ -52,7 +52,7 @@ export default function Home() {
         </div>
         {/* admin button */}
         <Link
-          href={"/admin"}
+          href={"/admin/dashboard"}
           className="  absolute bottom-0 right-0 inline-block">
           <button className="btn btn-neutral">Admin</button>
         </Link>
