@@ -1,6 +1,7 @@
-.gradle
-build
+.gradle/
+build/
 credentials.json
 .idea
-bin/
+
 out/
+bin/
