@@ -23,8 +23,8 @@ public class TimeSlotsController {
 
         try {
             Map<String, Boolean> timeSlotsAvailability = this.timeSlotsService.getTimeSlotsAvailabilityForDay(requestBody.get("todaysDate"));
-//            System.out.println("timeSlots");
-//            System.out.println(timeSlotsAvailability);
+            System.out.println("timeSlots");
+            System.out.println(timeSlotsAvailability);
             return ResponseEntity.ok().body(timeSlotsAvailability);
 
         } catch (Exception e) {
