@@ -1,10 +1,7 @@
 package com.dsd.reservationsystem.database;
 
-import com.dsd.reservationsystem.models.DaySchedule;
-import com.dsd.reservationsystem.models.Appointment;
+import com.dsd.reservationsystem.models.*;
 
-import com.dsd.reservationsystem.models.ServiceModel;
-import com.dsd.reservationsystem.models.Part;
 import com.google.api.core.ApiFuture;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.*;
@@ -155,6 +152,13 @@ public class Db {
             appointments.put(tsCode, appointment);
         }
         return appointments;
+    }
+
+    public Customer createCustomer(Customer customer) {
+        customer.setId(UUID.randomUUID().toString());
+        // Save the customer to Firestore
+        database.collection("customerInfo").document(String.valueOf(customer.getId())).set(customer);
+        return customer;
     }
 }
 
