@@ -1,26 +1,34 @@
 package com.dsd.reservationsystem.controller;
 
-import com.dsd.reservationsystem.database.Db;
-import com.dsd.reservationsystem.service.PartsService;
+import com.dsd.reservationsystem.models.Appointment;
 import com.dsd.reservationsystem.service.TimeSlotsService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/timeslots")
 public class TimeSlotsController {
 
-    private TimeSlotsService timeSlotsService;
+    private final TimeSlotsService timeSlotsService;
 
     public TimeSlotsController(TimeSlotsService timeSlotsService) {
         this.timeSlotsService = timeSlotsService;
     }
 
     @GetMapping("")
-    public List getTimeSlots() {
-        return this.timeSlotsService.getAll();
+    @ResponseBody
+    public ResponseEntity<Object> getTimeSlotsForDay(@RequestBody Map<String, String> requestBody) {
+
+        try {
+            Map<String, Boolean> timeSlotsAvailability = this.timeSlotsService.getTimeSlotsAvailabilityForDay(requestBody.get("todaysDate"));
+//            System.out.println("timeSlots");
+//            System.out.println(timeSlotsAvailability);
+            return ResponseEntity.ok().body(timeSlotsAvailability);
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }
