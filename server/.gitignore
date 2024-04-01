@@ -2,10 +2,5 @@
 build/
 credentials.json
 .idea
-
 out/
 bin/
-<<<<<<< HEAD
-
-=======
->>>>>>> master
