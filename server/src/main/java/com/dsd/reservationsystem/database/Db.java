@@ -1,5 +1,6 @@
 package com.dsd.reservationsystem.database;
 
+import com.dsd.reservationsystem.models.ServiceModel;
 import com.dsd.reservationsystem.models.Part;
 import com.google.api.core.ApiFuture;
 import com.google.auth.oauth2.GoogleCredentials;
@@ -87,6 +88,25 @@ public class Db {
       return new ArrayList<>(Arrays.asList(new HashMap<>() {{
         put("id", "failed to get timeslots");
       }}));
+    }
+
+    public ArrayList<ServiceModel> getAllServices() {
+        ApiFuture<QuerySnapshot> query = database.collection("services").get();
+
+        try {
+            ArrayList<ServiceModel> docs = new ArrayList();
+            QuerySnapshot servicesCollection = query.get();
+            List<QueryDocumentSnapshot> documents = servicesCollection.getDocuments();
+
+            for (QueryDocumentSnapshot document : documents) {
+                ServiceModel doc = new ServiceModel((String) document.getData().get("id"), (String) document.getData().get("name"));
+                docs.add(doc);
+            }
+
+            return docs;
+        } catch (Exception exception) {
+            return new ArrayList<>(Arrays.asList(new ServiceModel("id", "failed to get services")));
+        }
     }
   }
 }
