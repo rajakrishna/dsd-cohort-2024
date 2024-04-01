@@ -3,6 +3,8 @@ package com.dsd.reservationsystem.database;
 import com.dsd.reservationsystem.models.DaySchedule;
 import com.dsd.reservationsystem.models.Appointment;
 
+import com.dsd.reservationsystem.models.ServiceModel;
+import com.dsd.reservationsystem.models.Part;
 import com.google.api.core.ApiFuture;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.*;
@@ -31,80 +33,87 @@ public class Db {
         this.database = FirestoreClient.getFirestore();
     }
 
-    public List getAllParts() {
+    public List<Part> getAllParts() {
         QuerySnapshot partsCollection;
         ApiFuture<QuerySnapshot> query = database.collection("parts").get();
 
         try {
-            ArrayList docs = new ArrayList();
+            ArrayList<Part> docs = new ArrayList<>();
             partsCollection = query.get();
             List<QueryDocumentSnapshot> documents = partsCollection.getDocuments();
 
             for (QueryDocumentSnapshot document : documents) {
-                docs.add(document.getData());
+
+                Map<String, Object> doc = document.getData();
+                String id = document.getId();
+                String name = (String) doc.get("name");
+                Long quantity = (Long) doc.get("quantity");
+                Long threshold = (Long) doc.get("threshold");
+                docs.add(new Part(id, name, quantity, threshold));
             }
 
             return docs;
         } catch (Exception exception) {
+            System.out.println(exception.getMessage());
+            return new ArrayList<Part>();
+        }
+    }
+
+    public List getTimeSlots() {
+
+        //empty snapshot
+        QuerySnapshot timeSlotsCollection;
+
+        //request to firebase for timeslots collection
+        //request to firebase for timeslots collection
+        ApiFuture<QuerySnapshot> query = database.collection("timeSlots").get();
+
+        try {
+            //get snapshot from query
+            timeSlotsCollection = query.get();
+
+            //set new empty list
+            ArrayList docs = new ArrayList();
+
+            //get list of all documents from snapshot
+            List<QueryDocumentSnapshot> documents = timeSlotsCollection.getDocuments();
+
+            //loop all documents in snapshot and get the data
+            for (QueryDocumentSnapshot document : documents) {
+                docs.add(document.getData()); //add data of each doc to arraylist
+            }
+
+            return docs;
+
+        } catch (Exception exception) {
             return new ArrayList<>(Arrays.asList(new HashMap<>() {{
-                put("id", "failed to get parts");
+                put("id", "failed to get timeslots");
             }}));
         }
     }
 
-//  public List getTimeSlots() {
-//
-//    //empty snapshot
-//    QuerySnapshot timeSlotsCollection;
-//
-//    //request to firebase for timeslots collection
-//    ApiFuture<QuerySnapshot> query = database.collection("timeSlots").get();
-//
-//    try {
-//      //get snapshot from query
-//      timeSlotsCollection = query.get();
-//
-//      //set new empty list
-//      ArrayList docs = new ArrayList();
-//
-//      //get list of all documents from snapshot
-//      List<QueryDocumentSnapshot> documents = timeSlotsCollection.getDocuments();
-//
-//      //loop all documents in snapshot and get the data
-//      for (QueryDocumentSnapshot document : documents) {
-//        docs.add(document.getData()); //add data of each doc to arraylist
-//      }
-//
-//      return docs;
-//
-//    } catch (Exception exception) {
-//      return new ArrayList<>(Arrays.asList(new HashMap<>() {{
-//        put("id", "failed to get timeslots");
-//      }}));
-//    }
-//  }
-//
 
-    //    public Map<String, Object> getTimeSlotsForDay(String dateStr) throws Exception {
-//        //request to firebase for timeslots collection
-//        DocumentReference docRef = database.collection("timeSlots").document(dateStr);
-//
-//        try {
-//            ApiFuture<DocumentSnapshot> query = docRef.get();
-//
-//            //get snapshot from query
-//            DocumentSnapshot document = query.get();
-//
-//            if (document.exists()) {
-//                return document.getData();
-//            }
-//
-//            return new HashMap<>();
-//
-//        } catch (Exception exception) {
-//            throw new Exception("database failed to get timeslots for day" + dateStr);
-//        }
-//    }
+    public ArrayList<ServiceModel> getAllServices() {
+        ApiFuture<QuerySnapshot> query = database.collection("services").get();
+
+        try {
+            ArrayList<ServiceModel> docs = new ArrayList();
+            QuerySnapshot servicesCollection = query.get();
+            List<QueryDocumentSnapshot> documents = servicesCollection.getDocuments();
+
+            for (QueryDocumentSnapshot document : documents) {
+                ServiceModel doc = new ServiceModel((String) document.getData().get("id"), (String) document.getData().get("name"));
+                docs.add(doc);
+            }
+
+            return docs;
+        } catch (Exception exception) {
+
+            return new ArrayList<>(Arrays.asList(new ServiceModel("id", "failed to get services")));
+        }
+    }
+
+    //timeslots
     public DaySchedule getTimeSlotsForDay(String dateStr) throws Exception {
         //request to firebase for timeslots collection
         DocumentReference docRef = database.collection("timeSlots").document(dateStr);
@@ -130,6 +139,7 @@ public class Db {
         }
     }
 
+    //timeslot utility for getting timeslot info
     private static HashMap<String, Appointment> getAppointmentHashMap(DocumentSnapshot document) {
         HashMap<String, Appointment> appointments = new HashMap<>();
         Map<String, Object> doc = document.getData();
@@ -147,3 +157,4 @@ public class Db {
         return appointments;
     }
 }
+
