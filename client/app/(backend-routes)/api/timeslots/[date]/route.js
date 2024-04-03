@@ -2,12 +2,11 @@ const API_URL = process.env.API_URL;
 const LOC = "/api/timeslots/";
 
 export async function GET(request, { params }) {
-  // console.log("request", await request);
   const { date } = params;
 
   try {
-    const data = await getTimeSlotList(date);
-    return new Response("dataJson", {
+    const data = await JSON.stringify(await getTimeSlotList(date));
+    return new Response(data, {
       status: 200,
     });
   } catch (error) {
@@ -24,5 +23,7 @@ export async function GET(request, { params }) {
 async function getTimeSlotList(date) {
   const response = await fetch(`${API_URL}/timeslots/${date}`);
   const data = await response.json();
+
+  console.log("data", data);
   return data;
 }
