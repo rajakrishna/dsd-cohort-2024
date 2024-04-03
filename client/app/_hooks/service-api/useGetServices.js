@@ -6,10 +6,6 @@ export default function useGetServices() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    console.log("data for services", data);
-  }, [data]);
-
-  useEffect(() => {
     const controller = new AbortController();
 
     try {
