@@ -1,22 +1,35 @@
 import { useEffect, useRef, useState } from "react";
 
 export default function useGetDayTimeSlots(date) {
-  const [data, setData] = useState([{}]);
+  const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const controllerRef = useRef(new AbortController());
 
   useEffect(() => {
-    const controller = new AbortController();
+    const controller = controllerRef.current;
 
-    try {
-      setIsLoading(true);
-      fetchTimeSlotData({ date, setData, signal: controller.signal });
-      setIsLoading(false);
-    } catch (error) {
-      console.log("failed to fetch services");
-      controller.abort();
-      setIsLoading(false);
-      setError({ error: "failed to fetch services" });
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+
+        const data = await fetchTimeSlotData({
+          date,
+          signal: controller.signal,
+        });
+
+        setData(data);
+      } catch (error) {
+        console.log("failed to fetch timeslots for day", error);
+        controller.abort();
+        setError({ error: "failed to fetch timeslots for day" });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (!isLoading) {
+      fetchData();
     }
 
     return () => {
@@ -27,8 +40,7 @@ export default function useGetDayTimeSlots(date) {
   return { data, isLoading, error };
 }
 
-async function fetchTimeSlotData({ date, setData, signal }) {
-  //   const bodyData = JSON.stringify({ todaysDate: date });
+async function fetchTimeSlotData({ date, signal }) {
   const response = await fetch(`api/timeslots/${date}`, {
     headers: {
       "Content-Type": "application/json",
@@ -37,6 +49,9 @@ async function fetchTimeSlotData({ date, setData, signal }) {
     signal,
   });
 
+  // console.log("response", await response.json());
+
   const data = await response.json();
-  setData(data);
+
+  return data;
 }
