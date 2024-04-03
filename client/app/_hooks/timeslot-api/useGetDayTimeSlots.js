@@ -28,7 +28,7 @@ export default function useGetDayTimeSlots(date) {
       }
     };
 
-    if (!isLoading) {
+    if ((!isLoading, date)) {
       fetchData();
     }
 
