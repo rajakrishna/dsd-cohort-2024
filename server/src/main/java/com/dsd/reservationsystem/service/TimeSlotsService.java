@@ -13,7 +13,7 @@ import java.util.Map;
 @Service
 public class TimeSlotsService {
     private final Db database;
-    ArrayList<String> timeSlotCodes = new ArrayList<>(Arrays.asList("TS79", "TS911", "TS111"));
+    ArrayList<String> timeSlotCodes = new ArrayList<>(Arrays.asList("TS79", "TS911", "TS111", "TS13", "TS35", "TS57"));
 
     public TimeSlotsService(Db database) {
         this.database = database;
@@ -25,6 +25,9 @@ public class TimeSlotsService {
             put("TS79", true);
             put("TS911", true);
             put("TS111", true);
+            put("TS13", true);
+            put("TS35", true);
+            put("TS57", true);
         }};
 
         DaySchedule dayTimeSlots = this.database.getTimeSlotsForDay(dateStr);
