@@ -7,6 +7,7 @@ export default function useGetDayTimeSlots(date) {
 
   useEffect(() => {
     const controller = new AbortController();
+    setError(null);
 
     const fetchData = async () => {
       try {
@@ -17,9 +18,11 @@ export default function useGetDayTimeSlots(date) {
           signal: controller.signal,
         });
 
+        setError(null);
         setData(res.data);
       } catch (error) {
         console.log("failed to fetch timeslots for day", error);
+
         setData([]);
         setError({ message: "failed to fetch timeslots for day", error });
       } finally {
@@ -45,6 +48,10 @@ async function fetchTimeSlotData({ date, signal }) {
     method: "GET",
     signal,
   });
+
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
 
   const data = await response.json();
 

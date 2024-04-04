@@ -2,6 +2,7 @@ const API_URL = process.env.API_URL;
 const LOC = "/api/timeslots/";
 
 export async function GET(request, { params }) {
+  request;
   const { date } = params;
 
   try {
@@ -15,7 +16,7 @@ export async function GET(request, { params }) {
     const body = JSON.stringify({
       data: [],
       message: "failed to get timeslot list",
-      error,
+      error: error.message,
     });
     return new Response(body, {
       status: 500,

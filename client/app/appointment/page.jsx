@@ -18,15 +18,18 @@ export default function AppointmentPage() {
 
   const dateWithNoHyphens = formatDate(startDate);
 
-  const { data: serviceList } = useGetServices();
-  const { data: timeSlotsList } = useGetDayTimeSlots(dateWithNoHyphens);
+  const { data: serviceList, error: serviceListError } = useGetServices();
+  const { data: timeSlotsList, error: timeSlotsListError } =
+    useGetDayTimeSlots(dateWithNoHyphens);
 
-  useEffect(() => {
-    console.log("serviceList", serviceList);
-  }, [serviceList]);
-  useEffect(() => {
-    console.log("timeSlotsList", timeSlotsList);
-  }, [timeSlotsList]);
+  // useEffect(() => {
+  //   console.log("serviceList", serviceList);
+  //   console.log("serviceListError with servicelist", serviceListError);
+  // }, [serviceList, serviceListError]);
+
+  // useEffect(() => {
+  //   console.log("timeSlotsList", timeSlotsList);
+  // }, [timeSlotsList]);
 
   const [appointment, setAppointment] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -201,6 +204,8 @@ export default function AppointmentPage() {
   //====================================================================================================
   return (
     <div className="flex flex-row min-h-screen w-full">
+      {serviceListError && <div>sevice list ERROR</div>}
+      {timeSlotsListError && <div>timeslotslist ERROR</div>}
       <form className="flex-1 pr-2 grid grid-cols-1 md:grid-cols-2 gap-x-2 gap-y-1 p-40">
         <div className="col-span-1 md:col-span-2 lg:col-span-2">
           <select

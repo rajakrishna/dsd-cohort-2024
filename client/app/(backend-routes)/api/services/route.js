@@ -1,9 +1,10 @@
 const API_URL = process.env.API_URL;
 const LOC = "/api/services";
 
+export const dynamic = "force-dynamic"; // have next js NOT cache this request
 export async function GET(request, { params }) {
+  request;
   try {
-    throw new Error("error in route services");
     const data = await getServicesList();
     const body = JSON.stringify({ data });
     return new Response(body, {
