@@ -20,7 +20,7 @@ export default function useGetDayTimeSlots(date) {
         setData(data);
       } catch (error) {
         console.log("failed to fetch timeslots for day", error);
-        controller.abort();
+        // controller.abort();
         setError({ error: "failed to fetch timeslots for day" });
       } finally {
         setIsLoading(false);

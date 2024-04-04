@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 export default function useGetServices() {
   const [data, setData] = useState([{}]);
-  const [isLoading, setIsLoading] = useState([{}]);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -14,7 +14,7 @@ export default function useGetServices() {
       setIsLoading(false);
     } catch (error) {
       console.log("failed to fetch services");
-      controller.abort();
+      // controller.abort();
       setIsLoading(false);
       setError({ error: "failed to fetch services" });
     }
