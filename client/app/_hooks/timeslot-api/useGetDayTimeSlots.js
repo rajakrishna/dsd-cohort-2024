@@ -4,10 +4,9 @@ export default function useGetDayTimeSlots(date) {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const controllerRef = useRef(new AbortController());
 
   useEffect(() => {
-    const controller = controllerRef.current;
+    const controller = new AbortController();
 
     const fetchData = async () => {
       try {
@@ -28,19 +27,19 @@ export default function useGetDayTimeSlots(date) {
       }
     };
 
-    if ((!isLoading, date)) {
-      fetchData();
-    }
+    fetchData();
 
     return () => {
+      setIsLoading(false);
       controller.abort();
     };
-  }, []);
+  }, [date]);
 
   return { data, isLoading, error };
 }
 
 async function fetchTimeSlotData({ date, signal }) {
+  console.log("api/timeslots/${date}", `api/timeslots/${date}`);
   const response = await fetch(`api/timeslots/${date}`, {
     headers: {
       "Content-Type": "application/json",
