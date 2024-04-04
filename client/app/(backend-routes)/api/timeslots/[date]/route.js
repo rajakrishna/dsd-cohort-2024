@@ -1,6 +1,7 @@
 const API_URL = process.env.API_URL;
 const LOC = "/api/timeslots/";
 
+export const dynamic = "force-dynamic"; // have next js NOT cache this request
 export async function GET(request, { params }) {
   request;
   const { date } = params;
