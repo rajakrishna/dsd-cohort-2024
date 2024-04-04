@@ -132,7 +132,7 @@ export default function AppointmentPage() {
   const timeSlotData = useGetDayTimeSlots("03212024");
 
   useEffect(() => {
-    console.log("timeslots", timeSlotData.data);
+    // console.log("timeslots", timeSlotData.data);
     setTimeSlotsList(timeSlotData.data);
   }, [timeSlotData.data]);
 
