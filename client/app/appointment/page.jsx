@@ -8,12 +8,19 @@ import { mockTimeSlotsData } from "../mockData/mockGetTimeSlotsApi";
 import { timeSlots, statesList } from "@/constants";
 import { useRouter } from "next/navigation";
 import useGetDayTimeSlots from "../_hooks/timeslot-api/useGetDayTimeSlots";
+import useGetServices from "../_hooks/service-api/useGetServices";
 
 export default function AppointmentPage() {
-  const [serviceList, setServiceList] = useState(mockServicesData);
-  const [timeSlotsList, setTimeSlotsList] = useState(mockTimeSlotsData);
+  // const [serviceList, setServiceList] = useState(mockServicesData);
+  // const [timeSlotsList, setTimeSlotsList] = useState(mockTimeSlotsData);
   const [service, setService] = useState("");
   const [startDate, setStartDate] = useState(new Date().toLocaleDateString());
+
+  const dateWithNoHyphens = formatDate(startDate);
+
+  const { data: serviceList } = useGetServices();
+  const { data: timeSlotsList } = useGetDayTimeSlots(dateWithNoHyphens);
+
   const [appointment, setAppointment] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -25,6 +32,13 @@ export default function AppointmentPage() {
   const [city, setCity] = useState("");
   const [zip, setZip] = useState("");
   const router = useRouter();
+
+  // const timeSlotData = useGetDayTimeSlots(startDate);
+
+  // useEffect(() => {
+  //   // console.log("timeslots", timeSlotData.data);
+  //   setTimeSlotsList(timeSlotData.data);
+  // }, [timeSlotData.data]);
 
   const serviceInputHandler = (e) => {
     setService(e.target.value);
@@ -92,15 +106,18 @@ export default function AppointmentPage() {
       (timeSlotKey) => timeSlots[timeSlotKey] === appointment
     );
     const selectedService = serviceList.find((item) => item.name === service);
-    const formattedDate = startDate.split("/");
-    let [month, day, year] = formattedDate;
-    if (month.length === 1) {
-      month = "0" + month;
-    }
-    if (day.length === 1) {
-      day = "0" + day;
-    }
-    const dateWithNoHyphens = month + day + year;
+    // const formattedDate = startDate.split("/");
+
+    // let [month, day, year] = formattedDate;
+    // if (month.length === 1) {
+    //   month = "0" + month;
+    // }
+    // if (day.length === 1) {
+    //   day = "0" + day;
+    // }
+    // const dateWithNoHyphens = month + day + year;
+
+    // const dateWithNoHyphens = formatDate(startDate);
 
     const data = {
       appointmentInfo: { day: dateWithNoHyphens, timeSlot: timeSlotKey },
@@ -128,13 +145,6 @@ export default function AppointmentPage() {
       })
       .catch((err) => console.log(err));
   };
-
-  const timeSlotData = useGetDayTimeSlots("03212024");
-
-  useEffect(() => {
-    // console.log("timeslots", timeSlotData.data);
-    setTimeSlotsList(timeSlotData.data);
-  }, [timeSlotData.data]);
 
   //will enable below once the backend is ready!
   //====================================================================================================
@@ -318,4 +328,18 @@ export default function AppointmentPage() {
       </div>
     </div>
   );
+}
+
+function formatDate(startDate) {
+  const formattedDate = startDate.split("/");
+
+  let [month, day, year] = formattedDate;
+  if (month.length === 1) {
+    month = "0" + month;
+  }
+  if (day.length === 1) {
+    day = "0" + day;
+  }
+  const dateWithNoHyphens = month + day + year;
+  return dateWithNoHyphens;
 }
