@@ -9,11 +9,15 @@ Requirements
   - if not then you can optionaly update Path JAVA_HOME environment variable to location you installed the java JDK17 package
 
 1. build project using graddle wrapper and run
+
    - `cd server/`
    - `./gradlew build`
    - `./gradlew bootrun`
    - default port will be 8000
      - example url `http://localhost:8000/api/parts`
+
+1. create credentials file server/credentials.json
+   - add firestore credentials info inside
 
 # Java project configuration
 
