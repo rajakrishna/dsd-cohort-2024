@@ -1,19 +1,22 @@
 const API_URL = process.env.API_URL;
 const LOC = "/api/services";
 
-export async function GET(request) {
+export async function GET(request, { params }) {
   try {
+    throw new Error("error in route services");
     const data = await getServicesList();
-    const dataJson = JSON.stringify(data);
-    return new Response(dataJson, {
+    const body = JSON.stringify({ data });
+    return new Response(body, {
       status: 200,
     });
   } catch (error) {
-    const message = JSON.stringify({
-      error: "failed to get services list",
-      LOC,
+    const body = JSON.stringify({
+      data: [],
+      message: "failed to get services list",
+      error: error?.message,
     });
-    return new Response(message, {
+
+    return new Response(body, {
       status: 500,
     });
   }

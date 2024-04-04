@@ -21,6 +21,13 @@ export default function AppointmentPage() {
   const { data: serviceList } = useGetServices();
   const { data: timeSlotsList } = useGetDayTimeSlots(dateWithNoHyphens);
 
+  useEffect(() => {
+    console.log("serviceList", serviceList);
+  }, [serviceList]);
+  useEffect(() => {
+    console.log("timeSlotsList", timeSlotsList);
+  }, [timeSlotsList]);
+
   const [appointment, setAppointment] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");

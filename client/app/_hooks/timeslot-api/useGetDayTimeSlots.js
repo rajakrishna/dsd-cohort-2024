@@ -12,16 +12,16 @@ export default function useGetDayTimeSlots(date) {
       try {
         setIsLoading(true);
 
-        const data = await fetchTimeSlotData({
+        const res = await fetchTimeSlotData({
           date,
           signal: controller.signal,
         });
 
-        setData(data);
+        setData(res.data);
       } catch (error) {
         console.log("failed to fetch timeslots for day", error);
-        // controller.abort();
-        setError({ error: "failed to fetch timeslots for day" });
+        setData([]);
+        setError({ message: "failed to fetch timeslots for day", error });
       } finally {
         setIsLoading(false);
       }
@@ -30,7 +30,6 @@ export default function useGetDayTimeSlots(date) {
     fetchData();
 
     return () => {
-      setIsLoading(false);
       controller.abort();
     };
   }, [date]);
@@ -39,7 +38,6 @@ export default function useGetDayTimeSlots(date) {
 }
 
 async function fetchTimeSlotData({ date, signal }) {
-  console.log("api/timeslots/${date}", `api/timeslots/${date}`);
   const response = await fetch(`api/timeslots/${date}`, {
     headers: {
       "Content-Type": "application/json",
@@ -47,8 +45,6 @@ async function fetchTimeSlotData({ date, signal }) {
     method: "GET",
     signal,
   });
-
-  // console.log("response", await response.json());
 
   const data = await response.json();
 

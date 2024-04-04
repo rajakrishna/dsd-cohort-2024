@@ -1,23 +1,30 @@
 import { useEffect, useRef, useState } from "react";
 
 export default function useGetServices() {
-  const [data, setData] = useState([{}]);
+  const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const controller = new AbortController();
 
-    try {
-      setIsLoading(true);
-      fetchServiceData(setData, controller.signal);
-      setIsLoading(false);
-    } catch (error) {
-      console.log("failed to fetch services");
-      // controller.abort();
-      setIsLoading(false);
-      setError({ error: "failed to fetch services" });
-    }
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+
+        const res = await fetchServiceData(controller.signal);
+
+        setData(res.data);
+      } catch (error) {
+        console.log("failed to fetch services", error);
+        setData([]);
+        setError({ message: "failed to fetch services", error });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
 
     return () => {
       controller.abort();
@@ -27,8 +34,8 @@ export default function useGetServices() {
   return { data, isLoading, error };
 }
 
-async function fetchServiceData(setData, signal) {
+async function fetchServiceData(signal) {
   const response = await fetch(`api/services`, { signal });
   const data = await response.json();
-  setData(data);
+  return data;
 }
