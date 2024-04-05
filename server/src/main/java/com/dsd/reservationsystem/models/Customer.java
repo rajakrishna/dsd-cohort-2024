@@ -71,61 +71,61 @@ public class Customer {
         this.appointments = appointments;
     }
 
-    public static class Appointment {
-        private String serviceId;
-        private String confirmationNumber;
-        private String timeSlot;
-        private String date;
-        private String status;
-
-
-        public Appointment(String serviceId, String confirmationNumber, String timeSlot, String date, String status) {
-            this.serviceId = serviceId;
-            this.confirmationNumber = confirmationNumber;
-            this.timeSlot = timeSlot;
-            this.date = date;
-            this.status = status;
-        }
-
-
-        public String getServiceId() {
-            return serviceId;
-        }
-
-        public void setServiceId(String serviceId) {
-            this.serviceId = serviceId;
-        }
-
-        public String getConfirmationNumber() {
-            return confirmationNumber;
-        }
-
-        public void setConfirmationNumber(String confirmationNumber) {
-            this.confirmationNumber = confirmationNumber;
-        }
-
-        public String getTimeSlot() {
-            return timeSlot;
-        }
-
-        public void setTimeSlot(String timeSlot) {
-            this.timeSlot = timeSlot;
-        }
-
-        public String getDate() {
-            return date;
-        }
-
-        public void setDate(String date) {
-            this.date = date;
-        }
-
-        public String getStatus() {
-            return status;
-        }
-
-        public void setStatus(String status) {
-            this.status = status;
-        }
-    }
+//    public static class Appointment {
+//        private String serviceId;
+//        private String confirmationNumber;
+//        private String timeSlot;
+//        private String date;
+//        private String status;
+//
+//
+//        public Appointment(String serviceId, String confirmationNumber, String timeSlot, String date, String status) {
+//            this.serviceId = serviceId;
+//            this.confirmationNumber = confirmationNumber;
+//            this.timeSlot = timeSlot;
+//            this.date = date;
+//            this.status = status;
+//        }
+//
+//
+//        public String getServiceId() {
+//            return serviceId;
+//        }
+//
+//        public void setServiceId(String serviceId) {
+//            this.serviceId = serviceId;
+//        }
+//
+//        public String getConfirmationNumber() {
+//            return confirmationNumber;
+//        }
+//
+//        public void setConfirmationNumber(String confirmationNumber) {
+//            this.confirmationNumber = confirmationNumber;
+//        }
+//
+//        public String getTimeSlot() {
+//            return timeSlot;
+//        }
+//
+//        public void setTimeSlot(String timeSlot) {
+//            this.timeSlot = timeSlot;
+//        }
+//
+//        public String getDate() {
+//            return date;
+//        }
+//
+//        public void setDate(String date) {
+//            this.date = date;
+//        }
+//
+//        public String getStatus() {
+//            return status;
+//        }
+//
+//        public void setStatus(String status) {
+//            this.status = status;
+//        }
+//    }
 }

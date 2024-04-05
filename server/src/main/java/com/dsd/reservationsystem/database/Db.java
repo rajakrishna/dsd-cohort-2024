@@ -61,7 +61,7 @@ public class Db {
         //empty snapshot
         QuerySnapshot timeSlotsCollection;
 
-        //request to firebase for timeslots collection
+
         //request to firebase for timeslots collection
         ApiFuture<QuerySnapshot> query = database.collection("timeSlots").get();
 
@@ -160,5 +160,47 @@ public class Db {
         database.collection("customerInfo").document(String.valueOf(customer.getId())).set(customer);
         return customer;
     }
+    public Appointment createAppointment(Appointment appointment) {
+        // Generate a unique ID for the appointment
+        String id = UUID.randomUUID().toString();
+        appointment.setConfirmationNumber(id);
+
+        // Save the appointment to Firestore
+        database.collection("appointments").document(id).set(appointment);
+
+        return appointment;
+    }
+
+    public void updateTimeSlotsForDay(String day, Map<String, Appointment> appointments) {
+        // Get the document reference for the specific day
+        DocumentReference dayRef = database.collection("timeSlots").document(day);
+
+        // Prepare the updates
+        Map<String, Object> updates = new HashMap<>();
+        for (Map.Entry<String, Appointment> entry : appointments.entrySet()) {
+            updates.put(entry.getKey(), entry.getValue());
+        }
+
+        // Update the document
+        dayRef.update(updates);
+    }
+
+    public Customer getCustomerById(String id) {
+        DocumentReference docRef = database.collection("customerInfo").document(id);
+        ApiFuture<DocumentSnapshot> query = docRef.get();
+
+        try {
+            DocumentSnapshot document = query.get();
+            if (document.exists()) {
+                return document.toObject(Customer.class);
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }
 

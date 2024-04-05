@@ -3,6 +3,7 @@ package com.dsd.reservationsystem.service;
 import com.dsd.reservationsystem.database.Db;
 import com.dsd.reservationsystem.models.Customer;
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.google.firebase.FirebaseApp;
@@ -27,5 +28,16 @@ public class CustomerService {
 
         // Save the customer to Firestore
         return database.createCustomer(customer);
+    }
+
+    public Customer getCustomerById(String id) {
+
+        // Save the customer to Firestore
+        DocumentSnapshot document = database.collection("customerInfo").document(id).get().get();
+        if (document.exists()) {
+            return document.toObject(Customer.class);
+        } else {
+            return null;
+        }
     }
 }
