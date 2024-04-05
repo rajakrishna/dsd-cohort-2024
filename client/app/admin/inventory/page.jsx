@@ -1,5 +1,5 @@
 'use client'
-import { mockPartsData } from "@/app/mockData/mockGetPartsApi"
+import { mockPartsData } from "@/app/utility/mockData/mockGetPartsApi"
 import { partsAttributes } from "@/constants"
 import { useState } from "react";
 
