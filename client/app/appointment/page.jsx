@@ -24,6 +24,7 @@ export default function AppointmentPage() {
   const [state, setState] = useState('')
   const [city, setCity] = useState('')
   const [zip, setZip] = useState('')
+  const [showAlert, setShowAlert] = useState(false)
   const router = useRouter()
 
   const serviceInputHandler = (e) => {
@@ -47,6 +48,11 @@ export default function AppointmentPage() {
   }
 
   const phoneInputHandler = (e) => {
+    let value = e.target.value
+    if (/\D/.test(value)) {
+      alert('Please only enter numbers for phone number')
+      e.target.value = value.replace(/\D/g, '')
+    }
     setPhone(e.target.value)
   }
 
@@ -67,8 +73,14 @@ export default function AppointmentPage() {
   }
 
   const zipInputHandler = (e) => {
+    let value = e.target.value
+    if (/\D/.test(value)) {
+      alert('Please only enter numbers for zip code')
+      e.target.value = value.replace(/\D/g, '')
+    }
     setZip(e.target.value)
   }
+
 
   const bookAppointment = () => {
 
@@ -76,6 +88,27 @@ export default function AppointmentPage() {
       alert('Please fill out all fields')
       return
     }
+
+    if (zip.length !== 5) {
+      alert('Please enter a valid zip code')
+      return
+    }
+
+    if (phone.length !== 10) {
+      alert('Please enter a valid phone number')
+      return
+    }
+
+    const validateEmail = (email) => {
+      const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return regex.test(email);
+    }
+
+    if (!validateEmail(email)) {
+      alert('Please enter a valid email')
+      return
+    }
+
 
     const timeSlotKey = Object.keys(timeSlots).find(timeSlotKey => timeSlots[timeSlotKey] === appointment);
     const selectedService = serviceList.find(item => item.name === service);
@@ -99,7 +132,7 @@ export default function AppointmentPage() {
         "serviceId": selectedService.id
       }
     }
-
+console.log(data)
     fetch(
       '/saveAppointmentApi', {
       method: 'POST',
@@ -165,6 +198,14 @@ export default function AppointmentPage() {
   // }, [startDate])
   //====================================================================================================
   return (
+    <div>
+    {showAlert && (
+    <div className="toast toast-top toast-center">
+    <div className="alert alert-info">
+      <span>Please enter correct zip code</span>
+    </div>
+  </div>)
+    }
   <div className="flex flex-row min-h-screen w-full">
     <form className='flex-1 pr-2 grid grid-cols-1 md:grid-cols-2 gap-x-2 gap-y-1 p-40'>
       <div className="col-span-1 md:col-span-2 lg:col-span-2">
@@ -197,8 +238,8 @@ export default function AppointmentPage() {
 
        <input type="text" placeholder='First Name' className="input input-bordered w-full input-lg col-span-1" onChange={firstNameInputHandler}/>
        <input type="text" placeholder='Last Name' className="input input-bordered w-full input-lg col-span-1" onChange={lastNameInputHandler}/>
-       <input type="text" placeholder='Email' className="input input-bordered w-full input-lg col-span-1" onChange={emailInputHandler}/>
-       <input type="text" placeholder='Phone Number' className="input input-bordered input-lg w-full col-span-1" onChange={phoneInputHandler}/>
+       <input type="email" placeholder='Email' className="input input-bordered w-full input-lg col-span-1" onChange={emailInputHandler}/>
+       <input type="tel" placeholder='Phone Number' maxLength='10' className="input input-bordered input-lg w-full col-span-1" onChange={phoneInputHandler}/>
        <input type="text" placeholder='Street' className="input input-bordered input-lg w-full col-span-1" onChange={streetInputHandler}/>
        <input type="text" placeholder='Apt' className="input input-bordered input-lg w-full col-span-1" onChange={aptInputHandler}/>
        <select className="select select-bordered select-lg w-full" onChange={stateInputHandler}>
@@ -206,7 +247,7 @@ export default function AppointmentPage() {
         {statesList.map(state => <option key={state.abbreviation}>{state.name}</option>)}
       </select>
        <input type="text" placeholder='City' className="input input-bordered input-lg w-full" onChange={cityInputHandler}/>
-       <input type="text" placeholder='Zipcode' className="input input-bordered input-lg w-full" onChange={zipInputHandler}/>
+       <input type="text" placeholder='Zipcode' maxLength='5' inputMode="numeric" className="input input-bordered input-lg w-full" onChange={zipInputHandler}/>
     </form>
     <div className="flex-1 flex flex-col justify-center items-center p-5">
       <div className="w-full max-w-lg border-4 rounded-3xl border-gray-300 shadow-md py-20 h-auto px-8">
@@ -222,5 +263,8 @@ export default function AppointmentPage() {
       </div>
     </div>
   </div>
-  );
-}
+ </div>
+  )
+  }
+
+
