@@ -132,27 +132,30 @@ export default function AppointmentPage() {
         "serviceId": selectedService.id
       }
     }
-console.log(data)
-    fetch(
-      '/saveAppointmentApi', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    }
-    )
-    .then(res => res.json())
-    .then(data => {
-      if (data.status === 'success') {
-        router.push('/appointmentconfirmed')
-      }
-    })
-    .catch(err => console.log(err))
-  }
 
+    router.push('/appointmentconfirmed')
+  }
   //will enable below once the backend is ready!
   //====================================================================================================
+  //   fetch(
+  //     '/saveAppointmentApi', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json'
+  //     },
+  //     body: JSON.stringify(data)
+  //   }
+  //   )
+  //   .then(res => res.json())
+  //   .then(data => {
+  //     if (data.status === 'success') {
+  //
+  //     }
+  //   })
+  //   .catch(err => console.log(err))
+  // }
+
+
   // const getServiceList = () => {
   //   fetch(
   //     '/getServicesApi', {
