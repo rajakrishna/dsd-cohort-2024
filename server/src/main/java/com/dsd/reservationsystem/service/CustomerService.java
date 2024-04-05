@@ -31,11 +31,9 @@ public class CustomerService {
     }
 
     public Customer getCustomerById(String id) {
-
-        // Save the customer to Firestore
-        DocumentSnapshot document = database.collection("customerInfo").document(id).get().get();
-        if (document.exists()) {
-            return document.toObject(Customer.class);
+        Customer customer = database.getCustomerById(id);
+        if (customer != null) {
+            return customer;
         } else {
             return null;
         }

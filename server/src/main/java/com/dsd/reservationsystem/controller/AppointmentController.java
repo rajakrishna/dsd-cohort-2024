@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/api/appointment")
@@ -39,5 +40,11 @@ public class AppointmentController {
         // Get the time slots for the selected day
         return timeSlotsService.isTimeSlotAvailable(day,timeSlot);
 
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<Appointment>> getAppointments(@RequestParam String date) throws ExecutionException, InterruptedException {
+        List<Appointment> appointments = appointmentService.getAppointmentsForDay(date);
+        return ResponseEntity.ok(appointments);
     }
 }

@@ -14,6 +14,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 @Repository
 public class Db {
@@ -202,5 +203,61 @@ public class Db {
         }
     }
 
+    public void createPart(Part part) {
+        // Convert the Part object to a Map
+        Map<String, Object> partMap = new HashMap<>();
+        partMap.put("id", part.getId());
+        partMap.put("name", part.getName());
+        partMap.put("quantity", part.getQuantity());
+        partMap.put("threshold", part.getThreshold());
+
+        // Add the part to the Firestore collection
+        database.collection("parts").document(part.getId()).set(partMap);
+    }
+
+    public Part getPartById(String id) {
+        DocumentReference docRef = database.collection("parts").document(id);
+        ApiFuture<DocumentSnapshot> future = docRef.get();
+        DocumentSnapshot document;
+        try {
+            document = future.get();
+            if (document.exists()) {
+                return document.toObject(Part.class);
+            } else {
+                return null;
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    public CollectionReference collection(String parts) {
+        return database.collection(parts);
+    }
+
+    public List<Appointment> getAppointmentsForDay(String date) throws ExecutionException, InterruptedException {
+        // Create a query to get all appointments on the specified date
+        DocumentReference docRef = database.collection("timeSlots").document(date);
+
+        ApiFuture<DocumentSnapshot> future = docRef.get();
+
+        DocumentSnapshot document = future.get();
+
+
+        List<Appointment> appointments = new ArrayList<Appointment>();
+        Map<String, Object> doc = document.getData();
+
+        //loop through hash map of day timeslots
+        for (Map.Entry<String, Object> timeSlot : doc.entrySet()) {
+            String tsCode = timeSlot.getKey();
+            HashMap<String, String> timeSlotData = (HashMap<String, String>) timeSlot.getValue();
+
+//                    System.out.println("Key: " + tsCode + ", Value: " + (String) timeSlotData.get("customerId"));
+            Appointment appointment = new Appointment();
+            appointment.setCustomerId((String) timeSlotData.get("customerId"));
+            appointments.add(appointment);
+        }
+        return appointments;
+    }
 }
 

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @Service
 public class AppointmentService {
@@ -66,4 +67,9 @@ public class AppointmentService {
             return null;
         }
     }
+    public List<Appointment> getAppointmentsForDay(String date) throws ExecutionException, InterruptedException {
+        return database.getAppointmentsForDay(date);
+    }
+
+
 }
