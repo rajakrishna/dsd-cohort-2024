@@ -47,8 +47,7 @@ export default function InventoryPage() {
         } */
     }
     const handleQuantityChange = (e, partId, delta = 0) => {
-        const quantityInput = e.target.parentElement.querySelector('input[name="quantity"]').value.trim() === "" ? 0 : parseInt(e.target.parentElement.querySelector('input[name="quantity"]').value)
-        const value = Math.max(0, quantityInput + delta)
+        const value = Math.max(0, parseInt(e.target.parentElement.querySelector('input[name="quantity"]').value) + delta)
         setPartsData((prevData) => prevData.map((part) => part.partId === partId ? { ...part, quantity: value } : part))
     }
     return (
