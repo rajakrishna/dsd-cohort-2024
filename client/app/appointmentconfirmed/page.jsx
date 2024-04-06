@@ -1,21 +1,8 @@
-import { mockData } from "../mockData/mockAppointmentApi";
+import { mockData } from "../utility/mockData/mockAppointmentApi";
 import { timeSlots } from "@/constants";
+import { formatDate } from "../utility/formatDateUtil";
 import Link from "next/link";
 export default function AppointmentConfirmationPage() {
-    const formatDate = (dateString) => {
-        if(!dateString || dateString.length !== 8){
-            return "Invalid date";
-        }
-        const year = parseInt(dateString.slice(4));
-        const month = parseInt(dateString.slice(0, 2)) - 1;
-        const day = parseInt(dateString.slice(2, 4));
-        const changedDate = new Date(year, month, day);
-        if (month < 0 || month > 11 || day < 1 || day > 31 || year < 1 || changedDate.getMonth() !== month || changedDate.getDate() !== day || changedDate.getFullYear() !== year) {
-            return "Invalid date";
-        } else {
-            return changedDate.toLocaleDateString('en-US', {year: 'numeric', month: '2-digit', day: '2-digit'});
-        }
-    }
     return (
         <div className="card flex items-center bg-white p-8 rounded-none">
             <div className="card-body items-center border-black border-2 rounded-lg">

@@ -3,8 +3,8 @@
 import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { mockServicesData } from "../mockData/mockGetServicesApi";
-import { mockTimeSlotsData } from "../mockData/mockGetTimeSlotsApi";
+import { mockServicesData } from "../utility/mockData/mockGetServicesApi";
+import { mockTimeSlotsData } from "../utility/mockData/mockGetTimeSlotsApi";
 import { timeSlots, statesList } from "@/constants";
 import { useRouter } from "next/navigation";
 import useGetDayTimeSlots from "../_hooks/timeslot-api/useGetDayTimeSlots";
