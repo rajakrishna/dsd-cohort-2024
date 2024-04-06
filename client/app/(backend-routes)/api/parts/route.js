@@ -1,3 +1,6 @@
+import { mockData } from "@/app/utility/mockData/mockAppointmentApi";
+import { mockPartsData } from "@/app/utility/mockData/mockGetPartsApi";
+
 const API_URL = process.env.API_URL;
 const LOC = "/api/parts/";
 
@@ -18,7 +21,7 @@ export async function GET(request) {
   } catch (error) {
     const body = JSON.stringify({
       data: [],
-      message: "failed to get inventory list",
+      message: "failed to get parts list",
       error: error.message,
     });
     return new Response(body, {
@@ -62,8 +65,9 @@ async function updatePart(part) {
 async function getAllParts({ lowInventory = false }) {
   const params = new URLSearchParams({ lowInventory });
 
-  const response = await fetch(`${API_URL}/parts?${params}`);
-  const data = await response.json();
+  const data = mockPartsData;
+  // const response = await fetch(`${API_URL}/parts?${params}`);
+  // const data = await response.json();
 
   return data;
 }
