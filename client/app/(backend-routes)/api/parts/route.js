@@ -3,8 +3,13 @@ const LOC = "/api/parts/";
 
 export const dynamic = "force-dynamic"; // have next js NOT cache this request
 export async function GET(request) {
+  //
+  const searchParams = request.nextUrl.searchParams;
+  const lowInventory = searchParams.get("lowInventory");
+
   try {
-    const data = await updatePart({ lowInventory: true });
+    const data = await getAllParts({ lowInventory });
+
     const body = JSON.stringify({ data });
 
     return new Response(body, {
@@ -22,6 +27,7 @@ export async function GET(request) {
   }
 }
 
+//request body:{partid,name,quantity,threshold }
 export async function POST(request) {
   const part = await request.json();
   try {
@@ -43,9 +49,20 @@ export async function POST(request) {
   }
 }
 
+// part:{partid,name,quantity,threshold }
 async function updatePart(part) {
   const body = JSON.stringify(part);
   const response = await fetch(`${API_URL}/parts`, body);
+  const data = await response.json();
+
+  return data;
+}
+
+//
+async function getAllParts({ lowInventory = false }) {
+  const params = new URLSearchParams({ lowInventory });
+
+  const response = await fetch(`${API_URL}/parts?${params}`);
   const data = await response.json();
 
   return data;
