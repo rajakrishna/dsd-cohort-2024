@@ -31,7 +31,7 @@ export async function GET(request) {
 }
 
 //request body:{partid,name,quantity,threshold }
-export async function POST(request) {
+export async function PUT(request) {
   const part = await request.json();
   try {
     const data = await updatePart(part);
@@ -52,10 +52,41 @@ export async function POST(request) {
   }
 }
 
+//request body:{partid,name,quantity,threshold }
+export async function POST(request) {
+  const part = await request.json();
+  try {
+    const data = await createPart(part);
+    const body = JSON.stringify({ data });
+
+    return new Response(body, {
+      status: 200,
+    });
+  } catch (error) {
+    const body = JSON.stringify({
+      data: {},
+      message: "failed to update part",
+      error: error.message,
+    });
+    return new Response(body, {
+      status: 500,
+    });
+  }
+}
+
+// part:{partid,name,quantity,threshold }
+async function createPart(part) {
+  const body = JSON.stringify(part);
+  const response = await fetch(`${API_URL}/parts`, { body, method: "PUT" });
+  const data = await response.json();
+
+  return data;
+}
+
 // part:{partid,name,quantity,threshold }
 async function updatePart(part) {
   const body = JSON.stringify(part);
-  const response = await fetch(`${API_URL}/parts`, body);
+  const response = await fetch(`${API_URL}/parts`, { body, method: "PUT" });
   const data = await response.json();
 
   return data;
