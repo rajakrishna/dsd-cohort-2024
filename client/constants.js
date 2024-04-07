@@ -7,6 +7,23 @@ export const timeSlots = {
     "TS57": "5pm-7pm"
 }
 
+export const sideNavItems = [
+    { 
+        label: "Dashboard", 
+        href: "/admin/dashboard" 
+    },
+    { 
+        label: "Appointments", 
+        href: "/admin/appointments" 
+    },
+    { 
+        label: "Inventory", 
+        href: "/admin/inventory" 
+    }
+]
+
+export const partsAttributes = ["Name", "Threshold", "Quantity"];
+
 export const statesList = [
     {
         "name": "Alabama",
