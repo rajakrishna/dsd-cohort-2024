@@ -33,7 +33,9 @@ export async function GET(request) {
 //request body:{partid,name,quantity,threshold }
 export async function PUT(request) {
   const part = await request.json();
+
   try {
+    setTimeout;
     const data = await updatePart(part);
     const body = JSON.stringify({ data });
 
