@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 
-export default function useUpdatePart() {
+export default function usePostPart() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const controller = useRef(new AbortController());
@@ -12,9 +12,8 @@ export default function useUpdatePart() {
   // 	"threshold":5
   // }
 
-  async function updatePart(newPartData) {
+  async function postPart(newPartData) {
     try {
-      //check if controller was used
       if (controller.current.signal.aborted) {
         controller.current = new AbortController();
       }
@@ -23,11 +22,9 @@ export default function useUpdatePart() {
       if (isLoading) {
         controller.current.abort();
       }
-
       setIsLoading(true);
       const response = await fetch("/api/parts", {
-        method: "PUT",
-        signal: controller.current.signal,
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
@@ -35,17 +32,17 @@ export default function useUpdatePart() {
       });
 
       if (!response.ok) {
-        throw new Error("Network response was not ok PUT PART");
+        throw new Error("Network response was not ok POST PART");
       }
 
       setError(null);
     } catch (error) {
-      console.error("Error updating data:", error);
-      setError("Failed to update data");
+      console.error("Error creating part: ", error);
+      setError("Failed to create part");
     } finally {
       setIsLoading(false);
     }
   }
 
-  return { updatePart, isLoading, error };
+  return { postPart, isLoading, error };
 }

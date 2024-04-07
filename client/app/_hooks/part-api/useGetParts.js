@@ -42,9 +42,14 @@ export default function useGetParts(lowInventory = false) {
 async function fetchPartsData({ signal, lowInventory }) {
   const params = new URLSearchParams({ lowInventory });
 
-  const response = await fetch(`/api/parts?${params}`, { signal });
+  const response = await fetch(`/api/parts?${params}`, {
+    signal,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
   if (!response.ok) {
-    throw new Error("Network response was not ok");
+    throw new Error("Network response was not ok  GET PART");
   }
   const data = await response.json();
 
