@@ -98,9 +98,8 @@ async function updatePart(part) {
 async function getAllParts({ lowInventory = false }) {
   const params = new URLSearchParams({ lowInventory });
 
-  const data = mockPartsData;
-  // const response = await fetch(`${API_URL}/parts?${params}`);
-  // const data = await response.json();
+  const response = await fetch(`${API_URL}/parts?${params}`);
+  const data = await response.json();
 
   return data;
 }
