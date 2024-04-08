@@ -22,6 +22,8 @@ export const sideNavItems = [
     }
 ]
 
+export const partsAttributes = ["Name", "Threshold", "Quantity"];
+
 export const statesList = [
     {
         "name": "Alabama",

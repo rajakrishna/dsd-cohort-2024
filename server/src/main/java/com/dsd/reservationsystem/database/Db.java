@@ -161,6 +161,7 @@ public class Db {
         database.collection("customerInfo").document(String.valueOf(customer.getId())).set(customer);
         return customer;
     }
+
     public Appointment createAppointment(Appointment appointment) {
         // Generate a unique ID for the appointment
         String id = UUID.randomUUID().toString();

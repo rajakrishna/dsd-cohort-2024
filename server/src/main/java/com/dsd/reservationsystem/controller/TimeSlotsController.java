@@ -17,12 +17,12 @@ public class TimeSlotsController {
         this.timeSlotsService = timeSlotsService;
     }
 
-    @GetMapping("")
+    @GetMapping("/{todaysDate}")
     @ResponseBody
-    public ResponseEntity<Object> getTimeSlotsForDay(@RequestBody Map<String, String> requestBody) {
+    public ResponseEntity<Object> getTimeSlotsForDay(@PathVariable String todaysDate) {
 
         try {
-            Map<String, Boolean> timeSlotsAvailability = this.timeSlotsService.getTimeSlotsAvailabilityForDay(requestBody.get("todaysDate"));
+            Map<String, Boolean> timeSlotsAvailability = this.timeSlotsService.getTimeSlotsAvailabilityForDay(todaysDate);
             System.out.println("timeSlots");
             System.out.println(timeSlotsAvailability);
             return ResponseEntity.ok().body(timeSlotsAvailability);
