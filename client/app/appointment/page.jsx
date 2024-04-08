@@ -13,24 +13,14 @@ import useGetServices from "../_hooks/service-api/useGetServices";
 export default function AppointmentPage() {
   // const [serviceList, setServiceList] = useState(mockServicesData);
   // const [timeSlotsList, setTimeSlotsList] = useState(mockTimeSlotsData);
-  const [service, setService] = useState("");
-  const [startDate, setStartDate] = useState(new Date().toLocaleDateString());
 
+  const [startDate, setStartDate] = useState(new Date().toLocaleDateString())
   const dateWithNoHyphens = formatDate(startDate);
 
   const { data: serviceList, error: serviceListError } = useGetServices();
   const { data: timeSlotsList, error: timeSlotsListError } =
     useGetDayTimeSlots(dateWithNoHyphens);
-
-  // useEffect(() => {
-  //   console.log("serviceList", serviceList);
-  //   console.log("serviceListError with servicelist", serviceListError);
-  // }, [serviceList, serviceListError]);
-
-  // useEffect(() => {
-  //   console.log("timeSlotsList", timeSlotsList);
-  // }, [timeSlotsList]);
-
+  const [service, setService] = useState('')
   const [appointment, setAppointment] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -41,6 +31,7 @@ export default function AppointmentPage() {
   const [state, setState] = useState("");
   const [city, setCity] = useState("");
   const [zip, setZip] = useState("");
+  const [showAlert, setShowAlert] = useState(false)
   const router = useRouter();
 
   // const timeSlotData = useGetDayTimeSlots(startDate);
@@ -49,6 +40,7 @@ export default function AppointmentPage() {
   //   // console.log("timeslots", timeSlotData.data);
   //   setTimeSlotsList(timeSlotData.data);
   // }, [timeSlotData.data]);
+
 
   const serviceInputHandler = (e) => {
     setService(e.target.value);
@@ -71,8 +63,14 @@ export default function AppointmentPage() {
   };
 
   const phoneInputHandler = (e) => {
-    setPhone(e.target.value);
-  };
+
+    let value = e.target.value
+    if (/\D/.test(value)) {
+      alert('Please only enter numbers for phone number')
+      e.target.value = value.replace(/\D/g, '')
+    }
+    setPhone(e.target.value)
+  }
 
   const streetInputHandler = (e) => {
     setStreet(e.target.value);
@@ -91,8 +89,14 @@ export default function AppointmentPage() {
   };
 
   const zipInputHandler = (e) => {
-    setZip(e.target.value);
-  };
+
+    let value = e.target.value
+    if (/\D/.test(value)) {
+      alert('Please only enter numbers for zip code')
+      e.target.value = value.replace(/\D/g, '')
+    }
+    setZip(e.target.value)
+  }
 
   const bookAppointment = () => {
     if (
@@ -112,52 +116,74 @@ export default function AppointmentPage() {
       return;
     }
 
-    const timeSlotKey = Object.keys(timeSlots).find(
-      (timeSlotKey) => timeSlots[timeSlotKey] === appointment
-    );
-    const selectedService = serviceList.find((item) => item.name === service);
-    // const formattedDate = startDate.split("/");
+    if (zip.length !== 5) {
+      alert('Please enter a valid zip code')
+      return
+    }
 
-    // let [month, day, year] = formattedDate;
-    // if (month.length === 1) {
-    //   month = "0" + month;
-    // }
-    // if (day.length === 1) {
-    //   day = "0" + day;
-    // }
-    // const dateWithNoHyphens = month + day + year;
+    if (phone.length !== 10) {
+      alert('Please enter a valid phone number')
+      return
+    }
 
-    // const dateWithNoHyphens = formatDate(startDate);
+    const validateEmail = (email) => {
+      const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return regex.test(email);
+    }
+
+    if (!validateEmail(email)) {
+      alert('Please enter a valid email')
+      return
+    }
+
+
+    const timeSlotKey = Object.keys(timeSlots).find(timeSlotKey => timeSlots[timeSlotKey] === appointment);
+    const selectedService = serviceList.find(item => item.name === service);
+    const formattedDate = startDate.split('/')
+    let [month, day, year] = formattedDate
+    if (month.length === 1) {
+      month = '0' + month
+    }
+    if (day.length === 1) {
+      day = '0' + day
+    }
+    const dateWithNoHyphens = month + day + year
 
     const data = {
-      appointmentInfo: { day: dateWithNoHyphens, timeSlot: timeSlotKey },
-      customerInfo: {
-        address: street + " " + apt,
-        name: firstName + " " + lastName,
-        phoneNumber: phone,
-        email: email,
-        serviceId: selectedService.id,
-      },
-    };
+      "appointmentInfo": { "day": dateWithNoHyphens, "timeSlot": timeSlotKey },
+      "customerInfo": {
+        "address": street + ' ' + apt,
+        "name": firstName + ' ' + lastName,
+        "phoneNumber": phone,
+        "email": email,
+        "serviceId": selectedService.id
+      }
+    }
 
-    fetch("/saveAppointmentApi", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.status === "success") {
-          router.push("/appointmentconfirmed");
-        }
-      })
-      .catch((err) => console.log(err));
-  };
+    router.push('/appointmentconfirmed')
+  }
 
   //will enable below once the backend is ready!
   //====================================================================================================
+  //   fetch(
+  //     '/saveAppointmentApi', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json'
+  //     },
+  //     body: JSON.stringify(data)
+  //   }
+  //   )
+  //   .then(res => res.json())
+  //   .then(data => {
+  //     if (data.status === 'success') {
+  //
+  //     }
+  //   })
+  //   .catch(err => console.log(err))
+  // }
+
+
   // const getServiceList = () => {
   //   fetch(
   //     '/getServicesApi', {
@@ -203,24 +229,23 @@ export default function AppointmentPage() {
   // }, [startDate])
   //====================================================================================================
   return (
-    <div className="flex flex-row min-h-screen w-full">
-      {serviceListError && <div>sevice list ERROR</div>}
-      {timeSlotsListError && <div>timeslotslist ERROR</div>}
-      <form className="flex-1 pr-2 grid grid-cols-1 md:grid-cols-2 gap-x-2 gap-y-1 p-40">
-        <div className="col-span-1 md:col-span-2 lg:col-span-2">
-          <select
-            className="select select-bordered select-lg w-full"
-            onChange={serviceInputHandler}>
-            <option
-              disabled
-              selected>
-              Services
-            </option>
-            {serviceList.map((service) => (
-              <option key={service.id}>{service.name}</option>
-            ))}
-          </select>
-        </div>
+
+    <div>
+    {showAlert && (
+    <div className="toast toast-top toast-center">
+    <div className="alert alert-info">
+      <span>Please enter correct zip code</span>
+    </div>
+  </div>)
+    }
+  <div className="flex flex-row min-h-screen w-full">
+    <form className='flex-1 pr-2 grid grid-cols-1 md:grid-cols-2 gap-x-2 gap-y-1 p-40'>
+      <div className="col-span-1 md:col-span-2 lg:col-span-2">
+        <select className="select select-bordered select-lg w-full" onChange={serviceInputHandler}>
+          <option disabled selected>Services</option>
+          {serviceList.map(service => <option key={service.id}>{service.name}</option>)}
+        </select>
+      </div>
 
         <div className="dropdown col-span-1">
           <div
@@ -260,87 +285,36 @@ export default function AppointmentPage() {
           </select>
         </div>
 
-        <input
-          type="text"
-          placeholder="First Name"
-          className="input input-bordered w-full input-lg col-span-1"
-          onChange={firstNameInputHandler}
-        />
-        <input
-          type="text"
-          placeholder="Last Name"
-          className="input input-bordered w-full input-lg col-span-1"
-          onChange={lastNameInputHandler}
-        />
-        <input
-          type="text"
-          placeholder="Email"
-          className="input input-bordered w-full input-lg col-span-1"
-          onChange={emailInputHandler}
-        />
-        <input
-          type="text"
-          placeholder="Phone Number"
-          className="input input-bordered input-lg w-full col-span-1"
-          onChange={phoneInputHandler}
-        />
-        <input
-          type="text"
-          placeholder="Street"
-          className="input input-bordered input-lg w-full col-span-1"
-          onChange={streetInputHandler}
-        />
-        <input
-          type="text"
-          placeholder="Apt"
-          className="input input-bordered input-lg w-full col-span-1"
-          onChange={aptInputHandler}
-        />
-        <select
-          className="select select-bordered select-lg w-full"
-          onChange={stateInputHandler}>
-          <option
-            disabled
-            selected>
-            State
-          </option>
-          {statesList.map((state) => (
-            <option key={state.abbreviation}>{state.name}</option>
-          ))}
-        </select>
-        <input
-          type="text"
-          placeholder="City"
-          className="input input-bordered input-lg w-full"
-          onChange={cityInputHandler}
-        />
-        <input
-          type="text"
-          placeholder="Zipcode"
-          className="input input-bordered input-lg w-full"
-          onChange={zipInputHandler}
-        />
-      </form>
-      <div className="flex-1 flex flex-col justify-center items-center p-5">
-        <div className="w-full max-w-lg border-4 rounded-3xl border-gray-300 shadow-md py-20 h-auto px-8">
-          <h1 className="pb-6 font-bold text-3xl">Appointment Summary:</h1>
-          <p className="py-5 text-xl">Name: {firstName + " " + lastName}</p>
-          <p className="py-5 text-xl">Phone number: {phone}</p>
-          <p className="py-5 text-xl">Selected service: {service}</p>
-          <p className="py-5 text-xl">Selected date: {startDate}</p>
-          <p className="py-5 text-xl">Selected time: {appointment}</p>
-        </div>
-        <div>
-          <button
-            className="btn btn-primary mt-8 "
-            onClick={bookAppointment}>
-            Book Appointment
-          </button>
-        </div>
+       <input type="text" placeholder='First Name' className="input input-bordered w-full input-lg col-span-1" onChange={firstNameInputHandler}/>
+       <input type="text" placeholder='Last Name' className="input input-bordered w-full input-lg col-span-1" onChange={lastNameInputHandler}/>
+       <input type="email" placeholder='Email' className="input input-bordered w-full input-lg col-span-1" onChange={emailInputHandler}/>
+       <input type="tel" placeholder='Phone Number' maxLength='10' className="input input-bordered input-lg w-full col-span-1" onChange={phoneInputHandler}/>
+       <input type="text" placeholder='Street' className="input input-bordered input-lg w-full col-span-1" onChange={streetInputHandler}/>
+       <input type="text" placeholder='Apt' className="input input-bordered input-lg w-full col-span-1" onChange={aptInputHandler}/>
+       <select className="select select-bordered select-lg w-full" onChange={stateInputHandler}>
+        <option disabled selected>State</option>
+        {statesList.map(state => <option key={state.abbreviation}>{state.name}</option>)}
+      </select>
+       <input type="text" placeholder='City' className="input input-bordered input-lg w-full" onChange={cityInputHandler}/>
+       <input type="text" placeholder='Zipcode' maxLength='5' inputMode="numeric" className="input input-bordered input-lg w-full" onChange={zipInputHandler}/>
+    </form>
+    <div className="flex-1 flex flex-col justify-center items-center p-5">
+      <div className="w-full max-w-lg border-4 rounded-3xl border-gray-300 shadow-md py-20 h-auto px-8">
+        <h1 className='pb-6 font-bold text-3xl'>Appointment Summary:</h1>
+        <p className='py-5 text-xl'>Name: {firstName + ' ' + lastName}</p>
+        <p className='py-5 text-xl'>Phone number: {phone}</p>
+        <p className='py-5 text-xl'>Selected service: {service}</p>
+        <p className='py-5 text-xl'>Selected date: {startDate}</p>
+        <p className='py-5 text-xl'>Selected time: {appointment}</p>
+      </div>
+      <div>
+        <button className="btn btn-primary mt-8 " onClick={bookAppointment}>Book Appointment</button>
       </div>
     </div>
-  );
-}
+  </div>
+ </div>
+  )
+  }
 
 function formatDate(startDate) {
   const formattedDate = startDate.split("/");
@@ -355,3 +329,4 @@ function formatDate(startDate) {
   const dateWithNoHyphens = month + day + year;
   return dateWithNoHyphens;
 }
+
