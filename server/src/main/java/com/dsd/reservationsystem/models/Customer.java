@@ -71,6 +71,7 @@ public class Customer {
         this.appointments = appointments;
     }
 
+
     public static class Appointment {
         private String serviceId;
         private String confirmationNumber;

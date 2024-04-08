@@ -5,10 +5,7 @@ import com.dsd.reservationsystem.models.Appointment;
 import com.dsd.reservationsystem.models.DaySchedule;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class TimeSlotsService {
@@ -44,5 +41,14 @@ public class TimeSlotsService {
             }
         }
         return timeSlotsAvailability;
+    }
+
+    public boolean isTimeSlotAvailable(String day, String timeSlot) {
+        try {
+            Map<String, Boolean> timeSlots = getTimeSlotsAvailabilityForDay(day);
+            return timeSlots.get(timeSlot);
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
