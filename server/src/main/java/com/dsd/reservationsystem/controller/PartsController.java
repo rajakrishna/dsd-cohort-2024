@@ -40,4 +40,10 @@ public class PartsController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @PostMapping("/postPart")
+    public ResponseEntity<Part> postPart(@RequestBody Part part) {
+        Part createdPart = partsService.postPart(part);
+        return ResponseEntity.ok(createdPart);
+    }
 }

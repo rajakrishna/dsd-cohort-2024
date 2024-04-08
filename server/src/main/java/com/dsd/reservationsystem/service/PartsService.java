@@ -50,4 +50,15 @@ public class PartsService {
   public List<Part> getAllParts() {
     return database.getAllParts();
   }
+
+  public Part postPart(Part part) {
+    // Generate a unique ID for the part
+    String id = UUID.randomUUID().toString();
+    part = new Part(id, part.getName(), part.getQuantity(), part.getThreshold());
+
+    // Save the part to Firestore
+    database.createPart(part);
+
+    return part;
+  }
 }

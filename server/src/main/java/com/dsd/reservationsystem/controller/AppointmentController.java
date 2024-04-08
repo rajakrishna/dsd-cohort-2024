@@ -1,4 +1,4 @@
-package com.dsd.reservationsystem.controllers;
+package com.dsd.reservationsystem.controller;
 
 import com.dsd.reservationsystem.models.Appointment;
 import com.dsd.reservationsystem.models.Customer;

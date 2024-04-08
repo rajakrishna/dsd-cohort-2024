@@ -24,7 +24,7 @@ public class AppointmentService {
         // Save the appointment to Firestore
         Appointment savedAppointment = this.database.createAppointment(appointment);
 
-        // Update the timeslot in Firestore to include the customer id
+        // Update the timeslot in Firestore to include the customerId
         DaySchedule daySchedule;
         try {
             daySchedule = database.getTimeSlotsForDay(appointment.getDay());
