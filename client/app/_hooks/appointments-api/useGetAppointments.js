@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-export default function useGetByDay(date) {
+export default function useGetAppointments(date) {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
