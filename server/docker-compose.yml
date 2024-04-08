@@ -1,0 +1,11 @@
+version: "3.8"
+services:
+  dsd2024-java-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        CREDENTIALS_DIR: ./credentials
+    image: dsd2024-java-backend
+    ports:
+      - "8000:8000"
