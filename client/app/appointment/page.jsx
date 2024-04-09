@@ -165,6 +165,7 @@ export default function AppointmentPage() {
     try {
       const response = await postAppointment(data);
 
+      //send response data to confirmation page as url param
       const params = new URLSearchParams({
         appointment: JSON.stringify(response),
       });
