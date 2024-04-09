@@ -4,7 +4,38 @@ import { timeSlots } from "@/constants";
 import { formatDate } from "../utility/formatDateUtil";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
+
 export default function AppointmentConfirmationPage() {
+  // const searchParams = useSearchParams();
+  // const appointment = searchParams.get("appointment");
+
+  // let appointmentData = { day: "no day", timeSlot: "no timeslot" };
+  // let confirmId = "no id";
+  // let customer = { name: "no name" };
+
+  // if (appointment != null && appointment != "undefined") {
+  //   try {
+  //     const { appointmentInfo, confirmationId, customerInfo } =
+  //       JSON.parse(appointment);
+  //     appointmentData = appointmentInfo;
+  //     confirmId = confirmationId;
+  //     customer = customerInfo;
+  //   } catch (error) {
+  //     appointmentData = { day: "no day", timeSlot: "no timeslot" };
+  //     confirmId = "error saving appointment";
+  //     customer = { name: "no name" };
+  //   }
+  // }
+
+  return (
+    <Suspense>
+      <AppointmentInfo />
+    </Suspense>
+  );
+}
+
+function AppointmentInfo() {
   const searchParams = useSearchParams();
   const appointment = searchParams.get("appointment");
 
@@ -13,14 +44,18 @@ export default function AppointmentConfirmationPage() {
   let customer = { name: "no name" };
 
   if (appointment != null && appointment != "undefined") {
-    const { appointmentInfo, confirmationId, customerInfo } =
-      JSON.parse(appointment);
-    appointmentData = appointmentInfo;
-    confirmId = confirmationId;
-    customer = customerInfo;
+    try {
+      const { appointmentInfo, confirmationId, customerInfo } =
+        JSON.parse(appointment);
+      appointmentData = appointmentInfo;
+      confirmId = confirmationId;
+      customer = customerInfo;
+    } catch (error) {
+      appointmentData = { day: "no day", timeSlot: "no timeslot" };
+      confirmId = "error saving appointment";
+      customer = { name: "no name" };
+    }
   }
-
-  //   console.log("appointment at confirm", appointment);
   return (
     <div className="card flex items-center bg-white p-8 rounded-none">
       <div className="card-body items-center border-black border-2 rounded-lg">
@@ -28,8 +63,8 @@ export default function AppointmentConfirmationPage() {
         <p>See you soon {customer.name}</p>
         {/* <p>Service Name</p> */}
         <p>Confirmation Id: {confirmId}</p>
-        <p>Date:{formatDate(appointment.day)}</p>
-        <p>Time: {timeSlots[appointment.timeSlot]}</p>
+        <p>Date:{formatDate(appointmentData.day)}</p>
+        <p>Time: {timeSlots[appointmentData.timeSlot]}</p>
         <div className="card-actions justify-end">
           <Link href={"/appointment"}>
             <button className="btn bg-green-800">Book a new appointment</button>

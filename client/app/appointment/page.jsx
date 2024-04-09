@@ -3,8 +3,6 @@
 import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { mockServicesData } from "../utility/mockData/mockGetServicesApi";
-import { mockTimeSlotsData } from "../utility/mockData/mockGetTimeSlotsApi";
 import { timeSlots, statesList } from "@/constants";
 import { useRouter } from "next/navigation";
 import useGetDayTimeSlots from "../_hooks/timeslot-api/useGetDayTimeSlots";
@@ -164,13 +162,17 @@ export default function AppointmentPage() {
       },
     };
 
-    const response = await postAppointment(data);
+    try {
+      const response = await postAppointment(data);
 
-    const params = new URLSearchParams({
-      appointment: JSON.stringify(response),
-    });
+      const params = new URLSearchParams({
+        appointment: JSON.stringify(response),
+      });
 
-    router.push(`/appointmentconfirmed?${params}`);
+      router.push(`/appointmentconfirmed?${params}`);
+    } catch (error) {
+      console.log("error post appointment");
+    }
   };
 
   //will enable below once the backend is ready!
