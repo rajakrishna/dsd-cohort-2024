@@ -6,6 +6,7 @@ export default function usePostAppointment() {
   const controller = useRef(new AbortController());
 
   async function postAppointment(newAppointmentData) {
+    // console.log("newApointmentData", newAppointmentData);
     try {
       if (controller.current.signal.aborted) {
         controller.current = new AbortController();
@@ -27,11 +28,11 @@ export default function usePostAppointment() {
       if (!response.ok) {
         throw new Error("Network response was not ok POST PART");
       }
-
+      return await response.json();
       setError(null);
     } catch (error) {
-      console.error("Error creating part: ", error);
-      setError("Failed to create part");
+      console.error("Error creating appointment: ", error);
+      setError("Failed to create appointment");
     } finally {
       setIsLoading(false);
     }
