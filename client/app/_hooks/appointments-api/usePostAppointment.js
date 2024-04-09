@@ -28,8 +28,8 @@ export default function usePostAppointment() {
         throw new Error("Network response was not ok POST APPOINTMENT");
       }
       const res = await response.json();
-      return res;
       setError(null);
+      return res;
     } catch (error) {
       console.error("Error creating appointment: ", error);
       setError("Failed to create appointment");
