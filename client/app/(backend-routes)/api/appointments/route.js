@@ -69,8 +69,8 @@ appointmentData:{
 */
 async function postAppointment(appointmentData) {
   const body = await JSON.stringify(appointmentData);
-  // const res = fetch(`${API_URL}/appointments`, { method: "POST", body });
-  // const data = res.json();
+  const res = fetch(`${API_URL}/appointments`, { method: "POST", body });
+  const data = res.json();
   // const data = {
   //   appointmentTime: {
   //     day: "03212024",
@@ -84,7 +84,9 @@ async function postAppointment(appointmentData) {
   //     serviceId: "q1234",
   //   },
   // };
-  // return data;
-  appointmentData.confirmationId = "confirmationBOB1234";
-  return await JSON.stringify(appointmentData);
+  return data;
+
+  //! for testing returning same data with confirmationId added
+  // appointmentData.confirmationId = "confirmationBOB1234";
+  // return await JSON.stringify(appointmentData);
 }
