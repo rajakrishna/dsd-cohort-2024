@@ -9,7 +9,7 @@ import { timeSlots, statesList } from "@/constants";
 import { useRouter } from "next/navigation";
 import useGetDayTimeSlots from "../_hooks/timeslot-api/useGetDayTimeSlots";
 import useGetServices from "../_hooks/service-api/useGetServices";
-import usePostAppointment from "../_hooks/appointments-api/usePostAppoinment";
+import usePostAppointment from "../_hooks/appointments-api/usePostAppointment";
 
 export default function AppointmentPage() {
   // const [serviceList, setServiceList] = useState(mockServicesData);
@@ -166,10 +166,9 @@ export default function AppointmentPage() {
 
     const response = await postAppointment(data);
 
-    // console.log("response", response);
-    // const query = JSON.parse(response);
-
-    const params = new URLSearchParams({ appointment: response });
+    const params = new URLSearchParams({
+      appointment: JSON.stringify(response),
+    });
 
     router.push(`/appointmentconfirmed?${params}`);
   };
