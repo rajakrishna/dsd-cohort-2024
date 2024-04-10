@@ -8,6 +8,8 @@ import com.google.cloud.firestore.*;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Repository;
 
 import java.io.FileInputStream;
@@ -18,11 +20,13 @@ import java.util.concurrent.ExecutionException;
 
 @Repository
 public class Db {
+    private Environment env;
     private Firestore database;
+    private String credentialsPath = "credentials.json";
 
-    public Db() throws IOException {
+    public Db(Environment env) throws IOException {
+        credentialsPath = env.getProperty("credentials.path");
         // String credentialsPath = "/etc/secrets/credentials.json";
-        String credentialsPath = "credentials.json";
         // String environment = System.getenv("environment");
         // if (environment != "prod") {
         // credentialsPath = "credentials.json";
