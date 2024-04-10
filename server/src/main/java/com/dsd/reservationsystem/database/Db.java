@@ -8,6 +8,8 @@ import com.google.cloud.firestore.*;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Repository;
 
 import java.io.FileInputStream;
@@ -18,10 +20,20 @@ import java.util.concurrent.ExecutionException;
 
 @Repository
 public class Db {
+    private Environment env;
     private Firestore database;
+    private String credentialsPath = "credentials.json";
 
-    public Db() throws IOException {
-        InputStream serviceAccount = new FileInputStream("credentials.json");
+    public Db(Environment env) throws IOException {
+        credentialsPath = env.getProperty("credentials.path");
+        // String credentialsPath = "/etc/secrets/credentials.json";
+        // String environment = System.getenv("environment");
+        // if (environment != "prod") {
+        // credentialsPath = "credentials.json";
+        // }
+
+        System.out.println(credentialsPath);
+        InputStream serviceAccount = new FileInputStream(credentialsPath);
         GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
         FirebaseOptions options = new FirebaseOptions.Builder()
                 .setCredentials(credentials)
@@ -59,37 +71,37 @@ public class Db {
 
     public List getTimeSlots() {
 
-        //empty snapshot
+        // empty snapshot
         QuerySnapshot timeSlotsCollection;
 
-
-        //request to firebase for timeslots collection
+        // request to firebase for timeslots collection
         ApiFuture<QuerySnapshot> query = database.collection("timeSlots").get();
 
         try {
-            //get snapshot from query
+            // get snapshot from query
             timeSlotsCollection = query.get();
 
-            //set new empty list
+            // set new empty list
             ArrayList docs = new ArrayList();
 
-            //get list of all documents from snapshot
+            // get list of all documents from snapshot
             List<QueryDocumentSnapshot> documents = timeSlotsCollection.getDocuments();
 
-            //loop all documents in snapshot and get the data
+            // loop all documents in snapshot and get the data
             for (QueryDocumentSnapshot document : documents) {
-                docs.add(document.getData()); //add data of each doc to arraylist
+                docs.add(document.getData()); // add data of each doc to arraylist
             }
 
             return docs;
 
         } catch (Exception exception) {
-            return new ArrayList<>(Arrays.asList(new HashMap<>() {{
-                put("id", "failed to get timeslots");
-            }}));
+            return new ArrayList<>(Arrays.asList(new HashMap<>() {
+                {
+                    put("id", "failed to get timeslots");
+                }
+            }));
         }
     }
-
 
     public ArrayList<ServiceModel> getAllServices() {
         ApiFuture<QuerySnapshot> query = database.collection("services").get();
@@ -100,7 +112,8 @@ public class Db {
             List<QueryDocumentSnapshot> documents = servicesCollection.getDocuments();
 
             for (QueryDocumentSnapshot document : documents) {
-                ServiceModel doc = new ServiceModel((String) document.getData().get("id"), (String) document.getData().get("name"));
+                ServiceModel doc = new ServiceModel((String) document.getData().get("id"),
+                        (String) document.getData().get("name"));
                 docs.add(doc);
             }
 
@@ -111,24 +124,24 @@ public class Db {
         }
     }
 
-    //timeslots
+    // timeslots
     public DaySchedule getTimeSlotsForDay(String dateStr) throws Exception {
-        //request to firebase for timeslots collection
+        // request to firebase for timeslots collection
         DocumentReference docRef = database.collection("timeSlots").document(dateStr);
-//        System.out.println(dateStr);
+        // System.out.println(dateStr);
         try {
             ApiFuture<DocumentSnapshot> query = docRef.get();
 
-            //get snapshot from query
+            // get snapshot from query
             DocumentSnapshot document = query.get();
 
             if (document.exists()) {
-                //extract appointments from document
+                // extract appointments from document
                 HashMap<String, Appointment> appointments = getAppointmentHashMap(document);
                 return new DaySchedule(dateStr, appointments);
             }
 
-            //no document found send new file
+            // no document found send new file
             return new DaySchedule(dateStr, new HashMap<String, Appointment>());
 
         } catch (Exception exception) {
@@ -137,17 +150,18 @@ public class Db {
         }
     }
 
-    //timeslot utility for getting timeslot info
+    // timeslot utility for getting timeslot info
     private static HashMap<String, Appointment> getAppointmentHashMap(DocumentSnapshot document) {
         HashMap<String, Appointment> appointments = new HashMap<>();
         Map<String, Object> doc = document.getData();
 
-        //loop through hash map of day timeslots
+        // loop through hash map of day timeslots
         for (Map.Entry<String, Object> timeSlot : doc.entrySet()) {
             String tsCode = timeSlot.getKey();
             HashMap<String, String> timeSlotData = (HashMap<String, String>) timeSlot.getValue();
 
-//                    System.out.println("Key: " + tsCode + ", Value: " + (String) timeSlotData.get("customerId"));
+            // System.out.println("Key: " + tsCode + ", Value: " + (String)
+            // timeSlotData.get("customerId"));
             Appointment appointment = new Appointment();
             appointment.setCustomerId((String) timeSlotData.get("customerId"));
             appointments.put(tsCode, appointment);
@@ -232,6 +246,7 @@ public class Db {
             return null;
         }
     }
+
     public CollectionReference collection(String parts) {
         return database.collection(parts);
     }
@@ -244,16 +259,16 @@ public class Db {
 
         DocumentSnapshot document = future.get();
 
-
         List<Appointment> appointments = new ArrayList<Appointment>();
         Map<String, Object> doc = document.getData();
 
-        //loop through hash map of day timeslots
+        // loop through hash map of day timeslots
         for (Map.Entry<String, Object> timeSlot : doc.entrySet()) {
             String tsCode = timeSlot.getKey();
             HashMap<String, String> timeSlotData = (HashMap<String, String>) timeSlot.getValue();
 
-//                    System.out.println("Key: " + tsCode + ", Value: " + (String) timeSlotData.get("customerId"));
+            // System.out.println("Key: " + tsCode + ", Value: " + (String)
+            // timeSlotData.get("customerId"));
             Appointment appointment = new Appointment();
             appointment.setCustomerId((String) timeSlotData.get("customerId"));
             appointments.add(appointment);
@@ -261,4 +276,3 @@ public class Db {
         return appointments;
     }
 }
-
