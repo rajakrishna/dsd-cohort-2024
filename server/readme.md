@@ -27,36 +27,46 @@ port mapping can be changed in the `src/main/resources/application.properties` f
 
 - change `server.port=8000` to desired port number
 
-# Docker container build commands for LOCAL TEST ONLY
+### Environment variables
+
+env file should be placed at root of project `/server/.env` a file named .env.example is placed already in root you just need to rename to .env and replace any variables you want
+
+### Docker container build commands for LOCAL TEST ONLY work in progress
+
+- build image
+- create container
+- create /etc/secrets directory in container
+- copy credentials into container at /etc/secrets
+- start container
 
 build image
 
 ```
   docker build -t REPO_NAME/IMAGE_NAME .
 
-//example
+  //example
   docker build -t jesusdozarepo/server-java .
 ```
 
 push image to repo if needed OPTIONAL
 
 ```
-docker push REPO_NAME/IMAGE_NAME
+  docker push REPO_NAME/IMAGE_NAME
 
-//example
-docker push jesusdozarepo/server-java
+  //example
+  docker push jesusdozarepo/server-java
 ```
 
 create container on local machine
 
 ```
-docker container create --name java-server jesusdozarepo/server-java
+  docker container create --name java-server jesusdozarepo/server-java
 ```
 
 copy credentials into container
 
 ```
- docker container cp ./credentials.json java-server:/etc/secrets
+  docker container cp ./credentials.json java-server:/etc/secrets
 ```
 
 start container
