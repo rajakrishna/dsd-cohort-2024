@@ -26,3 +26,41 @@ Requirements
 port mapping can be changed in the `src/main/resources/application.properties` file
 
 - change `server.port=8000` to desired port number
+
+# Docker container build commands for LOCAL TEST ONLY
+
+build image
+
+```
+  docker build -t REPO_NAME/IMAGE_NAME .
+
+//example
+  docker build -t jesusdozarepo/server-java .
+```
+
+push image to repo if needed OPTIONAL
+
+```
+docker push REPO_NAME/IMAGE_NAME
+
+//example
+docker push jesusdozarepo/server-java
+```
+
+create container on local machine
+
+```
+docker container create --name java-server jesusdozarepo/server-java
+```
+
+copy credentials into container
+
+```
+ docker container cp ./credentials.json java-server:/etc/secrets
+```
+
+start container
+
+```
+docker container start -i java-server
+```
