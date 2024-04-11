@@ -15,25 +15,43 @@ import java.util.concurrent.ExecutionException;
 @Service
 public class AppointmentService {
     private Db database;
+    private EmailService emailService;
 
-    public AppointmentService(Db database) {
+    public AppointmentService(Db database, EmailService emailService) {
         this.database = database;
+        this.emailService = emailService;
     }
 
     public Appointment saveAppointment(Appointment appointment) {
+//        // Save the appointment to Firestore
+//        Appointment savedAppointment = this.database.createAppointment(appointment);
+//
+//        // Update the timeslot in Firestore to include the customerId
+//        DaySchedule daySchedule;
+//        try {
+//            daySchedule = database.getTimeSlotsForDay(appointment.getDay());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//        daySchedule.appointments().get(appointment.getTimeSlot()).setCustomerId(appointment.getCustomerId());
+//        database.updateTimeSlotsForDay(appointment.getDay(), daySchedule.appointments());
+//
+//        return savedAppointment;
+
         // Save the appointment to Firestore
         Appointment savedAppointment = this.database.createAppointment(appointment);
 
-        // Update the timeslot in Firestore to include the customerId
-        DaySchedule daySchedule;
-        try {
-            daySchedule = database.getTimeSlotsForDay(appointment.getDay());
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-        daySchedule.appointments().get(appointment.getTimeSlot()).setCustomerId(appointment.getCustomerId());
-        database.updateTimeSlotsForDay(appointment.getDay(), daySchedule.appointments());
+        // Fetch the customer's email
+        Customer customer = database.getCustomerById(appointment.getCustomerId());
+        String customerEmail = customer.getEmail();
+
+        // Send a confirmation email
+        emailService.sendSimpleMessage(
+                customerEmail,
+                "Appointment Confirmation",
+                "Your appointment has been confirmed. Your confirmation number is " + savedAppointment.getConfirmationNumber()
+        );
 
         return savedAppointment;
     }
