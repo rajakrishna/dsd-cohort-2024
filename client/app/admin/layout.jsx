@@ -6,23 +6,27 @@ import { auth } from '../firebase/config'
 import { signOut } from 'firebase/auth'
 import { useRouter } from 'next/navigation'
 import { useAuthState } from 'react-firebase-hooks/auth'
+import { useEffect } from 'react'
 
 export default function Layout({ children }) {
   const pathname = usePathname();
   const [user, loading, error] = useAuthState(auth);
   const router = useRouter()
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <span className="loading loading-bars loading-lg"></span>
-      </div>
-    )
-  }
+  useEffect(() => {
 
-  if (!user) {
-    router.push('/adminSignInAndSignUp')
-  }
+    if (loading) {
+      return (
+        <div className="flex items-center justify-center min-h-screen">
+          <span className="loading loading-bars loading-lg"></span>
+        </div>
+      )
+    };
+
+    if (!user) {
+      router.push('/adminSignInAndSignUp')
+    }
+  }, [user, loading, error])
 
   return (
     <div className="drawer lg:drawer-open bg-white">
