@@ -22,6 +22,7 @@ export const sideNavItems = [
     }
 ]
 
+export const appointmentAttributes = ["Name", "Time", "Service", "Parts Needed"];
 export const partsAttributes = ["Name", "Threshold", "Quantity"];
 
 export const statesList = [
