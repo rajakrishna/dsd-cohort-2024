@@ -68,10 +68,10 @@ export default function LoginPage() {
                 <input type="password" id="password" className="mt-1 p-2 w-full border rounded-md" onChange={(e) => setSigninPassword(e.target.value)} minLength='6' required />
             </div>
             <div className="mb-6">
-                <p htmlFor="password" className="text-sm font-medium text-gray-700">Forgot Password? - <a href="/passwordReset" className="text-blue-500 text-sm inline-flex">Reset Password</a></p>
+                <p className="text-sm font-medium text-gray-700">Forgot Password? - <a href="/passwordReset" className="text-blue-500 text-sm inline-flex">Reset Password</a></p>
             </div>
             <div className="mb-6">
-                <p htmlFor="password" className="text-sm font-medium text-gray-700">Don't have an account? - <a href="/signup" className="text-blue-500 text-sm inline-flex">Sign Up</a></p>
+                <p className="text-sm font-medium text-gray-700">Don't have an account? - <a href="/signup" className="text-blue-500 text-sm inline-flex">Sign Up</a></p>
             </div>
             <div className="min-h-[2em]">
            { !signInError ?

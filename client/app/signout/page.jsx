@@ -20,6 +20,9 @@ export default function SignOutPage() {
                 <button onClick={handleSignOut} className="w-full p-2 bg-red-500 text-white rounded-md hover:bg-red-600">
                     Sign Out
                 </button>
+                <div className="my-6">
+                  <p className="text-sm font-medium text-gray-700">I want to stay logged in - <a href="/" className="text-blue-500 text-sm inline-flex">Go to home page</a></p>
+                </div>
             </div>
         </div>
     );

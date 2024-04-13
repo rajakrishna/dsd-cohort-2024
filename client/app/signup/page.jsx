@@ -51,6 +51,9 @@ export default function LogUpPage() {
                 <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
                 <input type="password" id="password" className="mt-1 p-2 w-full border rounded-md" onChange={(e) => setSignupPassword(e.target.value)} minLength='6' required />
             </div>
+            <div className="mb-6">
+                <p className="text-sm font-medium text-gray-700">Already have an account? - <a href="/login" className="text-blue-500 text-sm inline-flex">Sign In</a></p>
+            </div>
             <div className='min-h-[2em]'>
             {!signUpError ?
             <p className={`text-blue-500 text-xs py-2 ${signUpLoading ? 'visible' : 'invisible'}`}>please wait while signing you up ...</p> :
