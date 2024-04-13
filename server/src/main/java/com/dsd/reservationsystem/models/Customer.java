@@ -1,5 +1,6 @@
 package com.dsd.reservationsystem.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Customer {
@@ -8,7 +9,7 @@ public class Customer {
     private String name;
     private String phoneNumber;
     private String email;
-    private List<Appointment> appointments;
+    private List<Appointment> appointments = new ArrayList<>();
 
     public Customer(String id, String address, String name, String phoneNumber, String email,
                     List<Appointment> appointments) {
