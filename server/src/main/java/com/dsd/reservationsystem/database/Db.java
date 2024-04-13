@@ -8,9 +8,8 @@ import com.google.cloud.firestore.*;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -18,11 +17,12 @@ import java.io.InputStream;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 
-@Repository
+@Service
 public class Db {
     private Environment env;
-    private Firestore database;
+    private Firestore database = null;
     private String credentialsPath = "credentials.json";
+
 
     public Db(Environment env) throws IOException {
         credentialsPath = env.getProperty("credentials.path");
@@ -33,14 +33,21 @@ public class Db {
         // }
 
         System.out.println(credentialsPath);
-        InputStream serviceAccount = new FileInputStream(credentialsPath);
-        GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
-        FirebaseOptions options = new FirebaseOptions.Builder()
-                .setCredentials(credentials)
-                .build();
-        FirebaseApp.initializeApp(options);
+        if (this.database == null) {
+            InputStream serviceAccount = new FileInputStream(credentialsPath);
+            GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
+            FirebaseOptions options = new FirebaseOptions.Builder()
+                    .setCredentials(credentials)
+                    .build();
 
-        this.database = FirestoreClient.getFirestore();
+
+            // Check if FirebaseApp has already been initialized
+            if (FirebaseApp.getApps().isEmpty()) {
+                FirebaseApp.initializeApp(options);
+            }
+
+            this.database = FirestoreClient.getFirestore();
+        }
     }
 
     public List<Part> getAllParts() {
@@ -176,15 +183,39 @@ public class Db {
         return customer;
     }
 
-    public Appointment createAppointment(Appointment appointment) {
+    public Appointment createAppointment(AppointmentPostRequest appointment) {
+
+        //todo find user by there email if they exists update customer info with new appointment
+        Query query = database.collection("customerInfo").whereEqualTo("email", appointment.getCustomerInfo().getEmail());
+        ApiFuture<QuerySnapshot> results = query.get();
+
+        try {
+
+            QuerySnapshot documents = results.get();
+            List data = documents.getDocuments();
+            System.out.println(data);
+
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (Exception e) {
+            System.out.printf("unhandled exeption getting customer info");
+        }
+
+        //todo push user id into timeslot
+
+
         // Generate a unique ID for the appointment
-        String id = UUID.randomUUID().toString();
-        appointment.setConfirmationNumber(id);
+//        String id = UUID.randomUUID().toString();
+//        appointment.setConfirmationNumber(id);
+
 
         // Save the appointment to Firestore
-        database.collection("appointments").document(id).set(appointment);
+//        database.collection("appointments").document(id).set(appointment);
 
-        return appointment;
+//        return appointment;
+        return new Appointment();//todo remove this default
     }
 
     public void updateTimeSlotsForDay(String day, Map<String, Appointment> appointments) {
@@ -274,5 +305,17 @@ public class Db {
             appointments.add(appointment);
         }
         return appointments;
+    }
+
+    public void setEnv(Environment env) {
+        this.env = env;
+    }
+
+    public void setDatabase(Firestore database) {
+        this.database = database;
+    }
+
+    public void setCredentialsPath(String credentialsPath) {
+        this.credentialsPath = credentialsPath;
     }
 }

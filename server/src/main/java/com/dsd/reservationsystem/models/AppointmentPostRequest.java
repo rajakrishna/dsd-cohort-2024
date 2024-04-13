@@ -1,11 +1,23 @@
 package com.dsd.reservationsystem.models;
 
-public class Appointment {
+public class AppointmentPostRequest {
     private String customerId;
     private String day;
     private String timeSlot;
-    private String confirmationNumber;
+
     private Customer customerInfo;
+
+    public AppointmentPostRequest(String customerId, String day, String timeSlot, Customer customerInfo) {
+        this.customerId = customerId;
+        this.day = day;
+        this.timeSlot = timeSlot;
+
+        this.customerInfo = customerInfo;
+    }
+
+    public AppointmentPostRequest() {
+    }
+
 
     public String getCustomerId() {
         return customerId;
@@ -31,13 +43,6 @@ public class Appointment {
         this.timeSlot = timeSlot;
     }
 
-    public String getConfirmationNumber() {
-        return confirmationNumber;
-    }
-
-    public void setConfirmationNumber(String confirmationNumber) {
-        this.confirmationNumber = confirmationNumber;
-    }
 
     public Customer getCustomerInfo() {
         return customerInfo;
@@ -49,11 +54,10 @@ public class Appointment {
 
     @Override
     public String toString() {
-        return "Appointment{" +
+        return "AppointmentPostRequest{" +
                 "customerId='" + customerId + '\'' +
                 ", day='" + day + '\'' +
                 ", timeSlot='" + timeSlot + '\'' +
-                ", confirmationNumber='" + confirmationNumber + '\'' +
                 ", customerInfo=" + customerInfo +
                 '}';
     }

@@ -2,6 +2,7 @@ package com.dsd.reservationsystem.service;
 
 import com.dsd.reservationsystem.database.Db;
 import com.dsd.reservationsystem.models.Appointment;
+import com.dsd.reservationsystem.models.AppointmentPostRequest;
 import com.dsd.reservationsystem.models.Customer;
 import com.dsd.reservationsystem.models.DaySchedule;
 import com.google.cloud.firestore.DocumentReference;
@@ -22,9 +23,11 @@ public class AppointmentService {
         this.emailService = emailService;
     }
 
-    public Appointment saveAppointment(Appointment appointment) {
+    public Appointment saveAppointment(AppointmentPostRequest appointment) {
+
+
 //        // Save the appointment to Firestore
-//        Appointment savedAppointment = this.database.createAppointment(appointment);
+        Appointment savedAppointment = this.database.createAppointment(appointment);
 //
 //        // Update the timeslot in Firestore to include the customerId
 //        DaySchedule daySchedule;
@@ -40,20 +43,22 @@ public class AppointmentService {
 //        return savedAppointment;
 
         // Save the appointment to Firestore
-        Appointment savedAppointment = this.database.createAppointment(appointment);
+//        Appointment savedAppointment = this.database.createAppointment(appointment);
 
         // Fetch the customer's email
-        Customer customer = database.getCustomerById(appointment.getCustomerId());
-        String customerEmail = customer.getEmail();
+//        Customer customer = database.getCustomerById(appointment.getCustomerId());
+//        String customerEmail = customer.getEmail();
+//
+//        // Send a confirmation email
+//        emailService.sendSimpleMessage(
+//                customerEmail,
+//                "Appointment Confirmation",
+//                "Your appointment has been confirmed. Your confirmation number is " + savedAppointment.getConfirmationNumber()
+//        );
+//
+//        return savedAppointment;
 
-        // Send a confirmation email
-        emailService.sendSimpleMessage(
-                customerEmail,
-                "Appointment Confirmation",
-                "Your appointment has been confirmed. Your confirmation number is " + savedAppointment.getConfirmationNumber()
-        );
-
-        return savedAppointment;
+        return new Appointment();
     }
 
 
@@ -85,6 +90,7 @@ public class AppointmentService {
             return null;
         }
     }
+
     public List<Appointment> getAppointmentsForDay(String date) throws ExecutionException, InterruptedException {
         return database.getAppointmentsForDay(date);
     }

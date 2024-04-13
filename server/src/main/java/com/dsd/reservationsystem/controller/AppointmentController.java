@@ -1,10 +1,13 @@
 package com.dsd.reservationsystem.controller;
 
+import com.dsd.reservationsystem.database.Db;
 import com.dsd.reservationsystem.models.Appointment;
+import com.dsd.reservationsystem.models.AppointmentPostRequest;
 import com.dsd.reservationsystem.models.Customer;
 import com.dsd.reservationsystem.service.AppointmentService;
 import com.dsd.reservationsystem.service.TimeSlotsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,20 +28,21 @@ public class AppointmentController {
     private TimeSlotsService timeSlotsService;
 
     @PostMapping("/save")
-    public ResponseEntity<String> saveAppointment(@RequestBody Appointment appointment) {
+    public ResponseEntity<Appointment> saveAppointment(@RequestBody AppointmentPostRequest appointmentRequest) {
         // Check if the appointment time is available
-        if (!timeSlotsService.isTimeSlotAvailable(appointment.getDay(), appointment.getTimeSlot())) {
-            return new ResponseEntity<>("Time slot is not available", HttpStatus.BAD_REQUEST);
-        }
+
+        System.out.println("Appointment request is :");
+        System.out.println(appointmentRequest);
 
         // Save the appointment
-        appointmentService.saveAppointment(appointment);
-        return new ResponseEntity<>("Appointment saved", HttpStatus.OK);
+        appointmentService.saveAppointment(appointmentRequest);
+        Appointment createdAppointment = new Appointment();
+        return new ResponseEntity<Appointment>(createdAppointment, HttpStatus.OK);
     }
 
     private boolean isTimeSlotAvailable(String day, String timeSlot) {
         // Get the time slots for the selected day
-        return timeSlotsService.isTimeSlotAvailable(day,timeSlot);
+        return timeSlotsService.isTimeSlotAvailable(day, timeSlot);
 
     }
 
