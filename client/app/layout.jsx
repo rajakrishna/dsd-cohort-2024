@@ -6,11 +6,28 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebase/config";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
 
 export default function RootLayout({ children }) {
 
   const [user, loading, error] = useAuthState(auth)
+
+  if (loading) {
+    return (
+    <html
+      lang="en"
+      className=" bg-blue-600"
+      data-theme="aqua">
+       <body className="">
+       <header>
+       </header>
+       <div className="flex items-center justify-center min-h-screen bg-blue-600">
+        <span className="loading loading-bars loading-lg"></span>
+       </div>
+      <main className=" bg-blue-600">{children}</main>
+      </body>
+    </html>
+  )
+}
 
   return (
     <html

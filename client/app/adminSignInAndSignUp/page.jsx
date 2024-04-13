@@ -72,9 +72,9 @@ export default function AdminSignInAndSignUp() {
     }
   }
 
-  if (loading || user) return <div className="flex items-center justify-center min-h-screen">
+  if (loading || user) {return <div className="flex items-center justify-center min-h-screen">
   <span className="loading loading-bars loading-lg"></span>
-</div>;
+</div>}
 
   return (
   <div className='flex items-center justify-center min-h-screen'>
