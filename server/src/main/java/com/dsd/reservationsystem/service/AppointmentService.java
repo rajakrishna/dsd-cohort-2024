@@ -28,23 +28,26 @@ public class AppointmentService {
 
     public Appointment saveAppointment(Appointment appointment) {
 
-        // // Save the appointment to Firestore
-        Optional<Customer> foundCustomer;
 
-        //todo get customer by email
+        Customer customer;// hold result of querying firebase
+
         String customerEmail = appointment.getCustomerInfo().getEmail();
 
-
+        //try to find customer info by email
         try {
-            foundCustomer = this.customerService.getCustomerByEmail(customerEmail);
+
+            Optional<Customer> foundCustomer = this.customerService.getCustomerByEmail(customerEmail);
 
             //no user found make one and return it
             if (foundCustomer.isEmpty()) {
                 Customer newCustomer = (Customer) appointment.getCustomerInfo();
-                newCustomer = this.customerService.createCustomer(newCustomer);
+                customer = this.customerService.createCustomer(newCustomer);
+
                 System.out.println("createdCustomer");
                 System.out.println(newCustomer);
             }
+
+            customer = foundCustomer.get();
 
         } catch (ExecutionException | InterruptedException e) {
             throw new RuntimeException(e);
@@ -52,6 +55,7 @@ public class AppointmentService {
             //todo what to do when user not found and exception thrown
             throw new RuntimeException(e);
         }
+
 
         //todo update customer appointment info
         //todo update timeslots with customer id

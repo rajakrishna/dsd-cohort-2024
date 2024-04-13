@@ -15,34 +15,41 @@ import java.util.concurrent.ExecutionException;
 @RequestMapping("/api/appointment")
 public class AppointmentController {
 
-  @Autowired
-  private AppointmentService appointmentService;
+    @Autowired
+    private AppointmentService appointmentService;
 
-  @Autowired
-  private TimeSlotsService timeSlotsService;
+    @Autowired
+    private TimeSlotsService timeSlotsService;
 
-  @PostMapping("/save")
-  public ResponseEntity<Appointment> saveAppointment(@RequestBody Appointment appointmentRequest) {
-    // Check if the appointment time is available
+    @PostMapping("/save")
+    public ResponseEntity saveAppointment(@RequestBody Appointment appointmentRequest) {
+        // Check if the appointment time is available
 
-    System.out.println("Appointment request is :");
-    System.out.println(appointmentRequest);
+        System.out.println("Appointment request is :");
+        System.out.println(appointmentRequest);
 
-    // Save the appointment
-    Appointment savedAppointment = appointmentService.saveAppointment(appointmentRequest);
+        // Save the appointment
+        Appointment savedAppointment = appointmentService.saveAppointment(appointmentRequest);
+        try {
 //    Appointment createdAppointment = new Appointment();
-    return new ResponseEntity<Appointment>(savedAppointment, HttpStatus.OK);
-  }
 
-  private boolean isTimeSlotAvailable(String day, String timeSlot) {
-    // Get the time slots for the selected day
-    return timeSlotsService.isTimeSlotAvailable(day, timeSlot);
+            return new ResponseEntity<Appointment>(savedAppointment, HttpStatus.OK);
+        } catch (Exception e) {
 
-  }
+            //todo test error sent back
+            return new ResponseEntity(e.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
-  @GetMapping("/all")
-  public ResponseEntity<List<Appointment>> getAppointments(@RequestParam String date) throws ExecutionException, InterruptedException {
-    List<Appointment> appointments = appointmentService.getAppointmentsForDay(date);
-    return ResponseEntity.ok(appointments);
-  }
+    private boolean isTimeSlotAvailable(String day, String timeSlot) {
+        // Get the time slots for the selected day
+        return timeSlotsService.isTimeSlotAvailable(day, timeSlot);
+
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<Appointment>> getAppointments(@RequestParam String date) throws ExecutionException, InterruptedException {
+        List<Appointment> appointments = appointmentService.getAppointmentsForDay(date);
+        return ResponseEntity.ok(appointments);
+    }
 }
