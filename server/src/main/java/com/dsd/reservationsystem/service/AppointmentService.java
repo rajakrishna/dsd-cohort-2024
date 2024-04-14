@@ -145,8 +145,17 @@ public class AppointmentService {
 
     List<HashMap<String, Object>> appointmentsList = new ArrayList<>();
 
+    Map<String, Object> daysTimeSlots;
+
+    try {
+      daysTimeSlots = database.getAppointmentsForDay(date);
+
+    } catch (Exception e) {
+      System.out.println("failed to get appointments for day");
+      System.out.printf(e.getMessage());
+      return new ArrayList<>();
+    }
     // call database for days appointments
-    Map<String, Object> daysTimeSlots = database.getAppointmentsForDay(date);
 
     // create appointment structures
     // loop through hash map of day timeslots and add appointments to list to

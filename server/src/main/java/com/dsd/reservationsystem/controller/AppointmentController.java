@@ -26,8 +26,7 @@ public class AppointmentController {
   @PostMapping("/save")
   public ResponseEntity saveAppointment(@RequestBody AppointmentPostRequest appointmentRequest) {
 
-    System.out.println("appointmentRequest");
-    System.out.println(appointmentRequest);
+
     // todo Save the appointment
     try {
       Appointment savedAppointment = appointmentService.saveAppointment(appointmentRequest);
@@ -60,6 +59,8 @@ public class AppointmentController {
   @GetMapping("/all")
   public ResponseEntity<List<HashMap<String, Object>>> getAppointments(@RequestParam String date)
       throws ExecutionException, InterruptedException {
+
+
     // List<Appointment> appointments =
     // appointmentService.getAppointmentsForDay(date);
     List<HashMap<String, Object>> appointments = appointmentService.getAppointmentsForDay(date);
