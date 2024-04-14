@@ -23,11 +23,12 @@ public class TimeSlotsService {
 
     //todo create update days timeslots method
     public Optional<Map<String, Object>> updateDayTimeslot(String customerId, String date, String timeSlot) throws ExecutionException, InterruptedException {
+
+        //create new timeslot info to update database with
+        TimeSlotInfo timeSlotInfo = new TimeSlotInfo(customerId);
+
         DocumentReference docRef = database.collection("timeSlots").document(date);
-
         ApiFuture<DocumentSnapshot> query = docRef.get();
-
-
         DocumentSnapshot document = query.get();
 
         //if there is a document for day update it
@@ -36,9 +37,6 @@ public class TimeSlotsService {
             Map<String, Object> data = document.getData();
             System.out.println("timeslot data before");
             System.out.println(data);
-
-            //create new timeslot info to update database with
-            TimeSlotInfo timeSlotInfo = new TimeSlotInfo(customerId);
 
 
             //update data on date timeslots
@@ -56,7 +54,9 @@ public class TimeSlotsService {
 
         } else {
             //todo doc does not exist create it
-
+            HashMap<String, Object> data = new HashMap<>();
+            data.put(timeSlot, timeSlotInfo);
+            docRef.set(data);
 
         }
 
