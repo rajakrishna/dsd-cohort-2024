@@ -148,10 +148,10 @@ public class AppointmentService {
         }
     }
 
-    public List<HashMap<String, String>> getAppointmentsForDay(String date) throws ExecutionException, InterruptedException {
+    public List<HashMap<String, Object>> getAppointmentsForDay(String date) throws ExecutionException, InterruptedException {
 
 
-        List<HashMap<String, String>> appointmentsList = new ArrayList<>();
+        List<HashMap<String, Object>> appointmentsList = new ArrayList<>();
 
         //call database for days appointments
         Map<String, Object> daysTimeSlots = database.getAppointmentsForDay(date);
@@ -161,7 +161,7 @@ public class AppointmentService {
         // loop through hash map of day timeslots and add appointments to list to display appointments for this day
         for (Map.Entry<String, Object> timeSlot : daysTimeSlots.entrySet()) {
             String tsCode = timeSlot.getKey();
-            HashMap<String, String> customerAppointment = new HashMap<>();
+            HashMap<String, Object> customerAppointment = new HashMap<>();
             HashMap<String, String> timeSlotData = (HashMap<String, String>) timeSlot.getValue();
 
             String customerId = timeSlotData.get("customerId");
@@ -186,7 +186,7 @@ public class AppointmentService {
 
                 }
             }
-            
+
             appointmentsList.add(customerAppointment);
 
         }
