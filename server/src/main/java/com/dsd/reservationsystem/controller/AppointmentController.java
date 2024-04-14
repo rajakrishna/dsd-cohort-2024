@@ -26,10 +26,6 @@ public class AppointmentController {
     @PostMapping("/save")
     public ResponseEntity saveAppointment(@RequestBody AppointmentPostRequest appointmentRequest) {
 
-        System.out.println("Appointment request is :");
-        System.out.println(appointmentRequest);
-
-
         // todo Save the appointment
         try {
             Appointment savedAppointment = appointmentService.saveAppointment(appointmentRequest);
@@ -41,7 +37,6 @@ public class AppointmentController {
             response.put("timeSlot", savedAppointment.getTimeSlot());
             response.put("confirmationID", savedAppointment.getConfirmationNumber());
 
-
             return new ResponseEntity<HashMap>(response, HttpStatus.OK);
         } catch (Exception e) {
 
@@ -49,8 +44,7 @@ public class AppointmentController {
             response.put("status", "failed");
             response.put("error", e.toString());
 
-
-            //todo test error sent back
+            // todo test error sent back
             return new ResponseEntity<HashMap>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -62,8 +56,10 @@ public class AppointmentController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<HashMap<String, Object>>> getAppointments(@RequestParam String date) throws ExecutionException, InterruptedException {
-//        List<Appointment> appointments = appointmentService.getAppointmentsForDay(date);
+    public ResponseEntity<List<HashMap<String, Object>>> getAppointments(@RequestParam String date)
+            throws ExecutionException, InterruptedException {
+        // List<Appointment> appointments =
+        // appointmentService.getAppointmentsForDay(date);
         List<HashMap<String, Object>> appointments = appointmentService.getAppointmentsForDay(date);
         return ResponseEntity.ok(appointments);
     }

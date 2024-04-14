@@ -21,39 +21,33 @@ public class TimeSlotsService {
         this.database = database;
     }
 
-    //todo create update days timeslots method
-    public Optional<Map<String, Object>> updateDayTimeslot(String customerId, String date, String timeSlot) throws ExecutionException, InterruptedException {
+    // todo create update days timeslots method
+    public Optional<Map<String, Object>> updateDayTimeslot(String customerId, String date, String timeSlot)
+            throws ExecutionException, InterruptedException {
 
-        //create new timeslot info to update database with
+        // create new timeslot info to update database with
         TimeSlotInfo timeSlotInfo = new TimeSlotInfo(customerId);
 
         DocumentReference docRef = database.collection("timeSlots").document(date);
         ApiFuture<DocumentSnapshot> query = docRef.get();
         DocumentSnapshot document = query.get();
 
-        //if there is a document for day update it
+        // if there is a document for day update it
         if (document.exists()) {
-            //get data from doc snapshot that contains the days timeslots
+            // get data from doc snapshot that contains the days timeslots
             Map<String, Object> data = document.getData();
-            System.out.println("timeslot data before");
-            System.out.println(data);
 
-
-            //update data on date timeslots
+            // update data on date timeslots
             data.put(timeSlot, timeSlotInfo);
 
-            System.out.println("timeslot data after");
-            System.out.println(data);
-
-            //todo update database
+            // todo update database
 
             docRef.set(data);
 
             return Optional.of(data);
 
-
         } else {
-            //todo doc does not exist create it
+            // todo doc does not exist create it
             HashMap<String, Object> data = new HashMap<>();
             data.put(timeSlot, timeSlotInfo);
             docRef.set(data);
@@ -61,7 +55,7 @@ public class TimeSlotsService {
             return Optional.of(data);
 
         }
-        
+
     }
 
     public boolean isTimeSlotAvailable(String day, String timeSlot) {
@@ -73,26 +67,28 @@ public class TimeSlotsService {
         }
     }
 
-    //date will be provided in 03022024 two-digit month, two-digit month and four digit year
+    // date will be provided in 03022024 two-digit month, two-digit month and four
+    // digit year
     public Map<String, Boolean> getTimeSlotsAvailabilityForDay(String dateStr) throws Exception {
-        Map<String, Boolean> timeSlotsAvailability = new HashMap<String, Boolean>() {{
-            put("TS79", true);
-            put("TS911", true);
-            put("TS111", true);
-            put("TS13", true);
-            put("TS35", true);
-            put("TS57", true);
-        }};
+        Map<String, Boolean> timeSlotsAvailability = new HashMap<String, Boolean>() {
+            {
+                put("TS79", true);
+                put("TS911", true);
+                put("TS111", true);
+                put("TS13", true);
+                put("TS35", true);
+                put("TS57", true);
+            }
+        };
 
         DaySchedule dayTimeSlots = this.database.getTimeSlotsForDay(dateStr);
 
-
-        //get set of key:value from Map and loop through it
+        // get set of key:value from Map and loop through it
         for (Map.Entry<String, Appointment> timeSlot : dayTimeSlots.appointments().entrySet()) {
             String key = timeSlot.getKey();
             Object timeSlotData = timeSlot.getValue();
 
-            //check if timecode exists, if exists then time slot is taken
+            // check if timecode exists, if exists then time slot is taken
             if (timeSlotData != null) {
                 timeSlotsAvailability.put(key, false);
             }
@@ -100,5 +96,5 @@ public class TimeSlotsService {
         return timeSlotsAvailability;
     }
 
-    //todo create new day entry into timeslots database
+    // todo create new day entry into timeslots database
 }

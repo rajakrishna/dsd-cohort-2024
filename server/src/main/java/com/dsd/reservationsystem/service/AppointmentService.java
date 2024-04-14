@@ -21,51 +21,45 @@ public class AppointmentService {
 
     private TimeSlotsService timeSlotsService;
 
-    public AppointmentService(Db database, EmailService emailService, CustomerService customerService, TimeSlotsService timeSlotsService) {
+    public AppointmentService(Db database, EmailService emailService, CustomerService customerService,
+            TimeSlotsService timeSlotsService) {
         this.database = database;
         this.emailService = emailService;
         this.customerService = customerService;
         this.timeSlotsService = timeSlotsService;
     }
 
-
     public Appointment saveAppointment(AppointmentPostRequest appointment) {
 
-
-        //existing or new customer
+        // existing or new customer
         Customer customer;
         String customerEmail = appointment.getCustomerInfo().getEmail();
         AppointmentPostRequest.CustomerInfo customerInfo = appointment.getCustomerInfo();
         AppointmentPostRequest.AppointmentTime appointmentTime = appointment.getAppointmentTime();
 
-        //try to find customer info by email
+        // try to find customer info by email
         try {
 
-            //get customer by email
+            // get customer by email
             Optional<Customer> foundCustomer = this.customerService.getCustomerByEmail(customerEmail);
 
-
-            //no customer found. Make new entry and return it
+            // no customer found. Make new entry and return it
             if (foundCustomer.isEmpty()) {
 
-                //create new customer from request
+                // create new customer from request
                 Customer newCustomer = new Customer();
                 newCustomer.setAddress(customerInfo.getAddress());
                 newCustomer.setEmail(customerInfo.getEmail());
                 newCustomer.setName(customerInfo.getName());
                 newCustomer.setPhoneNumber(customerInfo.getPhoneNumber());
 
-
-                //create customer in database
+                // create customer in database
                 customer = this.customerService.createCustomer(newCustomer);
 
-                System.out.println("createdCustomer");
-                System.out.println(customer);
             } else {
 
                 customer = foundCustomer.get();
-                System.out.println("customer found");
-                System.out.println(customer);
+
             }
 
         } catch (ExecutionException | InterruptedException e) {
@@ -75,8 +69,7 @@ public class AppointmentService {
             throw new RuntimeException(e);
         }
 
-
-//        create new appointment from request
+        // create new appointment from request
         Appointment newAppointment = new Appointment();
         newAppointment.setTimeSlot(appointmentTime.getTimeSlot());
         newAppointment.setDate(appointmentTime.getDay());
@@ -84,13 +77,10 @@ public class AppointmentService {
         newAppointment.setConfirmationNumber(UUID.randomUUID().toString());
         newAppointment.setStatus("PENDING");
 
-        //update appointments on customer
+        // update appointments on customer
         customer.addAppointment(newAppointment);
 
-        System.out.println("customer new data");
-        System.out.println(customer);
-
-        //update customerInfo database with customer changes
+        // update customerInfo database with customer changes
         try {
             CollectionReference customersCollection = database.collection("customerInfo");
             customersCollection.document(customer.getId()).set(customer);
@@ -100,21 +90,18 @@ public class AppointmentService {
             throw new RuntimeException("failed to update customerInfo data");
         }
 
-
-        //update timeSlots database
+        // update timeSlots database
         try {
-
 
             String date = newAppointment.getDate();
 
-            //update timeslots with customer id
+            // update timeslots with customer id
             timeSlotsService.updateDayTimeslot(customer.getId(), date, appointmentTime.getTimeSlot());
 
         } catch (Exception e) {
             System.out.println("failed to update timeslots data");
             throw new RuntimeException("failed to update timeslots data");
         }
-
 
         return newAppointment;
     }
@@ -148,17 +135,17 @@ public class AppointmentService {
         }
     }
 
-    public List<HashMap<String, Object>> getAppointmentsForDay(String date) throws ExecutionException, InterruptedException {
-
+    public List<HashMap<String, Object>> getAppointmentsForDay(String date)
+            throws ExecutionException, InterruptedException {
 
         List<HashMap<String, Object>> appointmentsList = new ArrayList<>();
 
-        //call database for days appointments
+        // call database for days appointments
         Map<String, Object> daysTimeSlots = database.getAppointmentsForDay(date);
 
-
-        //create appointment structures
-        // loop through hash map of day timeslots and add appointments to list to display appointments for this day
+        // create appointment structures
+        // loop through hash map of day timeslots and add appointments to list to
+        // display appointments for this day
         for (Map.Entry<String, Object> timeSlot : daysTimeSlots.entrySet()) {
             String tsCode = timeSlot.getKey();
             HashMap<String, Object> customerAppointment = new HashMap<>();
@@ -166,23 +153,18 @@ public class AppointmentService {
 
             String customerId = timeSlotData.get("customerId");
 
-            //todo get customer info
+            // todo get customer info
             Customer customer = customerService.getCustomerById(customerId);
-            System.out.println("customer ID=========");
-            System.out.println(customerId);
 
             customerAppointment.put("name", customer.getName());
 
-
-            //search customers appointments for matching date and timeslot
+            // search customers appointments for matching date and timeslot
             for (Appointment custAppt : customer.getAppointments()) {
-
 
                 if ((date.equals(custAppt.getDate())) && tsCode.equals(custAppt.getTimeSlot())) {
 
                     customerAppointment.put("time", custAppt.getTimeSlot());
                     customerAppointment.put("serviceId", custAppt.getServiceId());
-
 
                 }
             }
@@ -191,9 +173,7 @@ public class AppointmentService {
 
         }
 
-
         return appointmentsList;
     }
 
 }
-

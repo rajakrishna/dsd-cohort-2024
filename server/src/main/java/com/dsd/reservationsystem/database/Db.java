@@ -116,10 +116,8 @@ public class Db {
             List<QueryDocumentSnapshot> servicesDocuments = servicesCollection.getDocuments();
 
             for (QueryDocumentSnapshot service : servicesDocuments) {
-//                System.out.println(service.getData());
                 Map doc = service.getData();
-                System.out.println("=========");
-                System.out.println(doc);
+
                 docs.add(doc);
             }
 
@@ -134,7 +132,6 @@ public class Db {
     public DaySchedule getTimeSlotsForDay(String dateStr) throws Exception {
         // request to firebase for timeslots collection
         DocumentReference docRef = database.collection("timeSlots").document(dateStr);
-        // System.out.println(dateStr);
         try {
             ApiFuture<DocumentSnapshot> query = docRef.get();
 
@@ -164,12 +161,10 @@ public class Db {
         // loop through hash map of day timeslots
         for (Map.Entry<String, Object> timeSlot : doc.entrySet()) {
             String tsCode = timeSlot.getKey();
-            HashMap<String, String> timeSlotData = (HashMap<String, String>) timeSlot.getValue();
+            // HashMap<String, String> timeSlotData = (HashMap<String, String>)
+            // timeSlot.getValue();
 
-            // System.out.println("Key: " + tsCode + ", Value: " + (String)
-            // timeSlotData.get("customerId"));
             Appointment appointment = new Appointment();
-//      appointment.setCustomerId((String) timeSlotData.get("customerId"));
             appointments.put(tsCode, appointment);
         }
         return appointments;
@@ -285,6 +280,5 @@ public class Db {
     public void setCredentialsPath(String credentialsPath) {
         this.credentialsPath = credentialsPath;
     }
-
 
 }
