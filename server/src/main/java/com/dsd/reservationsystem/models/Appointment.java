@@ -3,7 +3,7 @@ package com.dsd.reservationsystem.models;
 
 //used inside customer db in appointmentsArray
 public class Appointment {
-    //    private String customerId;
+    private String customerId;
     private String date;
     private String timeSlot;
     private String confirmationNumber;
@@ -60,5 +60,13 @@ public class Appointment {
 
     public void setStatus(String status) {
         Status = status;
+    }
+
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
     }
 }
