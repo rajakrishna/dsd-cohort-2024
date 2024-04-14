@@ -56,6 +56,7 @@ public class AppointmentService {
 
 
     //todo update customer appointment info
+    
     //todo update timeslots with customer id
 
 //    Appointment savedAppointment = this.database.createAppointment(appointment);
