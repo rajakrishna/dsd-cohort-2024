@@ -70,8 +70,13 @@ appointmentData:{
 */
 async function postAppointment(appointmentData) {
   const body = await JSON.stringify(appointmentData);
-  const res = fetch(`${API_URL}/appointments`, { method: "POST", body });
-  const data = res.json();
+
+  const res = await fetch(`${API_URL}/appointment/save`, {
+    headers: { "Content-Type": "application/json" },
+    method: "POST",
+    body,
+  });
+  const data = await res.json();
 
   return data;
 
