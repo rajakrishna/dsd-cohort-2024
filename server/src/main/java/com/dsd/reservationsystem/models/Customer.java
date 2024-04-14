@@ -2,9 +2,12 @@ package com.dsd.reservationsystem.models;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+
+//customer database class
 public class Customer {
-    private String id;
+    private String id = UUID.randomUUID().toString();
     private String address;
     private String name;
     private String phoneNumber;
@@ -71,6 +74,11 @@ public class Customer {
     public void setAppointments(List<Appointment> appointments) {
         this.appointments = appointments;
     }
+
+    public void addAppointment(Appointment appointment) {
+        this.appointments.add(appointment);
+    }
+
 
     @Override
     public String toString() {

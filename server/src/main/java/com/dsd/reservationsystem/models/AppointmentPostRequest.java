@@ -79,13 +79,6 @@ public class AppointmentPostRequest {
         private String email;
         private String serviceId;
 
-//        public CustomerInfo(String address, String name, String phoneNumber, String email, String serviceId) {
-//            this.address = address;
-//            this.name = name;
-//            this.phoneNumber = phoneNumber;
-//            this.email = email;
-//            this.serviceId = serviceId;
-//        }
 
         public CustomerInfo() {
         }

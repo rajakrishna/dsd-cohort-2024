@@ -29,18 +29,17 @@ public class AppointmentController {
         System.out.println(appointmentRequest);
 
 
-//        // Save the appointment
-//        try {
-//            Appointment savedAppointment = appointmentService.saveAppointment(appointmentRequest);
-//
-//
-//            return new ResponseEntity<Appointment>(savedAppointment, HttpStatus.OK);
-//        } catch (Exception e) {
-//
-//            //todo test error sent back
-//            return new ResponseEntity("Error :" + e.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-        return new ResponseEntity("savedAppointment", HttpStatus.OK);
+        // Save the appointment
+        try {
+            Appointment savedAppointment = appointmentService.saveAppointment(appointmentRequest);
+
+
+            return new ResponseEntity<Appointment>(savedAppointment, HttpStatus.OK);
+        } catch (Exception e) {
+
+            //todo test error sent back
+            return new ResponseEntity("Error :" + e.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     private boolean isTimeSlotAvailable(String day, String timeSlot) {
