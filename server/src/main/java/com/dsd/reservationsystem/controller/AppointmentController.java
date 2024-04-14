@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -29,16 +30,28 @@ public class AppointmentController {
         System.out.println(appointmentRequest);
 
 
-        // Save the appointment
+        // todo Save the appointment
         try {
             Appointment savedAppointment = appointmentService.saveAppointment(appointmentRequest);
 
+            HashMap<String, String> response = new HashMap<>();
 
-            return new ResponseEntity<Appointment>(savedAppointment, HttpStatus.OK);
+            response.put("status", "success");
+            response.put("day", savedAppointment.getDate());
+            response.put("timeSlot", savedAppointment.getTimeSlot());
+            response.put("confirmationID", savedAppointment.getConfirmationNumber());
+
+
+            return new ResponseEntity<HashMap>(response, HttpStatus.OK);
         } catch (Exception e) {
 
+            HashMap<String, String> response = new HashMap<>();
+            response.put("status", "failed");
+            response.put("error", e.toString());
+
+
             //todo test error sent back
-            return new ResponseEntity("Error :" + e.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<HashMap>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

@@ -58,9 +58,10 @@ public class TimeSlotsService {
             data.put(timeSlot, timeSlotInfo);
             docRef.set(data);
 
-        }
+            return Optional.of(data);
 
-        return Optional.empty();
+        }
+        
     }
 
     public boolean isTimeSlotAvailable(String day, String timeSlot) {

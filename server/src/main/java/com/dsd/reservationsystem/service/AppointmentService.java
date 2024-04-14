@@ -110,7 +110,7 @@ public class AppointmentService {
 
             String date = newAppointment.getDate();
 
-            //todo update timeslots with customer id
+            //update timeslots with customer id
             timeSlotsService.updateDayTimeslot(customer.getId(), date, appointmentTime.getTimeSlot());
 
         } catch (Exception e) {
@@ -152,7 +152,8 @@ public class AppointmentService {
         //
         // return savedAppointment;
 
-        return new Appointment();
+
+        return newAppointment;
     }
 
     public Appointment addAppointmentToCustomer(String customerId, Appointment appointment) {
