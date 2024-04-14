@@ -1,3 +1,5 @@
+import { headers } from "next/headers";
+
 const API_URL = process.env.API_URL;
 const LOC = "/api/appointments";
 export const dynamic = "force-dynamic"; // have next js NOT cache this request
@@ -49,7 +51,9 @@ export async function POST(request) {
 
 async function getAppointmentsByDay(date) {
   const params = new URLSearchParams({ date });
-  const res = await fetch(`${API_URL}/appointment/all?${params}`);
+  const res = await fetch(`${API_URL}/appointment/all?${params}`, {
+    headers: { "Content-Type": "application/json" },
+  });
   return await res.json();
 }
 
