@@ -49,7 +49,7 @@ export async function POST(request) {
 
 async function getAppointmentsByDay(date) {
   const params = new URLSearchParams({ date });
-  const res = fetch(`${API_URL}/appointments?${params}`);
+  const res = await fetch(`${API_URL}/appointment/all?${params}`);
   return await res.json();
 }
 

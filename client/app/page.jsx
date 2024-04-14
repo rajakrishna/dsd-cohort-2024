@@ -1,7 +1,14 @@
 import Link from "next/link";
 import plumbingBg from "../public/plumbingbg.jpg";
+import useGetAppointments from "./_hooks/appointments-api/useGetAppointments";
+import { useEffect } from "react";
 
 export default function Home() {
+  const appt = useGetAppointments("03212024");
+  useEffect(() => {
+    console.log("appt", appt.data);
+  }, [appt.data]);
+
   return (
     <section className="w-full bg-inherit ">
       {/* expert plumbing and book appointment */}

@@ -15,41 +15,40 @@ import java.util.concurrent.ExecutionException;
 @RequestMapping("/api/appointment")
 public class AppointmentController {
 
-    @Autowired
-    private AppointmentService appointmentService;
+  @Autowired
+  private AppointmentService appointmentService;
 
-    @Autowired
-    private TimeSlotsService timeSlotsService;
+  @Autowired
+  private TimeSlotsService timeSlotsService;
 
-    @PostMapping("/save")
-    public ResponseEntity saveAppointment(@RequestBody Appointment appointmentRequest) {
-        // Check if the appointment time is available
+  @PostMapping("/save")
+  public ResponseEntity saveAppointment(@RequestBody Appointment appointmentRequest) {
 
-        System.out.println("Appointment request is :");
-        System.out.println(appointmentRequest);
+    System.out.println("Appointment request is :");
+    System.out.println(appointmentRequest);
 
-        // Save the appointment
-        Appointment savedAppointment = appointmentService.saveAppointment(appointmentRequest);
-        try {
+    // Save the appointment
+    try {
+      Appointment savedAppointment = appointmentService.saveAppointment(appointmentRequest);
 //    Appointment createdAppointment = new Appointment();
+        
+      return new ResponseEntity<Appointment>(savedAppointment, HttpStatus.OK);
+    } catch (Exception e) {
 
-            return new ResponseEntity<Appointment>(savedAppointment, HttpStatus.OK);
-        } catch (Exception e) {
-
-            //todo test error sent back
-            return new ResponseEntity(e.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+      //todo test error sent back
+      return new ResponseEntity("Error :" + e.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+  }
 
-    private boolean isTimeSlotAvailable(String day, String timeSlot) {
-        // Get the time slots for the selected day
-        return timeSlotsService.isTimeSlotAvailable(day, timeSlot);
+  private boolean isTimeSlotAvailable(String day, String timeSlot) {
+    // Get the time slots for the selected day
+    return timeSlotsService.isTimeSlotAvailable(day, timeSlot);
 
-    }
+  }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<Appointment>> getAppointments(@RequestParam String date) throws ExecutionException, InterruptedException {
-        List<Appointment> appointments = appointmentService.getAppointmentsForDay(date);
-        return ResponseEntity.ok(appointments);
-    }
+  @GetMapping("/all")
+  public ResponseEntity<List<Appointment>> getAppointments(@RequestParam String date) throws ExecutionException, InterruptedException {
+    List<Appointment> appointments = appointmentService.getAppointmentsForDay(date);
+    return ResponseEntity.ok(appointments);
+  }
 }
