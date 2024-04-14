@@ -6,6 +6,7 @@ import com.dsd.reservationsystem.models.AppointmentPostRequest;
 import com.dsd.reservationsystem.models.Customer;
 import com.dsd.reservationsystem.models.DaySchedule;
 import com.google.cloud.firestore.CollectionReference;
+import com.google.cloud.firestore.DocumentReference;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -89,13 +90,26 @@ public class AppointmentService {
         System.out.println("customer new data");
         System.out.println(customer);
 
-        //todo update database with customerchanges
+        //update database with customerchanges
+        try {
+            CollectionReference customersCollection = database.collection("customerInfo");
+            customersCollection.document(customer.getId()).set(customer);
 
-        CollectionReference customersCollection = database.collection("customerInfo");
+        } catch (Exception e) {
+            System.out.println("failed to update customerInfo data");
+            throw new RuntimeException("failed to update customerInfo data");
+        }
 
-        customersCollection.document(customer.getId()).set(customer);
 
-        //todo update timeslots with customer id
+        try {
+            //todo update timeslots with customer id
+            DocumentReference docRef = database.collection("timeSlots").document(newAppointment.getTimeSlot());
+
+
+        } catch (Exception e) {
+            System.out.println("failed to update timeslots data");
+            throw new RuntimeException("failed to update timeslots data");
+        }
 
 //    Appointment savedAppointment = this.database.createAppointment(appointment);
 
