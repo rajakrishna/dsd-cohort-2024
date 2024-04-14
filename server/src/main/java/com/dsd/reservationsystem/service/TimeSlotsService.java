@@ -3,9 +3,14 @@ package com.dsd.reservationsystem.service;
 import com.dsd.reservationsystem.database.Db;
 import com.dsd.reservationsystem.models.Appointment;
 import com.dsd.reservationsystem.models.DaySchedule;
+import com.dsd.reservationsystem.models.TimeSlotInfo;
+import com.google.api.core.ApiFuture;
+import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.DocumentSnapshot;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 @Service
 public class TimeSlotsService {
@@ -14,6 +19,57 @@ public class TimeSlotsService {
 
     public TimeSlotsService(Db database) {
         this.database = database;
+    }
+
+    //todo create update days timeslots method
+    public Optional<Map<String, Object>> updateDayTimeslot(String customerId, String date, String timeSlot) throws ExecutionException, InterruptedException {
+        DocumentReference docRef = database.collection("timeSlots").document(date);
+
+        ApiFuture<DocumentSnapshot> query = docRef.get();
+
+
+        DocumentSnapshot document = query.get();
+
+        //if there is a document for day update it
+        if (document.exists()) {
+            //get data from doc snapshot that contains the days timeslots
+            Map<String, Object> data = document.getData();
+            System.out.println("timeslot data before");
+            System.out.println(data);
+
+            //create new timeslot info to update database with
+            TimeSlotInfo timeSlotInfo = new TimeSlotInfo(customerId);
+
+
+            //update data on date timeslots
+            data.put(timeSlot, timeSlotInfo);
+
+            System.out.println("timeslot data after");
+            System.out.println(data);
+
+            //todo update database
+
+            docRef.set(data);
+
+            return Optional.of(data);
+
+
+        } else {
+            //todo doc does not exist create it
+
+
+        }
+
+        return Optional.empty();
+    }
+
+    public boolean isTimeSlotAvailable(String day, String timeSlot) {
+        try {
+            Map<String, Boolean> timeSlots = getTimeSlotsAvailabilityForDay(day);
+            return timeSlots.get(timeSlot);
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     //date will be provided in 03022024 two-digit month, two-digit month and four digit year
@@ -43,12 +99,5 @@ public class TimeSlotsService {
         return timeSlotsAvailability;
     }
 
-    public boolean isTimeSlotAvailable(String day, String timeSlot) {
-        try {
-            Map<String, Boolean> timeSlots = getTimeSlotsAvailabilityForDay(day);
-            return timeSlots.get(timeSlot);
-        } catch (Exception e) {
-            return false;
-        }
-    }
+    //todo create new day entry into timeslots database
 }

@@ -1,15 +1,16 @@
 package com.dsd.reservationsystem.service;
 
 import com.dsd.reservationsystem.database.Db;
-import com.dsd.reservationsystem.models.Appointment;
-import com.dsd.reservationsystem.models.AppointmentPostRequest;
-import com.dsd.reservationsystem.models.Customer;
-import com.dsd.reservationsystem.models.DaySchedule;
+import com.dsd.reservationsystem.models.*;
+import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
@@ -21,19 +22,21 @@ public class AppointmentService {
 
     private CustomerService customerService;
 
-    public AppointmentService(Db database, EmailService emailService, CustomerService customerService) {
+    private TimeSlotsService timeSlotsService;
+
+    public AppointmentService(Db database, EmailService emailService, CustomerService customerService, TimeSlotsService timeSlotsService) {
         this.database = database;
         this.emailService = emailService;
         this.customerService = customerService;
+        this.timeSlotsService = timeSlotsService;
     }
+
 
     public Appointment saveAppointment(AppointmentPostRequest appointment) {
 
 
         //existing or new customer
         Customer customer;
-
-
         String customerEmail = appointment.getCustomerInfo().getEmail();
         AppointmentPostRequest.CustomerInfo customerInfo = appointment.getCustomerInfo();
         AppointmentPostRequest.AppointmentTime appointmentTime = appointment.getAppointmentTime();
@@ -45,7 +48,7 @@ public class AppointmentService {
             Optional<Customer> foundCustomer = this.customerService.getCustomerByEmail(customerEmail);
 
 
-            //no user found. Make new entry and return it
+            //no customer found. Make new entry and return it
             if (foundCustomer.isEmpty()) {
 
                 //create new customer from request
@@ -71,7 +74,7 @@ public class AppointmentService {
         } catch (ExecutionException | InterruptedException e) {
             throw new RuntimeException(e);
         } catch (Exception e) {
-            //todo what to do when user not found and exception thrown
+
             throw new RuntimeException(e);
         }
 
@@ -90,7 +93,7 @@ public class AppointmentService {
         System.out.println("customer new data");
         System.out.println(customer);
 
-        //update database with customerchanges
+        //update customerInfo database with customer changes
         try {
             CollectionReference customersCollection = database.collection("customerInfo");
             customersCollection.document(customer.getId()).set(customer);
@@ -101,10 +104,14 @@ public class AppointmentService {
         }
 
 
+        //update timeSlots database
         try {
-            //todo update timeslots with customer id
-            DocumentReference docRef = database.collection("timeSlots").document(newAppointment.getTimeSlot());
 
+
+            String date = newAppointment.getDate();
+
+            //todo update timeslots with customer id
+            timeSlotsService.updateDayTimeslot(customer.getId(), date, appointmentTime.getTimeSlot());
 
         } catch (Exception e) {
             System.out.println("failed to update timeslots data");

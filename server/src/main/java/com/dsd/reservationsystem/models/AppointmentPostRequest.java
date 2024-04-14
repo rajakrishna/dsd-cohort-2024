@@ -1,5 +1,7 @@
 package com.dsd.reservationsystem.models;
 
+
+//request for post appointment
 public class AppointmentPostRequest {
     private AppointmentTime appointmentTime;
     private CustomerInfo customerInfo;
