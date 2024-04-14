@@ -5,10 +5,12 @@ import com.dsd.reservationsystem.models.Appointment;
 import com.dsd.reservationsystem.models.AppointmentPostRequest;
 import com.dsd.reservationsystem.models.Customer;
 import com.dsd.reservationsystem.models.DaySchedule;
+import com.google.cloud.firestore.CollectionReference;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 @Service
@@ -59,7 +61,10 @@ public class AppointmentService {
                 System.out.println("createdCustomer");
                 System.out.println(customer);
             } else {
+
                 customer = foundCustomer.get();
+                System.out.println("customer found");
+                System.out.println(customer);
             }
 
         } catch (ExecutionException | InterruptedException e) {
@@ -75,12 +80,20 @@ public class AppointmentService {
         newAppointment.setTimeSlot(appointmentTime.getTimeSlot());
         newAppointment.setDate(appointmentTime.getDay());
         newAppointment.setServiceId(customerInfo.getServiceId());
+        newAppointment.setConfirmationNumber(UUID.randomUUID().toString());
         newAppointment.setStatus("PENDING");
 
-        //add new created appointment to customer
+        //update appointments on customer
         customer.addAppointment(newAppointment);
 
-        //todo update customer appointment info
+        System.out.println("customer new data");
+        System.out.println(customer);
+
+        //todo update database with customerchanges
+
+        CollectionReference customersCollection = database.collection("customerInfo");
+
+        customersCollection.document(customer.getId()).set(customer);
 
         //todo update timeslots with customer id
 
