@@ -9,10 +9,7 @@ import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Query;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 @Service
@@ -118,40 +115,6 @@ public class AppointmentService {
             throw new RuntimeException("failed to update timeslots data");
         }
 
-//    Appointment savedAppointment = this.database.createAppointment(appointment);
-
-        //
-        // // Update the timeslot in Firestore to include the customerId
-        // DaySchedule daySchedule;
-        // try {
-        // daySchedule = database.getTimeSlotsForDay(appointment.getDay());
-        // } catch (Exception e) {
-        // e.printStackTrace();
-        // return null;
-        // }
-        // daySchedule.appointments().get(appointment.getTimeSlot()).setCustomerId(appointment.getCustomerId());
-        // database.updateTimeSlotsForDay(appointment.getDay(),
-        // daySchedule.appointments());
-        //
-        // return savedAppointment;
-
-        // Save the appointment to Firestore
-        // Appointment savedAppointment = this.database.createAppointment(appointment);
-
-        // Fetch the customer's email
-        // Customer customer = database.getCustomerById(appointment.getCustomerId());
-        // String customerEmail = customer.getEmail();
-        //
-        // // Send a confirmation email
-        // emailService.sendSimpleMessage(
-        // customerEmail,
-        // "Appointment Confirmation",
-        // "Your appointment has been confirmed. Your confirmation number is " +
-        // savedAppointment.getConfirmationNumber()
-        // );
-        //
-        // return savedAppointment;
-
 
         return newAppointment;
     }
@@ -187,7 +150,11 @@ public class AppointmentService {
 
     public List<Appointment> getAppointmentsForDay(String date) throws ExecutionException, InterruptedException {
         System.out.println("get appointment for day");
-        return database.getAppointmentsForDay(date);
+        List list = new ArrayList();
+        list.add(new Appointment());
+        Map<String, Object> daysTimeSlots = database.getAppointmentsForDay(date);
+
+        return list;
     }
 
 }

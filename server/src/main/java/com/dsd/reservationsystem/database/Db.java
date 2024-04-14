@@ -257,15 +257,16 @@ public class Db {
         return database.collection(collectionName);
     }
 
-    public List<Appointment> getAppointmentsForDay(String date) throws ExecutionException, InterruptedException {
+    public Map<String, Object> getAppointmentsForDay(String date) throws ExecutionException, InterruptedException {
         // Create a query to get all appointments on the specified date
+
         DocumentReference docRef = database.collection("timeSlots").document(date);
 
         ApiFuture<DocumentSnapshot> future = docRef.get();
 
         DocumentSnapshot document = future.get();
 
-        List<Appointment> appointments = new ArrayList<Appointment>();
+        List<Appointment> appointmentsList = new ArrayList<Appointment>();
         Map<String, Object> doc = document.getData();
 
         // loop through hash map of day timeslots
@@ -273,13 +274,22 @@ public class Db {
             String tsCode = timeSlot.getKey();
             HashMap<String, String> timeSlotData = (HashMap<String, String>) timeSlot.getValue();
 
-            // System.out.println("Key: " + tsCode + ", Value: " + (String)
-            // timeSlotData.get("customerId"));
             Appointment appointment = new Appointment();
-//            appointment.setCustomerId((String) timeSlotData.get("customerId"));
-            appointments.add(appointment);
+
+            appointment.setCustomerId(timeSlotData.get("customerId"));
+            appointment.setTimeSlot(tsCode);
+            appointment.setDate(date);
+
+            //todo get customer info
+            //todo get service ID
+            //todo get status
+            //todo get confirmationNumber
+
+            appointmentsList.add(appointment);
         }
-        return appointments;
+
+
+        return doc;
     }
 
     public void setEnv(Environment env) {
