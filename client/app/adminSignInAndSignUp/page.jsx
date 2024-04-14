@@ -19,6 +19,12 @@ export default function AdminSignInAndSignUp() {
   const router = useRouter()
 
   useEffect(() => {
+    if (user) {
+      router.push('/admin/dashboard')
+    }
+  },[user])
+
+  useEffect(() => {
     if (signUpError) {
       if (signUpError.message.includes('email-already-in-use')) {
         setSignUpAlert('Email already in use');
@@ -37,18 +43,6 @@ export default function AdminSignInAndSignUp() {
       }
     }
   }, [signInError])
-
-  if (loading) {
-    return (
-    <div className="flex items-center justify-center min-h-screen">
-      <span className="loading loading-bars loading-lg"></span>
-    </div>
-  )
-};
-
-  if (user) {
-    router.push('/admin/dashboard')
-  }
 
   const signInFormSubmitHandler = async (e) => {
     e.preventDefault()
@@ -77,6 +71,10 @@ export default function AdminSignInAndSignUp() {
       console.log('error', error)
     }
   }
+
+  if (loading || user) {return <div className="flex items-center justify-center min-h-screen">
+  <span className="loading loading-bars loading-lg"></span>
+</div>}
 
   return (
   <div className='flex items-center justify-center min-h-screen'>
