@@ -28,16 +28,6 @@ public class Appointment {
     }
 
 
-    @Override
-    public String toString() {
-        return "Appointment{" +
-//                ", day='" + day + '\'' +
-                ", timeSlot='" + timeSlot + '\'' +
-                ", confirmationNumber='" + confirmationNumber + '\'' +
-//                ", customerInfo=" + customerInfo +
-                '}';
-    }
-
     public String getDate() {
         return date;
     }
@@ -68,5 +58,17 @@ public class Appointment {
 
     public void setCustomerId(String customerId) {
         this.customerId = customerId;
+    }
+
+    @Override
+    public String toString() {
+        return "Appointment{" +
+                "customerId='" + customerId + '\'' +
+                ", date='" + date + '\'' +
+                ", timeSlot='" + timeSlot + '\'' +
+                ", confirmationNumber='" + confirmationNumber + '\'' +
+                ", serviceId='" + serviceId + '\'' +
+                ", Status='" + Status + '\'' +
+                '}';
     }
 }

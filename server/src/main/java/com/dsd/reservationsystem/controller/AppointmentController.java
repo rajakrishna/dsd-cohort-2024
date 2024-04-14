@@ -62,8 +62,9 @@ public class AppointmentController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Appointment>> getAppointments(@RequestParam String date) throws ExecutionException, InterruptedException {
-        List<Appointment> appointments = appointmentService.getAppointmentsForDay(date);
+    public ResponseEntity<List<HashMap<String, String>>> getAppointments(@RequestParam String date) throws ExecutionException, InterruptedException {
+//        List<Appointment> appointments = appointmentService.getAppointmentsForDay(date);
+        List<HashMap<String, String>> appointments = appointmentService.getAppointmentsForDay(date);
         return ResponseEntity.ok(appointments);
     }
 }

@@ -133,14 +133,14 @@ public class AppointmentService {
 
             // Add the appointment as a time slot for the given date
             DaySchedule daySchedule;
-//            try {
-//                daySchedule = database.getTimeSlotsForDay(appointment.getDay());
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                return null;
-//            }
-//            daySchedule.appointments().put(appointment.getTimeSlot(), appointment);
-//            database.updateTimeSlotsForDay(appointment.getDay(), daySchedule.appointments());
+            try {
+                daySchedule = database.getTimeSlotsForDay(appointment.getDate());
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+            daySchedule.appointments().put(appointment.getTimeSlot(), appointment);
+            database.updateTimeSlotsForDay(appointment.getDate(), daySchedule.appointments());
 
             return appointment;
         } else {
@@ -148,35 +148,52 @@ public class AppointmentService {
         }
     }
 
-    public List<Appointment> getAppointmentsForDay(String date) throws ExecutionException, InterruptedException {
-        System.out.println("get appointment for day");
-        List list = new ArrayList();
-        list.add(new Appointment());
+    public List<HashMap<String, String>> getAppointmentsForDay(String date) throws ExecutionException, InterruptedException {
+
+
+        List<HashMap<String, String>> appointmentsList = new ArrayList<>();
+
+        //call database for days appointments
         Map<String, Object> daysTimeSlots = database.getAppointmentsForDay(date);
 
-        return list;
+
+        //create appointment structures
+        // loop through hash map of day timeslots and add appointments to list to display appointments for this day
+        for (Map.Entry<String, Object> timeSlot : daysTimeSlots.entrySet()) {
+            String tsCode = timeSlot.getKey();
+            HashMap<String, String> customerAppointment = new HashMap<>();
+            HashMap<String, String> timeSlotData = (HashMap<String, String>) timeSlot.getValue();
+
+            String customerId = timeSlotData.get("customerId");
+
+            //todo get customer info
+            Customer customer = customerService.getCustomerById(customerId);
+            System.out.println("customer ID=========");
+            System.out.println(customerId);
+
+            customerAppointment.put("name", customer.getName());
+
+
+            //search customers appointments for matching date and timeslot
+            for (Appointment custAppt : customer.getAppointments()) {
+
+
+                if ((date.equals(custAppt.getDate())) && tsCode.equals(custAppt.getTimeSlot())) {
+
+                    customerAppointment.put("time", custAppt.getTimeSlot());
+                    customerAppointment.put("serviceId", custAppt.getServiceId());
+
+
+                }
+            }
+            
+            appointmentsList.add(customerAppointment);
+
+        }
+
+
+        return appointmentsList;
     }
 
 }
 
-// // todo find user by there email if they exists update customer info with new
-// // appointment
-// Query query = database.collection("customerInfo").whereEqualTo("email",
-// appointment.getCustomerInfo().getEmail());
-// ApiFuture<QuerySnapshot> results = query.get();
-
-// try {
-
-// QuerySnapshot documents = results.get();
-// List data = documents.getDocuments();
-// System.out.println(data);
-
-// } catch (ExecutionException e) {
-// throw new RuntimeException(e);
-// } catch (InterruptedException e) {
-// throw new RuntimeException(e);
-// } catch (Exception e) {
-// System.out.printf("unhandled exeption getting customer info");
-// }
-
-// todo push user id into timeslot

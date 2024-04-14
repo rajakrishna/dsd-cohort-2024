@@ -107,24 +107,26 @@ public class Db {
         }
     }
 
-    public ArrayList<ServiceModel> getAllServices() {
+    public ArrayList<Map> getAllServices() {
         ApiFuture<QuerySnapshot> query = database.collection("services").get();
 
         try {
-            ArrayList<ServiceModel> docs = new ArrayList();
+            ArrayList<Map> docs = new ArrayList();
             QuerySnapshot servicesCollection = query.get();
-            List<QueryDocumentSnapshot> documents = servicesCollection.getDocuments();
+            List<QueryDocumentSnapshot> servicesDocuments = servicesCollection.getDocuments();
 
-            for (QueryDocumentSnapshot document : documents) {
-                ServiceModel doc = new ServiceModel((String) document.getData().get("id"),
-                        (String) document.getData().get("name"));
+            for (QueryDocumentSnapshot service : servicesDocuments) {
+//                System.out.println(service.getData());
+                Map doc = service.getData();
+                System.out.println("=========");
+                System.out.println(doc);
                 docs.add(doc);
             }
 
             return docs;
-        } catch (Exception exception) {
-
-            return new ArrayList<>(Arrays.asList(new ServiceModel("id", "failed to get services")));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return new ArrayList<>();
         }
     }
 
@@ -268,26 +270,6 @@ public class Db {
 
         List<Appointment> appointmentsList = new ArrayList<Appointment>();
         Map<String, Object> doc = document.getData();
-
-        // loop through hash map of day timeslots
-        for (Map.Entry<String, Object> timeSlot : doc.entrySet()) {
-            String tsCode = timeSlot.getKey();
-            HashMap<String, String> timeSlotData = (HashMap<String, String>) timeSlot.getValue();
-
-            Appointment appointment = new Appointment();
-
-            appointment.setCustomerId(timeSlotData.get("customerId"));
-            appointment.setTimeSlot(tsCode);
-            appointment.setDate(date);
-
-            //todo get customer info
-            //todo get service ID
-            //todo get status
-            //todo get confirmationNumber
-
-            appointmentsList.add(appointment);
-        }
-
 
         return doc;
     }
