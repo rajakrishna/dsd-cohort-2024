@@ -15,14 +15,6 @@ export default function Layout({ children }) {
 
   useEffect(() => {
 
-    if (loading) {
-      return (
-        <div className="flex items-center justify-center min-h-screen">
-          <span className="loading loading-bars loading-lg"></span>
-        </div>
-      )
-    };
-
     if (!user) {
       router.push('/adminSignInAndSignUp')
     }
