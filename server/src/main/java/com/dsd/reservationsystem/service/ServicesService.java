@@ -24,20 +24,7 @@ public class ServicesService {
 
 
     public List getAll() {
-        ArrayList<ServiceModel> servicesDocs = this.database.getAllServices();
-
-//        ArrayList<ServiceModel> servicesAvailable = new ArrayList<>();
-
-//        for (ServiceModel service : servicesDocs) {
-//            Object name = service.name();
-//            Object id = service.id();
-//
-//            servicesAvailable.add(new HashMap<>() {{
-//                put("name", name);
-//                put("id", id);
-//            }});
-//        }
-
+        ArrayList<Map> servicesDocs = this.database.getAllServices();
         return servicesDocs;
     }
 

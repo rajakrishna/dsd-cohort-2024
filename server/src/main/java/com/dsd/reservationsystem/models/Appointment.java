@@ -1,27 +1,15 @@
 package com.dsd.reservationsystem.models;
 
+
+//used inside customer db in appointmentsArray
 public class Appointment {
     private String customerId;
-    private String day;
+    private String date;
     private String timeSlot;
     private String confirmationNumber;
-    private Customer customerInfo;
+    private String serviceId;
+    private String Status;
 
-    public String getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(String customerId) {
-        this.customerId = customerId;
-    }
-
-    public String getDay() {
-        return day;
-    }
-
-    public void setDay(String day) {
-        this.day = day;
-    }
 
     public String getTimeSlot() {
         return timeSlot;
@@ -39,11 +27,48 @@ public class Appointment {
         this.confirmationNumber = confirmationNumber;
     }
 
-    public Customer getCustomerInfo() {
-        return customerInfo;
+
+    public String getDate() {
+        return date;
     }
 
-    public void setCustomerInfo(Customer customerInfo) {
-        this.customerInfo = customerInfo;
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getServiceId() {
+        return serviceId;
+    }
+
+    public void setServiceId(String serviceId) {
+        this.serviceId = serviceId;
+    }
+
+    public String getStatus() {
+        return Status;
+    }
+
+    public void setStatus(String status) {
+        Status = status;
+    }
+
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
+    }
+
+    @Override
+    public String toString() {
+        return "Appointment{" +
+                "customerId='" + customerId + '\'' +
+                ", date='" + date + '\'' +
+                ", timeSlot='" + timeSlot + '\'' +
+                ", confirmationNumber='" + confirmationNumber + '\'' +
+                ", serviceId='" + serviceId + '\'' +
+                ", Status='" + Status + '\'' +
+                '}';
     }
 }
