@@ -14,7 +14,6 @@ export default function Layout({ children }) {
   const router = useRouter()
 
   useEffect(() => {
-
     if (!user) {
       router.push('/adminSignInAndSignUp')
     }
