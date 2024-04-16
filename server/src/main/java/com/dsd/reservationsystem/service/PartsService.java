@@ -13,52 +13,57 @@ import java.util.concurrent.ExecutionException;
 
 @Service
 public class PartsService {
-  private Db database;
+    private Db database;
 
-  public PartsService(Db database) {
-    this.database = database;
-  }
-
-  public Part createPart(Part part) {
-    // Generate a unique ID for the part
-    String id = UUID.randomUUID().toString();
-    part = new Part(id, part.getName(), part.getQuantity(), part.getThreshold());
-
-    // Save the part to Firestore
-    database.createPart(part);
-
-    return part;
-  }
-
-  public Part getPartById(String id) {
-    DocumentReference docRef = database.collection("parts").document(id);
-    ApiFuture<DocumentSnapshot> future = docRef.get();
-    DocumentSnapshot document;
-    try {
-      document = future.get();
-      if (document.exists()) {
-        return document.toObject(Part.class);
-      } else {
-        return null;
-      }
-    } catch (InterruptedException | ExecutionException e) {
-      e.printStackTrace();
-      return null;
+    public PartsService(Db database) {
+        this.database = database;
     }
-  }
 
-  public List<Part> getAllParts() {
-    return database.getAllParts();
-  }
+    public Part createPart(Part part) {
+        // Generate a unique ID for the part
+        String id = UUID.randomUUID().toString();
+        part = new Part(id, part.getName(), part.getQuantity(), part.getThreshold());
 
-  public Part postPart(Part part) {
-    // Generate a unique ID for the part
-    String id = UUID.randomUUID().toString();
-    part = new Part(id, part.getName(), part.getQuantity(), part.getThreshold());
+        // Save the part to Firestore
+        database.createPart(part);
 
-    // Save the part to Firestore
-    database.createPart(part);
+        return part;
+    }
 
-    return part;
-  }
+    public Part getPartById(String id) {
+        DocumentReference docRef = database.collection("parts").document(id);
+        ApiFuture<DocumentSnapshot> future = docRef.get();
+        DocumentSnapshot document;
+        try {
+            document = future.get();
+            if (document.exists()) {
+                return document.toObject(Part.class);
+            } else {
+                return null;
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public List<Part> getAllParts() {
+        return database.getAllParts();
+    }
+
+    public Part postPart(Part part) {
+        // Generate a unique ID for the part
+        String id = UUID.randomUUID().toString();
+        part = new Part(id, part.getName(), part.getQuantity(), part.getThreshold());
+
+        // Save the part to Firestore
+        database.createPart(part);
+
+        return part;
+    }
+
+    public Part updatePart(Part part) {
+
+        return new Part();
+    }
 }

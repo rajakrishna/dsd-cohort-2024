@@ -1,4 +1,5 @@
 package com.dsd.reservationsystem.controller;
+
 import com.dsd.reservationsystem.service.PartsService;
 
 import com.dsd.reservationsystem.models.Part;
@@ -16,8 +17,8 @@ public class PartsController {
 
 
     public PartsController(PartsService partsService) {
-    this.partsService = partsService;
-  }
+        this.partsService = partsService;
+    }
 
 
     @GetMapping("")
@@ -41,9 +42,9 @@ public class PartsController {
         }
     }
 
-    @PostMapping("/postPart")
+    @PutMapping("")
     public ResponseEntity<Part> postPart(@RequestBody Part part) {
-        Part createdPart = partsService.postPart(part);
-        return ResponseEntity.ok(createdPart);
+        Part updatedPart = partsService.updatePart(part);
+        return ResponseEntity.ok(updatedPart);
     }
 }
