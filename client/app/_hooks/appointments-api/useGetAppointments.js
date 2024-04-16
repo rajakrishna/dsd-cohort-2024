@@ -17,9 +17,9 @@ export default function useGetAppointments(date) {
           signal: controller.signal,
           date,
         });
-
+        console.log('resposnse:',res)
         setError(null);
-        setData(res.data);
+        setData(res);
       } catch (error) {
         console.log("failed to fetch appointment Data", error);
         setData([]);
@@ -34,13 +34,13 @@ export default function useGetAppointments(date) {
     return () => {
       controller.abort();
     };
-  }, []);
+  }, [date]);
   return { data, error, isLoading };
 }
 
 async function fetchAppointmentsData({ date, signal }) {
   const params = new URLSearchParams({ date });
-  const response = await fetch(`api/appointments?${params}`, { signal });
+  const response = await fetch(`/api/appointment/all?${params}`, { signal });
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }
