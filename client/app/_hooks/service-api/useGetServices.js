@@ -37,7 +37,7 @@ export default function useGetServices() {
 }
 
 async function fetchServiceData(signal) {
-  const response = await fetch(`api/services`, { signal });
+  const response = await fetch(`/api/services`, { signal });
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }
