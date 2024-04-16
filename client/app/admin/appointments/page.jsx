@@ -11,7 +11,7 @@ import { appointmentAttributes } from "@/constants";
 import { formatDateWithNoSlash } from "@/app/utility/formatDateWithNoSlash";
 export default function AppointmentsPage() {
     const [startDate, setStartDate] = useState(new Date().toLocaleDateString());
-    const { data: appointmentsList, error: appointmentsListError } = useGetAppointments('03212024');
+    const { data: appointmentsList, error: appointmentsListError } = useGetAppointments(formatDateWithNoSlash(startDate));
     const { data: serviceList, error: serviceListError } = useGetServices();
    // const [currentPage, setCurrentPage] = useState(1);
     const appointmentsPerPage = 5;
