@@ -14,7 +14,7 @@ export const sideNavItems = [
     },
     { 
         label: "Appointments", 
-        href: "/admin/appointments" 
+        href: "/admin/appointment" 
     },
     { 
         label: "Inventory", 
