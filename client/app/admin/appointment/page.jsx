@@ -50,7 +50,7 @@ export default function AppointmentsPage() {
                                 <td>{appointment.name}</td>
                                 <td>{timeSlots[appointment.time]}</td>
                                 <td>{serviceList.find((service) => service.id === appointment.service)?.name}</td>
-                                <td>{serviceList.find((service) => service.id === appointment.service)?.parts.map((part) => part.name).join(', ')}</td>
+                                <td>{serviceList.find((service) => service.id === appointment.service)?.partsNeeded.map((part) => part.name).join(', ')}</td>
                             </tr>
                         )}) : console.log('appointmentslist error',appointmentsListError )}
                     </tbody>
