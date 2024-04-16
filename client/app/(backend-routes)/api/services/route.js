@@ -6,7 +6,6 @@ export async function GET(request, { params }) {
   try {
     const data = await getServicesList();
     const body = JSON.stringify({ data });
-    console.log("body", body);
     return new Response(body, {
       status: 200,
     });

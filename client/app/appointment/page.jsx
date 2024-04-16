@@ -163,9 +163,7 @@ export default function AppointmentPage() {
     };
 
     try {
-      console.log("data about to send to postappointment", data);
       const response = await postAppointment(data);
-      console.log("response from post appointment", response);
 
       //send response data to confirmation page as url param
       const params = new URLSearchParams({
