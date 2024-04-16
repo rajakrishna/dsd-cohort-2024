@@ -169,8 +169,8 @@ export default function AppointmentPage() {
       const params = new URLSearchParams({
         appointment: JSON.stringify(response),
       });
-
-      // router.push(`/appointmentconfirmed?${params}`);
+      // console.log("response", response);
+      router.push(`/appointmentconfirmed?${params}`);
     } catch (error) {
       console.log("error post appointment");
     }

@@ -5,6 +5,7 @@ import { formatDate } from "../utility/formatDateUtil";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import { app } from "../firebase/config";
 
 export default function AppointmentConfirmationPage() {
   // const searchParams = useSearchParams();
@@ -45,11 +46,13 @@ function AppointmentInfo() {
 
   if (appointment != null && appointment != "undefined") {
     try {
-      const { appointmentInfo, confirmationId, customerInfo } =
-        JSON.parse(appointment);
-      appointmentData = appointmentInfo;
-      confirmId = confirmationId;
-      customer = customerInfo;
+      const { day, timeSlot, confirmationID } = JSON.parse(appointment);
+      appointmentData = {
+        day,
+        timeSlot,
+      };
+      confirmId = confirmationID;
+      // customer = customerInfo;
     } catch (error) {
       appointmentData = { day: "no day", timeSlot: "no timeslot" };
       confirmId = "error saving appointment";
@@ -60,7 +63,7 @@ function AppointmentInfo() {
     <div className="card flex items-center bg-white p-8 rounded-none">
       <div className="card-body items-center border-black border-2 rounded-lg">
         <h1 className="card-title">Your booking is confirmed</h1>
-        <p>See you soon {customer.name}</p>
+        <p>See you soon</p>
         {/* <p>Service Name</p> */}
         <p>Confirmation Id: {confirmId}</p>
         <p>Date:{formatDate(appointmentData.day)}</p>
