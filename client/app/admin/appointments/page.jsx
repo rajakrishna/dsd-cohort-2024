@@ -52,7 +52,7 @@ export default function AppointmentsPage() {
                                 <td>{serviceList.find((service) => service.id === appointment.service)}</td>
                                 <td>{appointment.partsNeeded.map((part) => part.name).join(', ')}</td>
                             </tr>
-                        )}) : console.log('appointmentslist error')}
+                        )}) : console.log('appointmentslist error',appointmentsListError )}
                     </tbody>
                 </table>
                 {/* <div className="flex items-center justify-between mt-4">
