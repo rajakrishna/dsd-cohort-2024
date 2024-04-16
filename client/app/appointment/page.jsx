@@ -152,7 +152,7 @@ export default function AppointmentPage() {
     const dateWithNoHyphens = month + day + year;
 
     const data = {
-      appointmentInfo: { day: dateWithNoHyphens, timeSlot: timeSlotKey },
+      appointmentTime: { date: dateWithNoHyphens, timeSlot: timeSlotKey },
       customerInfo: {
         address: street + " " + apt,
         name: firstName + " " + lastName,
@@ -163,14 +163,16 @@ export default function AppointmentPage() {
     };
 
     try {
+      console.log("data about to send to postappointment", data);
       const response = await postAppointment(data);
+      console.log("response from post appointment", response);
 
       //send response data to confirmation page as url param
       const params = new URLSearchParams({
         appointment: JSON.stringify(response),
       });
 
-      router.push(`/appointmentconfirmed?${params}`);
+      // router.push(`/appointmentconfirmed?${params}`);
     } catch (error) {
       console.log("error post appointment");
     }
