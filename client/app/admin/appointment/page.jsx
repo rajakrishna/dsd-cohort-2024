@@ -49,8 +49,8 @@ export default function AppointmentsPage() {
                                 <th>{indexOfFirstAppointment + index + 1}</th>
                                 <td>{appointment.name}</td>
                                 <td>{timeSlots[appointment.time]}</td>
-                                <td>{serviceList.find((service) => service.id === appointment.service)}</td>
-                                <td>{appointment.partsNeeded.map((part) => part.name).join(', ')}</td>
+                                <td>{serviceList.find((service) => service.id === appointment.service)?.name}</td>
+                                <td>{serviceList.find((service) => service.id === appointment.service)?.parts.map((part) => part.name).join(', ')}</td>
                             </tr>
                         )}) : console.log('appointmentslist error',appointmentsListError )}
                     </tbody>
