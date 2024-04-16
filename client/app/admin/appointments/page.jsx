@@ -35,7 +35,7 @@ export default function AppointmentsPage() {
                 />
             </div>
             <div className="w-full border-2 border-black m-4 p-6 rounded-xl">
-                <h1 className="text-center pb-10 font-bold">Appointments for {startDate}</h1>
+                <h1 className="text-center pb-6 font-bold">Appointments for {startDate}</h1>
                 <table className="table text-center">
                     <thead>
                         <tr className="text-black border-2 border-black rounded-xl">

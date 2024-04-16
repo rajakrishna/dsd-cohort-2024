@@ -64,7 +64,7 @@ export default function InventoryPage() {
     }
     return (
         <div className="w-full border-2 border-black m-4 p-6 rounded-xl">
-            <h1 className="text-center pb-10 font-bold">Inventory</h1>
+            <h1 className="text-center pb-6 font-bold">Inventory</h1>
             <table className="table text-center">
                 {/* head */}
                 <thead>
