@@ -5,6 +5,8 @@ import { useState } from "react";
 
 export default function InventoryPage() {
     const [partsData, setPartsData] = useState(mockPartsData);
+    const [currentPage, setCurrentPage] = useState(1);
+    const inventoryPerPage = 5;
     /* Get request for parts
     const getPartsList = () => {
         fetch(
@@ -46,24 +48,35 @@ export default function InventoryPage() {
         .catch(error => console.log(error))
         } */
     }
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
+
+    const indexOfLastInventory = currentPage * inventoryPerPage;
+    const indexOfFirstInventory = indexOfLastInventory - inventoryPerPage;
+    const currentInventory = partsData.slice(indexOfFirstInventory, indexOfLastInventory);
+    const totalPages = Math.ceil(partsData.length / inventoryPerPage);
+
+
     const handleQuantityChange = (e, partId, delta = 0) => {
         const value = Math.max(0, parseInt(e.target.parentElement.querySelector('input[name="quantity"]').value) + delta)
         setPartsData((prevData) => prevData.map((part) => part.partId === partId ? { ...part, quantity: value } : part))
     }
     return (
-        <div className="w-4/5 mx-auto">
-            <h1 className="text-center">Inventory</h1>
+        <div className="w-full border-2 border-black m-4 p-6 rounded-xl">
+            <h1 className="text-center pb-10 font-bold">Inventory</h1>
             <table className="table text-center">
                 {/* head */}
                 <thead>
-                    <tr className="text-black">
-                        {partsAttributes.map((item, index) => <th key={index}>{item}</th>)}
+                    <tr className="text-black border-2 border-black">
+                        {partsAttributes.map((item, index) => <th className="text-gray-500 uppercase" key={index}>{item}</th>)}
                     </tr>
                 </thead>
                 <tbody>
-                    {partsData.map((part) => {
+                    {currentInventory.map((part, index) => {
                         return (
-                        <tr key={part.partId}>
+                        <tr key={part.partId}  className="border-gray-300 text-black font-medium">
+                            <th>{indexOfFirstInventory + index + 1}</th>
                             <td>{part.name}</td>
                             <td>{part.threshold}</td>
                             <td>
@@ -78,6 +91,14 @@ export default function InventoryPage() {
                     )})}
                 </tbody>
             </table>
+            <div className="flex items-center justify-between mt-4">
+                <div className="flex-1">
+                    {currentPage > 1 && (<button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} className="mr-2 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold rounded-lg flex items-center justify-center">Previous</button>)}
+                </div>
+                <div className="flex flex-1 justify-end">
+                    {currentPage < totalPages && (<button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages} className="self-end ml-2 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold rounded-lg flex justify-center">Next</button>)}
+                </div>
+            </div>
         </div>
     )
 }
