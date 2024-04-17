@@ -3,8 +3,8 @@ package com.dsd.reservationsystem.models;
 public class Part {
     private String id;
     private String name;
-    private Long quantity;
-    private Long threshold;
+    private Long quantity = 0L;
+    private Long threshold = 0L;
 
     public Part(String id, String name, Long quantity, Long threshold) {
         this.id = id;
