@@ -87,7 +87,5 @@ public class PartsService {
         } catch (Exception e) {
             throw new RuntimeException("failed to fetch part to update");
         }
-
-
     }
 }
