@@ -8,6 +8,8 @@ import com.google.cloud.firestore.DocumentSnapshot;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
@@ -62,8 +64,30 @@ public class PartsService {
         return part;
     }
 
-    public Part updatePart(Part part) {
+    public Optional<Part> updatePart(Part part) {
+        DocumentReference document = database.collection("parts").document(part.getId());
+        DocumentSnapshot partDocument;
+        //get part from database
+        try {
+            ApiFuture<DocumentSnapshot> snapshot = document.get();
+            partDocument = snapshot.get();
 
-        return new Part();
+            if (partDocument.exists()) {
+                document.set(part);
+                return Optional.of(part);
+            } else {
+                //doc does not exist
+                throw new Exception("part does not exist: " + part.getId());
+            }
+
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new RuntimeException("failed to fetch part to update");
+        }
+
+
     }
 }

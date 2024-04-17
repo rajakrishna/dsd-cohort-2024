@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/parts")
@@ -44,7 +46,13 @@ public class PartsController {
 
     @PutMapping("")
     public ResponseEntity<Part> postPart(@RequestBody Part part) {
-        Part updatedPart = partsService.updatePart(part);
-        return ResponseEntity.ok(updatedPart);
+
+        try {
+            Optional<Part> updatedPart = partsService.updatePart(part);
+            return ResponseEntity.ok(updatedPart.orElseThrow());
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(part);
+        }
     }
 }
