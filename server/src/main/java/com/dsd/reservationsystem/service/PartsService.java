@@ -77,7 +77,7 @@ public class PartsService {
                 return Optional.of(part);
             } else {
                 //doc does not exist
-                throw new Exception("part does not exist: " + part.getId());
+                return Optional.empty();
             }
 
         } catch (ExecutionException e) {
