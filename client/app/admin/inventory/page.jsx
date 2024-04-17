@@ -1,34 +1,21 @@
 'use client'
+import useGetParts from "@/app/_hooks/part-api/useGetParts";
 import { mockPartsData } from "@/app/utility/mockData/mockGetPartsApi"
 import { partsAttributes } from "@/constants"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function InventoryPage() {
-    const [partsData, setPartsData] = useState(mockPartsData);
+    const [partsData, setPartsData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const inventoryPerPage = 5;
-    /* Get request for parts
-    const getPartsList = () => {
-        fetch(
-            '/getPartsApi', {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            }
-        ) 
-        .then((response) => response.json())
-        .then((data) => {
-            if(data.status === 'success'){
-                setPartsData(data.parts);
-            }
-        })
-        .catch(error => console.log(error))
-    } 
+    const { data: partsDataFromApi, isLoading, error } = useGetParts(false);
+    const inventoryPerPage = 6;
+
     useEffect(() => {
-        getPartsList();
-    }, [])
-    */
+        if (partsDataFromApi) {
+            setPartsData(partsDataFromApi);
+        }
+    }, [partsDataFromApi]);
+    
     const updateParts = () => {
         /* fetch(
             '/postPartsApi', {
@@ -60,7 +47,7 @@ export default function InventoryPage() {
 
     const handleQuantityChange = (e, partId, delta = 0) => {
         const value = Math.max(0, parseInt(e.target.parentElement.querySelector('input[name="quantity"]').value) + delta)
-        setPartsData((prevData) => prevData.map((part) => part.partId === partId ? { ...part, quantity: value } : part))
+        setPartsData((prevData) => prevData.map((part) => part.id === partId ? { ...part, quantity: value } : part))
     }
     return (
         <div className="w-full border-2 border-black m-4 p-6 rounded-xl">
@@ -75,15 +62,15 @@ export default function InventoryPage() {
                 <tbody>
                     {currentInventory.map((part, index) => {
                         return (
-                        <tr key={part.partId}  className="border-gray-300 text-black font-medium">
+                        <tr key={part.id}  className="border-gray-300 text-black font-medium">
                             <th>{indexOfFirstInventory + index + 1}</th>
                             <td>{part.name}</td>
                             <td>{part.threshold}</td>
                             <td>
                                 <div className="inline-flex">
-                                    <button onClick={ (e) => handleQuantityChange(e, part.partId, 1) } className="flex justify-center items-center text-2xl w-8 h-8 border-2 border-black hover:bg-gray-200">+</button>
-                                    <input type="number" name="quantity" value={part.quantity} onChange={ (e) => handleQuantityChange(e, part.partId)} className="text-center w-10 h-8 bg-gray-300 border-y-2 border-black daisy-custom-input"/>
-                                    <button onClick={ (e) => handleQuantityChange(e, part.partId, -1) } className="flex justify-center items-center text-2xl w-8 h-8 border-2 border-black hover:bg-gray-200">-</button>
+                                    <button onClick={ (e) => handleQuantityChange(e, part.id, 1) } className="flex justify-center items-center text-2xl w-8 h-8 border-2 border-black hover:bg-gray-200">+</button>
+                                    <input type="number" name="quantity" value={part.quantity} onChange={ (e) => handleQuantityChange(e, part.id)} className="text-center w-10 h-8 bg-gray-300 border-y-2 border-black daisy-custom-input"/>
+                                    <button onClick={ (e) => handleQuantityChange(e, part.id, -1) } className="flex justify-center items-center text-2xl w-8 h-8 border-2 border-black hover:bg-gray-200">-</button>
                                     <button name="update" className="h-8 ml-4 px-2 border-2 border-black hover:bg-gray-200" onClick={updateParts}>Update</button>
                                 </div>
                             </td>
