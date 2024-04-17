@@ -40,7 +40,7 @@ export default function useGetAppointments(date) {
 
 async function fetchAppointmentsData({ date, signal }) {
   const params = new URLSearchParams({ date });
-  const response = await fetch(`api/appointments?${params}`, { signal });
+  const response = await fetch(`/api/appointments?${params}`, { signal });
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }
