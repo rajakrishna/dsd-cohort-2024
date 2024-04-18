@@ -263,10 +263,16 @@ public class Db {
 
         DocumentSnapshot document = future.get();
 
-        List<Appointment> appointmentsList = new ArrayList<Appointment>();
-        Map<String, Object> doc = document.getData();
+        if (document.exists()) {
 
-        return doc;
+            List<Appointment> appointmentsList = new ArrayList<Appointment>();
+            Map<String, Object> doc = document.getData();
+
+            return doc;
+
+        }
+        return new HashMap<String, Object>();
+
     }
 
     public void setEnv(Environment env) {
