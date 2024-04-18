@@ -36,9 +36,7 @@ export default function PasswordResetPage() {
       console.error(error)
     }
   }
-  console.log('success', success)
-  console.log('passwordreseterror', passwordResetError)
-  console.log('passwordResetsending', passwordResetsending)
+
   return (
   <div className=" flex items-center justify-center h-screen">
     <div className="bg-white p-8 rounded-lg shadow-md w-96">
