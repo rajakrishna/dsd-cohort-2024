@@ -41,7 +41,7 @@ export default function useGetDayTimeSlots(date) {
 }
 
 async function fetchTimeSlotData({ date, signal }) {
-  const response = await fetch(`api/timeslots/${date}`, {
+  const response = await fetch(`/api/timeslots/${date}`, {
     headers: {
       "Content-Type": "application/json",
     },
