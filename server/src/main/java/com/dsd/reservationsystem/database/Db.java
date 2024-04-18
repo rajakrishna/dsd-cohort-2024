@@ -254,7 +254,7 @@ public class Db {
         return database.collection(collectionName);
     }
 
-    public Map<String, Object> getAppointmentsForDay(String date) throws ExecutionException, InterruptedException {
+    public Map<String, Object> getAppointmentsForDay(String date) throws Exception {
         // Create a query to get all appointments on the specified date
 
         DocumentReference docRef = database.collection("timeSlots").document(date);
@@ -263,15 +263,15 @@ public class Db {
 
         DocumentSnapshot document = future.get();
 
-        if (document.exists()) {
-
-            List<Appointment> appointmentsList = new ArrayList<Appointment>();
-            Map<String, Object> doc = document.getData();
-
-            return doc;
-
+        if (!document.exists()) {
+            return new HashMap<String, Object>();
         }
-        return new HashMap<String, Object>();
+
+        List<Appointment> appointmentsList = new ArrayList<Appointment>();
+        Map<String, Object> doc = document.getData();
+
+        return doc;
+
 
     }
 
