@@ -32,6 +32,7 @@ export default function PasswordResetPage() {
         setSuccessMessage('Password reset email sent successfully')
         setSuccess(true)
       }
+      router.push('/login')
     } catch (error) {
       console.error(error)
     }
