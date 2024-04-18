@@ -21,6 +21,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-admin:9.2.0'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
+    implementation 'io.springfox:springfox-boot-starter:3.0.0'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     implementation 'me.paulschwarz:spring-dotenv:4.0.0'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

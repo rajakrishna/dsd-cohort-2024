@@ -40,6 +40,8 @@ public class AppointmentService {
 //        return savedAppointment;
 
         // Save the appointment to Firestore
+
+
         Appointment savedAppointment = this.database.createAppointment(appointment);
 
         // Fetch the customer's email

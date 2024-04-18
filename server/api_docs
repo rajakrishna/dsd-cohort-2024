@@ -1,0 +1,207 @@
+swagger: '2.0'
+info:
+  version: "1.0.0"
+  title: Reservation System
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /api/appointment/save:
+    post:
+      summary: Save a new appointment
+      description: Checks if the appointment time is available and saves the appointment
+      operationId: saveAppointment
+      parameters:
+        - in: body
+          name: appointment
+          description: The appointment to be saved
+          required: true
+          schema:
+            $ref: '#/definitions/Appointment'
+      responses:
+        200:
+          description: Appointment saved
+          schema:
+            type: string
+  /api/appointment/all:
+    get:
+      summary: Get all appointments for a specific date
+      description: Returns a list of all appointments for the specified date
+      operationId: getAppointments
+      parameters:
+        - name: date
+          in: query
+          description: The date for which appointments are to be retrieved
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Appointment'
+  /api/customers:
+    post:
+      summary: Create a new customer
+      description: Saves the customer
+      operationId: createCustomer
+      parameters:
+        - in: body
+          name: customer
+          description: The customer to be saved
+          required: true
+          schema:
+            $ref: '#/definitions/Customer'
+      responses:
+        200:
+          description: Customer created
+          schema:
+            $ref: '#/definitions/Customer'
+  /api/customers/{id}:
+    get:
+      summary: Get a customer by its ID
+      description: Returns a customer for the specified ID
+      operationId: getCustomerById
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the customer to retrieve
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/Customer'
+  /api/parts:
+    post:
+      summary: Create a new part
+      description: Saves the part
+      operationId: createPart
+      parameters:
+        - in: body
+          name: part
+          description: The part to be saved
+          required: true
+          schema:
+            $ref: '#/definitions/Part'
+      responses:
+        200:
+          description: Part created
+          schema:
+            $ref: '#/definitions/Part'
+  /api/parts/{id}:
+    get:
+      summary: Get a part by its ID
+      description: Returns a part for the specified ID
+      operationId: getPartById
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the part to retrieve
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/Part'
+  /api/services:
+    get:
+      summary: Get all services
+      description: Returns a list of all services
+      operationId: getServices
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ServiceModel'
+  /api/services/{id}:
+    get:
+      summary: Get a service by its ID
+      description: Returns a service for the specified ID
+      operationId: getServiceById
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the service to retrieve
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/ServiceModel'
+  /api/timeslots/{todaysDate}:
+    get:
+      summary: Get time slots for a specific day
+      description: Returns a list of time slots for the specified date
+      operationId: getTimeSlotsForDay
+      parameters:
+        - name: todaysDate
+          in: path
+          description: The date for which time slots are to be retrieved
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            additionalProperties:
+              type: boolean
+definitions:
+  Appointment:
+    type: object
+    properties:
+      customerId:
+        type: string
+      day:
+        type: string
+      timeSlot:
+        type: string
+      confirmationNumber:
+        type: string
+      customerInfo:
+        $ref: '#/definitions/Customer'
+  Customer:
+    type: object
+    properties:
+      id:
+        type: string
+      address:
+        type: string
+      name:
+        type: string
+      phoneNumber:
+        type: string
+      email:
+        type: string
+      appointments:
+        type: array
+        items:
+          $ref: '#/definitions/Appointment'
+  Part:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      quantity:
+        type: integer
+      threshold:
+        type: integer
+  ServiceModel:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
