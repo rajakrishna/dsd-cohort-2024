@@ -6,8 +6,11 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebase/config";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useEffect } from "react";
+import useDrift from "./_hooks/liveChat-api/useDrift.js";
 
 export default function RootLayout({ children }) {
+
+  useDrift();
 
   const [user, loading, error] = useAuthState(auth)
 
