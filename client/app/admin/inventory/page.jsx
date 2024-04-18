@@ -51,19 +51,19 @@ export default function InventoryPage() {
         setPartsData((prevData) => prevData.map((part) => part.partId === partId ? { ...part, quantity: value } : part))
     }
     return (
-        <div className="w-4/5 mx-auto">
-            <h1 className="text-center">Inventory</h1>
+        <div className="w-4/5 border-2 border-black m-4 p-4 rounded-xl">
+            <h1 className="text-center p-4">Inventory</h1>
             <table className="table text-center">
                 {/* head */}
                 <thead>
-                    <tr className="text-black">
+                    <tr className="text-black border-2 border-black rounded-xl">
                         {partsAttributes.map((item, index) => <th key={index}>{item}</th>)}
                     </tr>
                 </thead>
                 <tbody>
                     {partsData.map((part) => {
                         return (
-                        <tr key={part.partId}>
+                        <tr key={part.partId}  className="border-0">
                             <td>{part.name}</td>
                             <td>{part.threshold}</td>
                             <td>

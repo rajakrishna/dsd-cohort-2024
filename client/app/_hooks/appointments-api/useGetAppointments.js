@@ -17,9 +17,9 @@ export default function useGetAppointments(date) {
           signal: controller.signal,
           date,
         });
-
+        console.log('resposnse:',res)
         setError(null);
-        setData(res.data);
+        setData(res);
       } catch (error) {
         console.log("failed to fetch appointment Data", error);
         setData([]);
@@ -34,7 +34,7 @@ export default function useGetAppointments(date) {
     return () => {
       controller.abort();
     };
-  }, []);
+  }, [date]);
   return { data, error, isLoading };
 }
 

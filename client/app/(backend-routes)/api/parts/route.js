@@ -79,11 +79,7 @@ export async function POST(request) {
 // part:{partid,name,quantity,threshold }
 async function createPart(part) {
   const body = JSON.stringify(part);
-  const response = await fetch(`${API_URL}/parts`, {
-    headers: { "Content-Type": "application/json" },
-    body,
-    method: "PUT",
-  });
+  const response = await fetch(`${API_URL}/parts`, { body, method: "PUT" });
   const data = await response.json();
 
   return data;
@@ -91,16 +87,8 @@ async function createPart(part) {
 
 // part:{partid,name,quantity,threshold }
 async function updatePart(part) {
-  // console.log("part", part);
   const body = JSON.stringify(part);
-  const response = await fetch(`${API_URL}/parts`, {
-    headers: { "Content-Type": "application/json" },
-    body,
-    method: "PUT",
-  });
-  if (!response.ok) {
-    throw new Error("Network response was not ok");
-  }
+  const response = await fetch(`${API_URL}/parts`, { body, method: "PUT" });
   const data = await response.json();
 
   return data;
