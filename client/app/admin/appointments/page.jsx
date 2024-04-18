@@ -6,24 +6,35 @@ import "react-datepicker/dist/react-datepicker.css";
 import useGetAppointments from "@/app/_hooks/appointments-api/useGetAppointments";
 import useGetServices from "@/app/_hooks/service-api/useGetServices";
 import { timeSlots } from "@/constants";
-//import { appointmentsList } from "@/app/utility/mockData/mockGetAppointments"
+import { mockData } from "@/app/utility/mockData/mockGetAppointmentsApi";
 import { appointmentAttributes } from "@/constants";
 import { formatDateWithNoSlash } from "@/app/utility/formatDateWithNoSlash";
+import useGetParts from "@/app/_hooks/part-api/useGetParts";
 export default function AppointmentsPage() {
     const [startDate, setStartDate] = useState(new Date().toLocaleDateString());
-    const { data: appointmentsList, error: appointmentsListError } = useGetAppointments(formatDateWithNoSlash(startDate));
+    const { data: appointmentsListData, error: appointmentsListError } = useGetAppointments(formatDateWithNoSlash(startDate));
     const { data: serviceList, error: serviceListError } = useGetServices();
-   // const [currentPage, setCurrentPage] = useState(1);
-    const appointmentsPerPage = 5;
-    
+    const {data: partsData, error: partsError, isLoading: partsIsLoading} = useGetParts()
+    const [currentPage, setCurrentPage] = useState(1);
+    const appointmentsPerPage = 6;
+    console.log('Appointments List: ', appointmentsListData)
+    console.log('AppointmentsListError: ', appointmentsListError)
+
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
+    const getServicesDataFromCollection = (serviceId) => {
+        return serviceList.find((service) => service.id === serviceId)
+    }
 
-    // const indexOfLastAppointment = currentPage * appointmentsPerPage;
-    // const indexOfFirstAppointment = indexOfLastAppointment - appointmentsPerPage;
-    // const currentAppointments = appointmentsList.slice(indexOfFirstAppointment, indexOfLastAppointment);
-    // const totalPages = Math.ceil(appointmentsList.length / appointmentsPerPage);
+    const getPartsDataFromCollection = (partsIds) => {
+        let parts = partsData?.filter((part) => partsIds.includes(part.id));
+        return parts?.map((part) => part.name).join(', ')
+    }
+    const indexOfLastAppointment = currentPage * appointmentsPerPage;
+    const indexOfFirstAppointment = indexOfLastAppointment - appointmentsPerPage;
+    const currentAppointments = appointmentsListData.length >= appointmentsPerPage ? appointmentsListData.slice(indexOfFirstAppointment, indexOfLastAppointment) : appointmentsListData;
+    const totalPages = Math.ceil(appointmentsListData.length / appointmentsPerPage);
 
     return (
         <>
@@ -43,26 +54,26 @@ export default function AppointmentsPage() {
                         </tr>
                     </thead>
                     <tbody>
-                        {appointmentsList ? appointmentsList.map((appointment, index) => {
+                        {currentAppointments ? currentAppointments.map((appointment, index) => {
                             return (
                             <tr key={index} className="border-gray-300 text-black font-medium">
-                                <th>{indexOfFirstAppointment + index + 1}</th>
+                                <th>{ indexOfFirstAppointment + index + 1}</th>
                                 <td>{appointment.name}</td>
                                 <td>{timeSlots[appointment.time]}</td>
-                                <td>{serviceList.find((service) => service.id === appointment.service)?.name}</td>
-                                <td>{serviceList.find((service) => service.id === appointment.service)?.partsNeeded.map((part) => part.name).join(', ')}</td>
+                                <td>{getServicesDataFromCollection(appointment.serviceId)?.name}</td>
+                                <td>{getPartsDataFromCollection(getServicesDataFromCollection(appointment.serviceId)?.partsNeeded)}</td>
                             </tr>
                         )}) : console.log('appointmentslist error',appointmentsListError )}
                     </tbody>
                 </table>
-                {/* <div className="flex items-center justify-between mt-4">
+                <div className="flex items-center justify-between mt-4">
                     <div className="flex-1">
                         {currentPage > 1 && (<button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} className="mr-2 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold rounded-lg flex items-center justify-center">Previous</button>)}
                     </div>
                     <div className="flex flex-1 justify-end">
                         {currentPage < totalPages && (<button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages} className="self-end ml-2 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold rounded-lg flex justify-center">Next</button>)}
                     </div>
-                </div> */}
+                </div>
             </div>
         </>       
     );
