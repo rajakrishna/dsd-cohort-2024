@@ -1,7 +1,34 @@
+'use client'
+
 import "./globals.css";
 import Link from "next/link";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./firebase/config";
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { useEffect } from "react";
 
 export default function RootLayout({ children }) {
+
+  const [user, loading, error] = useAuthState(auth)
+
+  if (loading) {
+    return (
+    <html
+      lang="en"
+      className=" bg-blue-600"
+      data-theme="aqua">
+       <body className="">
+       <header>
+       </header>
+       <div className="flex items-center justify-center min-h-screen bg-blue-600">
+        <span className="loading loading-bars loading-lg"></span>
+       </div>
+      <main className=" bg-blue-600">{children}</main>
+      </body>
+    </html>
+  )
+}
+
   return (
     <html
       lang="en"
@@ -20,6 +47,8 @@ export default function RootLayout({ children }) {
             <Link href={"/companyservices"}>
               <div className="btn btn-sm bg-transparent border-0">Services</div>
             </Link>
+            { !user && (
+              <>
             <Link href={"/signup"}>
               <div className="btn btn-sm bg-transparent  border-2">Sign Up</div>
             </Link>
@@ -29,11 +58,14 @@ export default function RootLayout({ children }) {
               href={"/login"}>
               <div>Login</div>
             </Link>
-            <Link
+            </>
+          )}
+           { user &&  <Link
               className="btn btn-sm btn-warning"
               href={"/signout"}>
               <div>Sign out</div>
             </Link>
+          }
           </nav>
         </header>
         <main className=" bg-blue-600">{children}</main>

@@ -2,19 +2,13 @@ package com.dsd.reservationsystem.service;
 
 import com.dsd.reservationsystem.database.Db;
 import com.dsd.reservationsystem.models.Customer;
-import com.google.auth.oauth2.GoogleCredentials;
-
-import com.google.cloud.firestore.DocumentSnapshot;
-
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.FirestoreOptions;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
-import com.google.firebase.cloud.FirestoreClient;
+import com.google.api.core.ApiFuture;
+import com.google.cloud.firestore.QueryDocumentSnapshot;
+import com.google.cloud.firestore.QuerySnapshot;
 import org.springframework.stereotype.Service;
 
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CustomerService {
@@ -40,5 +34,19 @@ public class CustomerService {
         } else {
             return null;
         }
+    }
+
+    public Optional<Customer> getCustomerByEmail(String email) throws Exception {
+        //todo get customer by email
+        ApiFuture<QuerySnapshot> query = this.database.collection("customerInfo").whereEqualTo("email",
+                email).limit(1).get();
+
+        List<QueryDocumentSnapshot> documents = query.get().getDocuments();
+
+        if (documents.isEmpty()) {
+            return Optional.empty();
+        }
+
+        return Optional.of(documents.get(0).toObject(Customer.class));
     }
 }

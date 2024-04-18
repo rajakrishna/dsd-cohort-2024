@@ -22,9 +22,8 @@ public class TimeSlotsController {
     public ResponseEntity<Object> getTimeSlotsForDay(@PathVariable String todaysDate) {
 
         try {
-            Map<String, Boolean> timeSlotsAvailability = this.timeSlotsService.getTimeSlotsAvailabilityForDay(todaysDate);
-            System.out.println("timeSlots");
-            System.out.println(timeSlotsAvailability);
+            Map<String, Boolean> timeSlotsAvailability = this.timeSlotsService
+                    .getTimeSlotsAvailabilityForDay(todaysDate);
             return ResponseEntity.ok().body(timeSlotsAvailability);
 
         } catch (Exception e) {
