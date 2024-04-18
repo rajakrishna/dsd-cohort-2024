@@ -254,7 +254,7 @@ public class Db {
         return database.collection(collectionName);
     }
 
-    public Map<String, Object> getAppointmentsForDay(String date) throws Exception {
+    public Map<String, Object> getAppointmentsForDay(String date) throws ExecutionException, InterruptedException {
         // Create a query to get all appointments on the specified date
 
         DocumentReference docRef = database.collection("timeSlots").document(date);
