@@ -17,8 +17,6 @@ export default function AppointmentsPage() {
     const {data: partsData, error: partsError, isLoading: partsIsLoading} = useGetParts()
     const [currentPage, setCurrentPage] = useState(1);
     const appointmentsPerPage = 6;
-    console.log('Appointments List: ', appointmentsListData)
-    console.log('AppointmentsListError: ', appointmentsListError)
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
