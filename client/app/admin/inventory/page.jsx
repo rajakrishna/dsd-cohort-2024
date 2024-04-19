@@ -9,48 +9,39 @@ export default function InventoryPage() {
     const [partsData, setPartsData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const { data: partsDataFromApi, isLoading: partsDataLoading, error: partsDataError } = useGetParts(false);
-
     const {updatePart, error: updatePartsError, isLoading: updatePartsLaoding} = useUpdatePart();
     const inventoryPerPage = 6;
+    const indexOfLastInventory = currentPage * inventoryPerPage;
+    const indexOfFirstInventory = indexOfLastInventory - inventoryPerPage;
+    const currentInventory = partsData.slice(indexOfFirstInventory, indexOfLastInventory);
+    const totalPages = Math.ceil(partsData.length / inventoryPerPage);
 
     useEffect(() => {
-        console.log('fetching parts data', partsDataFromApi);
         if (partsDataFromApi) {
             setPartsData(partsDataFromApi);
-            //setPartsData(mockPartsData);
         }
     }, [partsDataFromApi]);
-
-    console.log('after useEffect');
     
     const updateParts = async (part) => {
-        console.log("part",part)
         try{
-            const response = await updatePart(part);
-            console.log('Parts Post Response: ',response);
+            await updatePart(part);
         } catch(error){
-            console.log('error posting parts data to api : ', err)
+            console.error('error posting parts data to api : ', err)
         }
     }
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
 
-    const indexOfLastInventory = currentPage * inventoryPerPage;
-    const indexOfFirstInventory = indexOfLastInventory - inventoryPerPage;
-    const currentInventory = partsData.slice(indexOfFirstInventory, indexOfLastInventory);
-    const totalPages = Math.ceil(partsData.length / inventoryPerPage);
-
-
     const handleQuantityChange = (e, partId, delta = 0) => {
         const value = Math.max(0, parseInt(e.target.parentElement.querySelector('input[name="quantity"]').value) + delta)
         setPartsData((prevData) => prevData.map((part) => part.id === partId ? { ...part, quantity: value } : part))
     }
+
     return (
         <div className="w-full border-2 border-black m-4 p-6 rounded-xl">
             <h1 className="text-center pb-6 font-bold">Inventory</h1>
             <table className="table text-center">
-                {/* head */}
                 <thead>
                     <tr className="text-black border-2 border-black">
                         {partsAttributes.map((item, index) => <th className="text-gray-500 uppercase" key={index}>{item}</th>)}
