@@ -17,7 +17,6 @@ export default function useGetAppointments(date) {
           signal: controller.signal,
           date,
         });
-        console.log("resposnse:", res.data);
         setError(null);
         setData(res.data);
       } catch (error) {

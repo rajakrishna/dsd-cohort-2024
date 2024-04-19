@@ -13,7 +13,6 @@ export default function useUpdatePart() {
   // }
 
   async function updatePart(newPartData) {
-    console.log("newPartData", newPartData);
     try {
       //check if controller was used
       if (controller.current.signal.aborted) {
