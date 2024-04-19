@@ -80,10 +80,13 @@ export async function POST(request) {
 async function createPart(part) {
   const body = JSON.stringify(part);
   const response = await fetch(`${API_URL}/parts`, {
-    headers: { "Content-Type": "application/json" },
     body,
     method: "PUT",
+    headers: { "Content-Type": "application/json" },
   });
+  if (!response.ok) {
+    throw new Error("Network response not ok");
+  }
   const data = await response.json();
 
   return data;
@@ -91,15 +94,16 @@ async function createPart(part) {
 
 // part:{partid,name,quantity,threshold }
 async function updatePart(part) {
-  // console.log("part", part);
+  console.log("part", part);
   const body = JSON.stringify(part);
   const response = await fetch(`${API_URL}/parts`, {
-    headers: { "Content-Type": "application/json" },
     body,
     method: "PUT",
+    headers: { "Content-Type": "application/json" },
   });
+
   if (!response.ok) {
-    throw new Error("Network response was not ok");
+    throw new Error("Network response not ok");
   }
   const data = await response.json();
 
@@ -113,5 +117,8 @@ async function getAllParts({ lowInventory = false }) {
   const response = await fetch(`${API_URL}/parts?${params}`);
   const data = await response.json();
 
+  if (!response.ok) {
+    throw new Error("Network response not ok");
+  }
   return data;
 }

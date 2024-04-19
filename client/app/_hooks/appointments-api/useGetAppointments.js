@@ -17,7 +17,6 @@ export default function useGetAppointments(date) {
           signal: controller.signal,
           date,
         });
-
         setError(null);
         setData(res.data);
       } catch (error) {
@@ -34,7 +33,7 @@ export default function useGetAppointments(date) {
     return () => {
       controller.abort();
     };
-  }, []);
+  }, [date]);
   return { data, error, isLoading };
 }
 

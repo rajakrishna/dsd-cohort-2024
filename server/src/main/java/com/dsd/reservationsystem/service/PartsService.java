@@ -8,7 +8,6 @@ import com.google.cloud.firestore.DocumentSnapshot;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
@@ -53,32 +52,22 @@ public class PartsService {
         return database.getAllParts();
     }
 
-    public Part postPart(Part part) {
-        // Generate a unique ID for the part
-        String id = UUID.randomUUID().toString();
-        part = new Part(id, part.getName(), part.getQuantity(), part.getThreshold());
-
-        // Save the part to Firestore
-        database.createPart(part);
-
-        return part;
-    }
-
     public Optional<Part> updatePart(Part part) {
         DocumentReference document = database.collection("parts").document(part.getId());
+        System.out.println("PART ID:=== " + part.getId());
+
         DocumentSnapshot partDocument;
         //get part from database
         try {
             ApiFuture<DocumentSnapshot> snapshot = document.get();
             partDocument = snapshot.get();
 
-            if (partDocument.exists()) {
-                document.set(part);
-                return Optional.of(part);
-            } else {
-                //doc does not exist
+            if (!partDocument.exists()) {
                 return Optional.empty();
             }
+
+            document.set(part);
+            return Optional.of(part);
 
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
@@ -88,4 +77,5 @@ public class PartsService {
             throw new RuntimeException("failed to fetch part to update");
         }
     }
+
 }
