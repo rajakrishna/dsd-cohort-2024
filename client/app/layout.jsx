@@ -7,23 +7,29 @@ import { auth } from "./firebase/config";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useEffect, useState } from "react";
 import { usePathname } from 'next/navigation'
-import Drift from "react-driftjs";
+import useDrift from "./_hooks/liveChat-api/useDrift.js";
 
 export default function RootLayout({ children }) {
 
+  useDrift();
+  const [ shouldUseDrift, setShouldUseDrift ] = useState(true);
   const pathname = usePathname();
 
-  const [ shouldUseDrift, setShouldUseDrift ] = useState(true);
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+
     let adminURL = pathname.includes('admin');
-    setShouldUseDrift(!adminURL);
-    if (adminURL && window.drift) {
+
+    console.log(pathname, shouldUseDrift);
+    if (adminURL && window.drift?.api?.widget) {
       window.drift.api.widget.hide();
-    } else if (!adminURL && window.drift) {
+    } else if (!adminURL && window.drift?.api?.widget) {
       window.drift.api.widget.show();
     }
+    setShouldUseDrift(adminURL ? false : true);
   }, [pathname]);
+
 
   const [user, loading, error] = useAuthState(auth)
 
@@ -85,7 +91,6 @@ export default function RootLayout({ children }) {
           </nav>
         </header>
         <main className=" bg-blue-600">{children}</main>
-         <Drift appId='k9sf2yvdayey' />
       </body>
     </html>
   );
