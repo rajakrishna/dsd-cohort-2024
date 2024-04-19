@@ -9,11 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@chatscope/chat-ui-kit-react": "^2.0.3",
+    "@chatscope/chat-ui-kit-styles": "^1.4.0",
     "firebase": "^10.10.0",
     "next": "14.1.4",
     "react": "^18",
     "react-datepicker": "^6.6.0",
     "react-dom": "^18",
+    "react-driftjs": "^1.2.2",
     "react-firebase-hooks": "^5.1.1",
     "uuid": "^9.0.1"
   },
