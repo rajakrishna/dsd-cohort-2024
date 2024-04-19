@@ -79,7 +79,11 @@ export async function POST(request) {
 // part:{partid,name,quantity,threshold }
 async function createPart(part) {
   const body = JSON.stringify(part);
-  const response = await fetch(`${API_URL}/parts`, { body, method: "PUT" });
+  const response = await fetch(`${API_URL}/parts`, {
+    body,
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+  });
   const data = await response.json();
 
   return data;
@@ -88,7 +92,11 @@ async function createPart(part) {
 // part:{partid,name,quantity,threshold }
 async function updatePart(part) {
   const body = JSON.stringify(part);
-  const response = await fetch(`${API_URL}/parts`, { body, method: "PUT" });
+  const response = await fetch(`${API_URL}/parts`, {
+    body,
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+  });
   const data = await response.json();
 
   return data;

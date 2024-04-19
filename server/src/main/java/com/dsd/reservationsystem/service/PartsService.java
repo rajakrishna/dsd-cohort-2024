@@ -54,19 +54,20 @@ public class PartsService {
 
     public Optional<Part> updatePart(Part part) {
         DocumentReference document = database.collection("parts").document(part.getId());
+        System.out.println("PART ID:=== " + part.getId());
+
         DocumentSnapshot partDocument;
         //get part from database
         try {
             ApiFuture<DocumentSnapshot> snapshot = document.get();
             partDocument = snapshot.get();
 
-            if (partDocument.exists()) {
-                document.set(part);
-                return Optional.of(part);
-            } else {
-                //doc does not exist
+            if (!partDocument.exists()) {
                 return Optional.empty();
             }
+
+            document.set(part);
+            return Optional.of(part);
 
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
