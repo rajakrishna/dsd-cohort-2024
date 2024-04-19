@@ -54,7 +54,6 @@ public class PartsService {
 
     public Optional<Part> updatePart(Part part) {
         DocumentReference document = database.collection("parts").document(part.getId());
-        System.out.println("PART ID:=== " + part.getId());
 
         DocumentSnapshot partDocument;
         //get part from database
