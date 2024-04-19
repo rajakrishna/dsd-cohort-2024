@@ -13,6 +13,9 @@ public class Part {
         this.threshold = threshold;
     }
 
+    public Part() {
+    }
+
     public String getId() {
         return id;
     }
