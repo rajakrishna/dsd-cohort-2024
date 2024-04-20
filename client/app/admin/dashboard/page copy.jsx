@@ -49,25 +49,31 @@ export default function AdminPage() {
 	return (
 		<div className='flex flex-col justify-center items-center'>
 			<h1 className='text-black text-center pb-6 font-bold text-2xl'>Today's Appointments</h1>
-			<table className='table'>
-				<thead>
+			<table className='table text-black w-full min-w-full divide-y divide-gray-200'>
+				<thead className='w-full max-w-full border-2 border-black rounded-2xl bg-gray-50'>
 					<tr className='mb-7'>
-						{/* <th></th> */}
-						<th>Name</th>
-						<th>Time</th>
-						<th>Service</th>
-						<th>Parts Needed</th>
+						<th className='px-6 py-3 text-left text-md text-gray-500 font-bold'></th>
+						<th className='px-6 py-3 text-left text-md text-gray-500 font-bold'>Name</th>
+						<th className='px-6 py-3 text-left text-md text-gray-500 font-bold'>Time</th>
+						<th className='px-6 py-3 text-left text-md text-gray-500 font-bold'>Service</th>
+						<th className='px-6 py-3 text-left text-md text-gray-500 font-bold'>Parts Needed</th>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody className='bg-white divide-y divide-gray-200 mt-4 overflow-scroll max-h-max'>
 					{displayedRows.map((app, index) => {
 						return (
-							<tr className='hover' id={index}>
-								{/* <th>{indexOfFirstRow + index + 1}</th> */}
-								<td>{app.customerInfo}</td>
-								<td>{timeSlots[app.timeSlot]}</td>
-								<td>{app.confirmationNumber}</td>
-								<td>{app.customerId}</td>
+							<tr className='hover'>
+								<th className='px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900'>
+									{indexOfFirstRow + index + 1}
+								</th>
+								<td className='px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900'>{app.customerInfo}</td>
+								<td className='px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900'>
+									{timeSlots[app.timeSlot]}
+								</td>
+								<td className='px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900'>
+									{app.confirmationNumber}
+								</td>
+								<td className='px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900'>{app.customerId}</td>
 							</tr>
 						);
 					})}
