@@ -152,7 +152,7 @@ export default function AppointmentPage() {
     const dateWithNoHyphens = month + day + year;
 
     const data = {
-      appointmentInfo: { day: dateWithNoHyphens, timeSlot: timeSlotKey },
+      appointmentTime: { date: dateWithNoHyphens, timeSlot: timeSlotKey },
       customerInfo: {
         address: street + " " + apt,
         name: firstName + " " + lastName,
@@ -169,7 +169,7 @@ export default function AppointmentPage() {
       const params = new URLSearchParams({
         appointment: JSON.stringify(response),
       });
-
+      // console.log("response", response);
       router.push(`/appointmentconfirmed?${params}`);
     } catch (error) {
       console.log("error post appointment");

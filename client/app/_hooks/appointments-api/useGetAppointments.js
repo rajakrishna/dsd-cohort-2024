@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 export default function useGetAppointments(date) {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -17,7 +17,6 @@ export default function useGetAppointments(date) {
           signal: controller.signal,
           date,
         });
-
         setError(null);
         setData(res.data);
       } catch (error) {
@@ -34,13 +33,13 @@ export default function useGetAppointments(date) {
     return () => {
       controller.abort();
     };
-  }, []);
+  }, [date]);
   return { data, error, isLoading };
 }
 
 async function fetchAppointmentsData({ date, signal }) {
   const params = new URLSearchParams({ date });
-  const response = await fetch(`api/appointments?${params}`, { signal });
+  const response = await fetch(`/api/appointments?${params}`, { signal });
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }
