@@ -49,19 +49,14 @@ export default function AdminPage() {
     }
 
     const partNameCollection = (serviceId) => {
-      let result = '';
-        for (let i=0; i<getServicesData.length; i++) {
-            if (getServicesData[i].id === serviceId) {
-                for (let j=0; j<getServicesData[i].partsNeeded.length; j++) {
-                    for (let k=0; k<getPartsData.length; k++) {
-                        if (getServicesData[i].partsNeeded[j] === getPartsData[k].id) {
-                            result += getPartsData[k].name + ', ';
-                        }
-                    }
-                }
-            }
-        }
-        return result.slice(0, -2);
+        let serviceResult = getServicesData.find((service) =>
+        service.id === serviceId)
+        let partsResult = serviceResult.partsNeeded.map((partId) => {
+        let partRes = getPartsData.find(item => item.id === partId)
+        return partRes
+       })
+        let final = partsResult.map(part => part.name)
+        return final
     }
 
     const findLowInventoryParts = (partsInventory) => {
