@@ -61,7 +61,7 @@ function AppointmentInfo() {
   }
   return (
     <div className="card flex items-center bg-white p-8 rounded-none">
-      <div className="card-body items-center border-black border-2 rounded-lg">
+      <div className="card-body items-center border-black border-2 rounded-lg text-black">
         <h1 className="card-title">Your booking is confirmed</h1>
         <p>See you soon</p>
         {/* <p>Service Name</p> */}
