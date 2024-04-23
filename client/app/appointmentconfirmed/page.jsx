@@ -70,7 +70,7 @@ function AppointmentInfo() {
         <p>Time: {timeSlots[appointmentData.timeSlot]}</p>
         <div className="card-actions justify-end">
           <Link href={"/appointment"}>
-            <button className="btn bg-green-800">Book a new appointment</button>
+            <button className="btn bg-primary text-white">Book a new appointment</button>
           </Link>
         </div>
       </div>
